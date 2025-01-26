@@ -1,0 +1,1 @@
+export { RouteGuardHoc } from './route-guard.hoc.tsx';
