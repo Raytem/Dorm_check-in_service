@@ -1,8 +1,7 @@
 import { inject, injectable } from 'inversify';
 
 import { ITokenRepository } from '@domain/repositories';
-
-import { LoginDto } from './dto';
+import { IAuthService, LoginDto } from '@domain/adapters/services/auth-service';
 import { AuthenticatedUserEntity } from '@domain/entities';
 
 
@@ -11,11 +10,15 @@ export class LoginUseCase {
 	constructor(
 		@inject(ITokenRepository.$)
 		private readonly tokenRepository: ITokenRepository,
+		@inject(IAuthService.$)
+		private readonly authService: IAuthService,
 	) {}
 
 	async execute(dto: LoginDto): Promise<AuthenticatedUserEntity> {
-		this.tokenRepository.setAccessToken(`${dto.email}=${dto.password}`)
+		const loginResponse = await this.authService.login(dto)
 
-		return new AuthenticatedUserEntity(1, '', '', '', [])
+		this.tokenRepository.setAccessToken(loginResponse.accessToken)
+
+		return new AuthenticatedUserEntity(1, '', '', '', []) // TODO: get user info from api and return it
 	}
 }

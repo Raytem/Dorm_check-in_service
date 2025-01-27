@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { AppRoutes } from "@routing/app-routes.enum";
 import { Button, Stack, Text, useMantineColorScheme } from "@mantine/core";
 
-
 function App() {
     const { toggleColorScheme } = useMantineColorScheme();
 

@@ -15,7 +15,7 @@
     "moduleDetection": "force",
     "noEmit": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": false,
+    "emitDecoratorMetadata": true,
     "jsx": "react-jsx",
 
     "baseUrl": "./src",

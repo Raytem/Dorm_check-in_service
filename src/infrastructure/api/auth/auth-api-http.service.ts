@@ -1,8 +1,12 @@
-import axios, { AxiosInstance, HttpStatusCode } from 'axios';
 import { inject, injectable } from 'inversify';
+
+import axios, { AxiosInstance, HttpStatusCode } from 'axios';
+
 import { ConfigService } from '@infrastructure/services';
 import { ITokenRepository } from '@domain/repositories';
 import { RefreshTokensUseCase } from '@/usecases';
+import { diContainer } from '@/di';
+
 
 @injectable()
 export class AuthApiHttpService {
@@ -13,8 +17,6 @@ export class AuthApiHttpService {
 		private readonly config: ConfigService,
 		@inject(ITokenRepository.$)
 		private readonly tokenRepository: ITokenRepository,
-		@inject(RefreshTokensUseCase)
-		private readonly refreshTokensUseCase: RefreshTokensUseCase
 	) {
 		const instance = axios.create({
 			baseURL: this.config.getConfig().authApi.baseUrl,
@@ -27,34 +29,26 @@ export class AuthApiHttpService {
 			}
 		})
 
-		const maxUnauthorizedRetryCount = 1
 		instance.interceptors.response.use(
-			(response) => {
-				return response
-			},
+			(response) => response,
 			async (error) => {
-				const originalRequest = error.config
-				const isUnauthorized = error.status === HttpStatusCode.Unauthorized
+				const originalRequest = error.config;
+				const isUnauthorized = error.response?.status === HttpStatusCode.NotFound;
 
-				if (!originalRequest._unauthorizedRetryCount) {
-					originalRequest._unauthorizedRetryCount = 0
+				if (isUnauthorized && !originalRequest._isRetry) {
+					originalRequest._isRetry = true;
+					try {
+						// refresh tokens
+						await diContainer.get(RefreshTokensUseCase).execute();
+						// retry request
+						return instance.request(originalRequest);
+					} catch (e) {
+						console.log(e)
+					}
 				}
-
-				if (
-					isUnauthorized &&
-					originalRequest._unauthorizedRetryCount < maxUnauthorizedRetryCount
-				) {
-					// refresh tokens
-					await this.refreshTokensUseCase.execute()
-
-					// retry request
-					return instance(originalRequest)
-				}
-
-				// throw an error
 				return Promise.reject(error);
 			}
-		)
+		);
 
 		this.instance = instance
 	}
