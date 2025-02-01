@@ -1,4 +1,3 @@
-import { AppRoutes } from "@presentation/routing/app-routes.enum";
 import { useNavigate } from "react-router-dom";
 import { Button, Center, Stack, Text, Title } from "@mantine/core";
 
@@ -6,7 +5,7 @@ const ForbiddenPage = () => {
     const navigate = useNavigate()
 
     const handleToMainPageBtnClick = () => {
-        navigate(AppRoutes.MAIN)
+        navigate('/')
     }
 
     return <Center maw={'100%'} h={'100dvh'}>

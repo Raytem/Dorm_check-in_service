@@ -30,9 +30,12 @@
       "@usecases/*": ["usecases/*"],
 
       "@components/*": ["presentation/components/*"],
+      "@assets/*": ["presentation/assets/*"],
+      "@layouts/*": ["presentation/layouts/*"],
       "@pages/*": ["presentation/pages/*"],
       "@routing/*": ["presentation/routing/*"],
-      "@hooks/*": ["presentation/hooks/*"]
+      "@hooks/*": ["presentation/hooks/*"],
+      "@styles/*": ["presentation/styles/*"],
     },
 
     /* Linting */

@@ -1,28 +1,25 @@
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAppSelector } from '@application/store';
+import { isUserAuthenticated } from '@application/store/slices';
+
 import './App.css'
-import { Link } from "react-router-dom";
-import { AppRoutes } from "@routing/app-routes.enum";
-import { Button, Stack, Text, useMantineColorScheme } from "@mantine/core";
 
-function App() {
-    const { toggleColorScheme } = useMantineColorScheme();
+export interface AppProps {
+    children?: React.ReactNode;
+}
 
-    return (
-    <>
-        <Button
-            onClick={async () => {
-                toggleColorScheme();
-            }
-        }>
-            Toggle color scheme
-        </Button>
+function App({ children = <></> }: AppProps) {
+    const navigate = useNavigate();
+    const isAuthenticated = useAppSelector(isUserAuthenticated)
 
-        <Text size={'xl'}>Hello world</Text>
-        <Stack align={'start'} gap={'sm'}>
-            <Link to={AppRoutes.LOGIN}>Login</Link>
-            <Link to={AppRoutes.DORM_ROOMS}>Dorm rooms</Link>
-        </Stack>
-    </>
-    )
+    useEffect(() => {
+        if (!isAuthenticated) {
+            navigate('auth/login')
+        }
+    }, [isAuthenticated, navigate]);
+
+    return children
 }
 
 export default App

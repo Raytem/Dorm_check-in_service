@@ -19,6 +19,7 @@ export class LoginUseCase {
 
 		this.tokenRepository.setAccessToken(loginResponse.accessToken)
 
-		return new AuthenticatedUserEntity(1, '', '', '', []) // TODO: get user info from api and return it
+		return new AuthenticatedUserEntity(1, 'Даниил', 'Баков', 'Сергеевич', 'daniilbakov', null,
+			'daniilbk@yandex.by', []) // TODO: get user info from api and return it
 	}
 }

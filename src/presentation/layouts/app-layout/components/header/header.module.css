@@ -1,0 +1,88 @@
+.header__inner {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    gap: var(--mantine-spacing-md);
+
+    height: 100%;
+    padding: 0 var(--mantine-spacing-xl);
+
+    @media (max-width: $mantine-breakpoint-xs) {
+        flex-direction: column;
+        gap: 0;
+        padding: 0;
+    }
+}
+
+.header__logo {
+    cursor: pointer;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--mantine-h2-font-size);
+
+    @media (max-width: $mantine-breakpoint-xs) {
+        width: 100%;
+        padding: 0 var(--mantine-spacing-md);
+        background: var(--mantine-color-main-6);
+        text-align: center;
+    }
+}
+
+.header__toolbar {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: var(--mantine-spacing-xl);
+
+    height: 100%;
+
+    @media (max-width: $mantine-breakpoint-sm) {
+        gap: var(--mantine-spacing-sm);
+    }
+
+    @media (max-width: $mantine-breakpoint-xs) {
+        gap: var(--mantine-spacing-sm);
+        background: var(--mantine-color-auxiliaryMain-6);
+        justify-content: space-between;
+        width: 100%;
+        padding: 0 var(--mantine-spacing-md);
+    }
+}
+
+
+.header__toolbarProfile {
+    order: 2;
+    @media (max-width: $mantine-breakpoint-xs) {
+        order: 1;
+    }
+}
+
+.header__toolbarThemeBtn {
+    order: 1;
+    @media (max-width: $mantine-breakpoint-xs) {
+        order: 3;
+    }
+}
+
+.header__toolbarSpacer {
+    display: none;
+
+    @media (max-width: $mantine-breakpoint-xs) {
+        display: block;
+        order: 2;
+        width: 100%;
+    }
+}
+
+.header__toolbarLogoutBtn {
+    order: 4;
+}
+
+.header__toolbarBurger {
+    order: 5;
+}

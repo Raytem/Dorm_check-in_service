@@ -3,8 +3,9 @@ import { Container } from 'inversify';
 
 // Api Http Services
 import { AuthApiHttpService } from '@infrastructure/api/auth';
-// App services
-import { LocalStorageService, ConfigService } from '@infrastructure/services';
+// App services'
+import { IAuthService } from '@domain/adapters/services/auth-service';
+import { LocalStorageService, ConfigService, UINotificationService } from '@infrastructure/services';
 import { AuthService } from '@infrastructure/services/auth';
 // Repo interfaces
 import { IRoomRepository, ITokenRepository } from '@domain/repositories';
@@ -12,7 +13,7 @@ import { IRoomRepository, ITokenRepository } from '@domain/repositories';
 import { RoomRepository, LocalStorageTokenRepository } from '@infrastructure/repositories';
 // Usecases
 import { LoginUseCase, LogoutUseCase, RefreshTokensUseCase } from '@/usecases';
-import { IAuthService } from '@domain/adapters/services/auth-service';
+import { IUINotificationService } from '@domain/adapters/services/ui-notification';
 
 
 const diContainer = new Container()
@@ -21,6 +22,7 @@ const diContainer = new Container()
 diContainer.bind(AuthApiHttpService).toSelf();
 // Api Services
 // App Services
+diContainer.bind(IUINotificationService.$).to(UINotificationService).inSingletonScope()
 diContainer.bind(IAuthService.$).to(AuthService)
 diContainer.bind(ConfigService).toSelf().inSingletonScope()
 diContainer.bind(LocalStorageService).toSelf()

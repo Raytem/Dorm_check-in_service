@@ -33,7 +33,7 @@ export class AuthApiHttpService {
 			(response) => response,
 			async (error) => {
 				const originalRequest = error.config;
-				const isUnauthorized = error.response?.status === HttpStatusCode.NotFound;
+				const isUnauthorized = error.response?.status === HttpStatusCode.Unauthorized;
 
 				if (isUnauthorized && !originalRequest._isRetry) {
 					originalRequest._isRetry = true;

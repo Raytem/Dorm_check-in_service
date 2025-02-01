@@ -6,7 +6,11 @@ type AuthenticatedUserStateType = {
 }
 
 const initialState: AuthenticatedUserStateType = {
-	authenticatedUser: null
+	// authenticatedUser: null
+
+	// TODO: delete mock
+	authenticatedUser: new AuthenticatedUserEntity(1, 'Даниил', 'Баков', 'Сергеевич', 'daniilbakov', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlOLBRK-3wEFFeCojWlHou4nooggl5iI2PJQ&s',
+		'daniilbk@yandex.by', [])
 }
 
 export const authenticatedUserSlice = createSlice({
