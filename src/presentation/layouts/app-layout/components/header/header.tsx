@@ -18,7 +18,7 @@ import Burger from './components/burger';
 import ThemeButton from './components/theme-button';
 
 import classes from './header.module.css';
-import LogoutButton from './components/logout-button';
+import LogoutButton from '../logout-button';
 
 
 export interface HeaderProps {
@@ -78,7 +78,7 @@ const Header: React.FC<HeaderProps> = ({
 							avatarUrl={authenticatedUser.avatarUrl}
 						/>
 
-						<LogoutButton className={classes['header__toolbarLogoutBtn']!}/>
+						<LogoutButton visibleFrom={'sm'} className={classes['header__toolbarLogoutBtn']!}/>
 
 						<Box className={classes['header__toolbarSpacer']!}></Box>
 

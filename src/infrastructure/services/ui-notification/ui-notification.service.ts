@@ -4,8 +4,8 @@ import {
 	IUINotificationService
 } from '@domain/adapters/services/ui-notification';
 import { notifications } from '@mantine/notifications';
-import { AppException, ERROR_MESSAGES } from '@domain/adapters/exceptions';
 import { IconAlertCircle, IconCheck, IconX } from '@tabler/icons-react';
+import { ErrorUtil } from '@presentation/utils';
 
 
 @injectable()
@@ -22,7 +22,7 @@ export class UINotificationService implements IUINotificationService {
         });
     }
     showError(error: unknown, title?: string): void {
-        const errorMessage = this.parseError(error);
+        const errorMessage = ErrorUtil.parseError(error);
         notifications.show({
             title: title ?? 'Ошибка',
             message: errorMessage,
@@ -45,12 +45,4 @@ export class UINotificationService implements IUINotificationService {
             withBorder: true,
         });
     }
-
-    private parseError(error: unknown): string {
-        if (error instanceof AppException) {
-            return error.message;
-        }
-        return ERROR_MESSAGES.GENERAL.UNKNOWN_ERROR;
-    }
-
 }

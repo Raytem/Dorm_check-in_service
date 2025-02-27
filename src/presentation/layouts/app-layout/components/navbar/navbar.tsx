@@ -1,37 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import { AppShell, Group, NavLink, useMantineColorScheme } from '@mantine/core';
-import { IconBuildings, IconClipboardCheck } from '@tabler/icons-react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import VSTULogo from '@components/shared/vstu-logo';
+import {
+	AppShell, Transition,
+} from '@mantine/core';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { linksData } from '@layouts/app-layout/components/navbar/navbar.constants.tsx';
+import DesktopNavbar from '@layouts/app-layout/components/navbar/components/desktop-navbar';
+import MobileNavbar from '@layouts/app-layout/components/navbar/components/mobile-navbar';
 
-interface LinkData {
-	label: string;
-	link: string;
-	icon: React.ReactNode;
-}
-
-const linksData: LinkData[] = [
-	{
-		label: 'Общежития',
-		link: '/dormitories',
-		icon: <IconBuildings />,
-	},
-	{
-		label: 'Утверждение заселения',
-		link: '/check-in-confirmation',
-		icon: <IconClipboardCheck />,
-	}
-]
 
 export interface NavbarProps {
-	onLinkClick?: () => void
+	isMobile?: boolean;
+	headerHeight?: number;
+	isNavbarCollapsed?: boolean;
+	toggleNavbarCollapsed?: () => void;
+	onMobileLinkClick?: () => void;
 }
 
 const Navbar: React.FC<NavbarProps> = ({
-	onLinkClick = () => {}
+   	isMobile = false,
+	headerHeight = 0,
+	isNavbarCollapsed = true,
+   	toggleNavbarCollapsed = () => {},
+	onMobileLinkClick = () => {},
 }) => {
 	const [active, setActive] = useState(0);
-	const { colorScheme } = useMantineColorScheme()
 	const navigate = useNavigate()
 	const location = useLocation()
 
@@ -43,30 +35,38 @@ const Navbar: React.FC<NavbarProps> = ({
 		}
 	}, [location])
 
-	return <AppShell.Navbar>
-		<Group justify={'center'} w={'100%'} py={'md'}>
-			<VSTULogo size={130} color={ colorScheme !== 'dark' ? 'main.6' : 'gray.4'} />
-		</Group>
+	return <>
+		<AppShell.Navbar>
+			{ !isMobile
+				?
+				<MobileNavbar
+					activeLinkIdx={active}
+					isNavbarCollapsed={isNavbarCollapsed}
+					toggleNavbarCollapsed={toggleNavbarCollapsed}
+					onLinkClick={onMobileLinkClick}
+				/>
+				:
+				<DesktopNavbar activeLinkIdx={active} toggleNavbarCollapsed={toggleNavbarCollapsed}/>
+			}
+		</AppShell.Navbar>
 
-		{
-			linksData.map((data, idx) => {
-				return <Link to={data.link} key={idx}>
-					<NavLink
-						py={'lg'}
-						px={'xl'}
-						label={data.label}
-						leftSection={data.icon}
-						variant='filled'
-						active={idx === active}
-						color={'main.6'}
-						onClick={() => {
-							onLinkClick()
-						}}
-					/>
-				</Link>
-			})
-		}
-	</AppShell.Navbar>
+		<Transition mounted={isMobile && !isNavbarCollapsed} transition={'slide-right'}>
+			{(styles) => (
+				<MobileNavbar
+					pos={'fixed'}
+					w={400}
+					top={headerHeight}
+					bottom={0}
+					left={0}
+					activeLinkIdx={active}
+					isNavbarCollapsed={isNavbarCollapsed}
+					toggleNavbarCollapsed={toggleNavbarCollapsed}
+					onLinkClick={onMobileLinkClick}
+					style={styles}
+				/>
+			)}
+		</Transition>
+	</>
 }
 
 export default Navbar

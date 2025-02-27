@@ -3,8 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '@application/store';
 import { isUserAuthenticated } from '@application/store/slices';
 
-import './App.css'
-
 export interface AppProps {
     children?: React.ReactNode;
 }

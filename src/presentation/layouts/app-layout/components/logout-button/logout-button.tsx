@@ -1,5 +1,5 @@
 import React from 'react';
-import { ActionIcon, Button, Tooltip } from '@mantine/core';
+import { Button, ButtonProps } from '@mantine/core';
 import { IconLogout } from '@tabler/icons-react';
 import { useAppDispatch } from '@application/store';
 import { clearAuthenticatedUser } from '@application/store/slices';
@@ -8,18 +8,19 @@ import { LogoutUseCase } from '@/usecases';
 import { IUINotificationService } from '@domain/adapters/services/ui-notification';
 
 
-export interface LogoutButtonProps {
+export interface LogoutButtonProps extends ButtonProps {
 	title?: string;
-	className?: string;
 }
 
 const LogoutButton: React.FC<LogoutButtonProps> = ({
 	title = 'Выйти',
 	className = '',
+	...props
 }) => {
 	const dispatch = useAppDispatch()
 	const logoutUseCase = useInjection(LogoutUseCase)
 	const uiNotificationService = useInjection(IUINotificationService.$)
+
 
 	const handleClick = async () => {
 		try {
@@ -30,28 +31,16 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({
 		}
 	}
 
-	return <>
-		<Button
-			className={className}
-			color={'main.7'}
-			rightSection={<IconLogout />}
-			visibleFrom={'sm'}
-			onClick={handleClick}
-		>
-			{ title }
-		</Button>
-		<Tooltip label={title}>
-			<ActionIcon
-				className={className}
-				color={'main.7'}
-				size={'lg'}
-				hiddenFrom={'sm'}
-				onClick={handleClick}
-			>
-				<IconLogout />
-			</ActionIcon>
-		</Tooltip>
-	</>
+	return <Button
+		className={className}
+		color={'main.7'}
+		rightSection={<IconLogout />}
+		onClick={handleClick}
+		miw={'110px'}
+		{...props}
+	>
+		{ title }
+	</Button>
 }
 
 export default LogoutButton;

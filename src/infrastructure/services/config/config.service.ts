@@ -7,10 +7,13 @@ export class ConfigService {
 		const env = import.meta.env;
 		this.config = {
 			app: {
-				title: env.VITE_APP_TITLE ?? ''
+				title: env.VITE_APP_TITLE ?? '',
 			},
 			authApi: {
-				baseUrl: env.VITE_AUTH_API_BASE_URL ?? ''
+				baseUrl: env.VITE_AUTH_API_BASE_URL ?? '',
+			},
+			dormitoryApi: {
+				baseUrl: env.VITE_DORMITORY_API_BASE_URL ?? '',
 			}
 		}
 	}

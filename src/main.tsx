@@ -5,6 +5,8 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from "react-router-dom";
 import { Provider as DIProvider } from 'inversify-react'
 import { Provider as StoreProvider } from 'react-redux'
+import { QueryParamProvider } from 'use-query-params';
+import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';
 
 import { ApplicationRoutes } from "@routing/application.routes.tsx";
 import LoadingPage from "presentation/pages/loading-page";
@@ -21,18 +23,20 @@ const App = lazy(() => import('@/App.tsx'));
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <MantineProvider theme={mantineTheme} defaultColorScheme={'auto'}>
-        <Notifications />
-        <StoreProvider store={store}>
-            <DIProvider container={diContainer}>
-                <BrowserRouter>
-                    <Suspense fallback={<LoadingPage />}>
-                        <App />
-                        <ApplicationRoutes />
-                    </Suspense>
-                </BrowserRouter>
-            </DIProvider>
-        </StoreProvider>
-    </MantineProvider>
+      <MantineProvider theme={mantineTheme} defaultColorScheme={'auto'}>
+          <Notifications />
+          <StoreProvider store={store}>
+              <DIProvider container={diContainer}>
+                  <BrowserRouter>
+                      <QueryParamProvider adapter={ReactRouter6Adapter}>
+                              <Suspense fallback={<LoadingPage />}>
+                                  <App />
+                                  <ApplicationRoutes />
+                              </Suspense>
+                      </QueryParamProvider>
+                  </BrowserRouter>
+              </DIProvider>
+          </StoreProvider>
+      </MantineProvider>
   </StrictMode>,
 )

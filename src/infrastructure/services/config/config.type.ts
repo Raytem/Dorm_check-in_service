@@ -1,8 +1,11 @@
 export interface Config {
 	app: {
-		title: string
+		title: string,
 	},
 	authApi: {
-		baseUrl: string
-	}
+		baseUrl: string,
+	},
+	dormitoryApi: {
+		baseUrl: string,
+	},
 }

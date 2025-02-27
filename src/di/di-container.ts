@@ -3,6 +3,9 @@ import { Container } from 'inversify';
 
 // Api Http Services
 import { AuthApiHttpService } from '@infrastructure/api/auth';
+import { DormitoryApiHttpService } from '@infrastructure/api/dormitory-api';
+// Api services
+import { RoomService } from '@infrastructure/api/dormitory-api/services/room';
 // App services'
 import { IAuthService } from '@domain/adapters/services/auth-service';
 import { LocalStorageService, ConfigService, UINotificationService } from '@infrastructure/services';
@@ -12,7 +15,7 @@ import { IRoomRepository, ITokenRepository } from '@domain/repositories';
 // Repositories impl
 import { RoomRepository, LocalStorageTokenRepository } from '@infrastructure/repositories';
 // Usecases
-import { LoginUseCase, LogoutUseCase, RefreshTokensUseCase } from '@/usecases';
+import { LoginUseCase, LogoutUseCase, RefreshTokensUseCase, GetRoomsUseCase } from '@/usecases';
 import { IUINotificationService } from '@domain/adapters/services/ui-notification';
 
 
@@ -20,7 +23,9 @@ const diContainer = new Container()
 
 // Api Http Services
 diContainer.bind(AuthApiHttpService).toSelf();
+diContainer.bind(DormitoryApiHttpService).toSelf();
 // Api Services
+diContainer.bind(RoomService).toSelf();
 // App Services
 diContainer.bind(IUINotificationService.$).to(UINotificationService).inSingletonScope()
 diContainer.bind(IAuthService.$).to(AuthService)
@@ -33,5 +38,6 @@ diContainer.bind(IRoomRepository.$).to(RoomRepository)
 diContainer.bind(LoginUseCase).toSelf()
 diContainer.bind(LogoutUseCase).toSelf()
 diContainer.bind(RefreshTokensUseCase).toSelf()
+diContainer.bind(GetRoomsUseCase).toSelf()
 
 export { diContainer }

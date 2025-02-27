@@ -9,6 +9,10 @@
     height: 100%;
     padding: 0 var(--mantine-spacing-xl);
 
+    @media (max-width: $mantine-breakpoint-sm) {
+        padding: 0 var(--mantine-spacing-md);
+    }
+
     @media (max-width: $mantine-breakpoint-xs) {
         flex-direction: column;
         gap: 0;

@@ -4,3 +4,12 @@
   font-family: 'Roboto';
   src: url("presentation/assets/fonts/roboto/Roboto-Regular.ttf");
 }
+
+:root {
+  --app-container-width: 1920px
+}
+
+.appContainer {
+  max-width: var(--app-container-width);
+  margin: 0 auto
+}
