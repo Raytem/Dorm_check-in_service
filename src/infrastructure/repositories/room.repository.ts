@@ -1,7 +1,8 @@
 import { injectable } from 'inversify';
 import { PaginatedData } from '@domain/types';
-import { PaginationFilterEntity, RoomEntity, RoomSearchFiltersEntity } from '@domain/entities';
+import { PaginationFilterEntity, RoomDetailsEntity, RoomEntity, RoomSearchFiltersEntity } from '@domain/entities';
 import { ROOM_MOCK_DATA } from '@domain/mocks';
+import { ROOM_DETAILS_MOCK_DATA } from '@domain/mocks/room-details.mock.ts';
 import { IRoomRepository } from '@domain/repositories';
 import { PaginatedDataMapper } from '@infrastructure/mappers';
 
@@ -29,10 +30,12 @@ export class RoomRepository implements IRoomRepository {
 		}, timeout))
 	}
 
-	// async findById(id: string): Promise<RoomEntity> {
-	// 	const timeout = Math.ceil(Math.random() * 600 + 120);
-	// 	return await new Promise((resolve) => setTimeout(() => {
-	// 		resolve(ROOM_MOCK_DATA[0]!)
-	// 	}, timeout) )
-	// }
+	async getRoomDetailsById(roomId: string): Promise<RoomDetailsEntity> {
+		console.log('RoomRepository.findById: ', roomId);
+
+		const timeout = Math.ceil(Math.random() * 1000 + 700);
+		return await new Promise((resolve) => setTimeout(() => {
+			resolve(ROOM_DETAILS_MOCK_DATA)
+		}, timeout) )
+	}
 }

@@ -15,7 +15,7 @@ import { IRoomRepository, ITokenRepository } from '@domain/repositories';
 // Repositories impl
 import { RoomRepository, LocalStorageTokenRepository } from '@infrastructure/repositories';
 // Usecases
-import { LoginUseCase, LogoutUseCase, RefreshTokensUseCase, GetRoomsUseCase } from '@/usecases';
+import { LoginUseCase, LogoutUseCase, RefreshTokensUseCase, GetRoomsUseCase, GetRoomDetailsUseCase } from '@/usecases';
 import { IUINotificationService } from '@domain/adapters/services/ui-notification';
 
 
@@ -39,5 +39,6 @@ diContainer.bind(LoginUseCase).toSelf()
 diContainer.bind(LogoutUseCase).toSelf()
 diContainer.bind(RefreshTokensUseCase).toSelf()
 diContainer.bind(GetRoomsUseCase).toSelf()
+diContainer.bind(GetRoomDetailsUseCase).toSelf()
 
 export { diContainer }

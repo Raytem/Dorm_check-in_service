@@ -5,6 +5,7 @@ import RoomsTableRow from '@pages/rooms/components/rooms-table-row';
 import TableThWithFilters from '@components/shared/table-th-with-filters';
 import { RoomSortParam, SortDirection } from '@domain/enums';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export interface RoomsTableProps {
 	rooms: RoomEntity[];
@@ -61,11 +62,21 @@ const RoomsTableSkeletonRows = ({ count }: { count: number }) => (
 	</>
 );
 
-const RoomsTableBody = ({ rooms, isLoading, skeletonRowsCount }: RoomsTableProps) => (
-	<Table.Tbody>
-		{isLoading ? <RoomsTableSkeletonRows count={skeletonRowsCount ?? 20} /> : rooms.map((room) => <RoomsTableRow key={room.id} room={room} />)}
+const RoomsTableBody = ({ rooms, isLoading, skeletonRowsCount }: RoomsTableProps) => {
+	const navigate = useNavigate();
+
+	const handleRowClick = (roomId: number) => {
+		navigate(`/rooms/${roomId}`)
+	}
+
+	return <Table.Tbody>
+		{isLoading
+			? <RoomsTableSkeletonRows count={skeletonRowsCount ?? 20} />
+			: rooms.map((room) => (
+				<RoomsTableRow key={room.id} room={room} onClick={() => handleRowClick(room.id)} />
+			))}
 	</Table.Tbody>
-);
+};
 
 const RoomsTable: React.FC<RoomsTableProps> = ({
 	rooms,
