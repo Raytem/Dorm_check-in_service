@@ -13,5 +13,6 @@ export class ResidentEntity {
 		public isCheckInConfirmed: boolean,
 		public checkInDate: Date,
 		public evictionDate: Date | null,
+		public note: string,
 	) {}
 }

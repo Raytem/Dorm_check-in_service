@@ -5,9 +5,9 @@ import EmptyView from '@components/shared/empty-view';
 
 
 interface DataStatusContainerProps {
-	skipLoadingState: boolean
+	skipLoadingState?: boolean
 
-	isLoading: boolean;
+	isLoading?: boolean;
 	error?: unknown | null;
 	dataLength?: number;
 
@@ -21,8 +21,8 @@ interface DataStatusContainerProps {
 const DataStatusContainer: React.FC<DataStatusContainerProps> = ({
 	skipLoadingState = false,
 
-	isLoading,
-	error,
+	isLoading = false,
+	error = null,
 	dataLength,
 
 	LoadingComponent = (

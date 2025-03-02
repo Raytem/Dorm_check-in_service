@@ -1,6 +1,6 @@
 import PageLayout from '@/presentation/layouts/page-layout';
 import React from 'react';
-import RoomPageSkeleton from '@pages/room/skeletons';
+import RoomPageSkeleton from 'presentation/pages/room/skeleton';
 import DataStatusContainer from '@components/shared/data-status-container';
 
 export interface RoomPageLayoutProps {
@@ -28,8 +28,7 @@ const RoomPageLayout: React.FC<RoomPageLayoutProps> = ({
 			isLoading={isLoading}
 			error={error}
 		>
-
-		{ isLoading ? <RoomPageSkeleton/> : children }
+			{ isLoading ? <RoomPageSkeleton/> : children }
 		</DataStatusContainer>
 	</PageLayout>
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Group, Skeleton, Stack, StackProps, Title } from '@mantine/core';
+import { Box, Group, Skeleton, Stack, StackProps, Title } from '@mantine/core';
 import BackButton, { BackButtonProps } from '@layouts/page-layout/components/back-button.tsx';
 
 export interface PageLayoutProps extends StackProps {
@@ -31,7 +31,9 @@ const PageLayout: React.FC<PageLayoutProps> = ({
 			</Group>
 		</Stack>
 
-		{ children }
+		<Box>
+			{ children }
+		</Box>
 	</Stack>
 }
 

@@ -1,12 +1,13 @@
 import { useParams } from 'react-router-dom';
-import LabelValueBox from '@pages/room/components/label-value-box/label-value-box.tsx';
 import { useInjection } from 'inversify-react';
 import { GetRoomDetailsUseCase } from '@/usecases';
-import { BlockType } from '@domain/enums';
 import { useFetch } from '@presentation/hooks';
 import { useEffect } from 'react';
-import { Group } from '@mantine/core';
 import RoomPageLayout from '@pages/room/components/room-page-layout';
+import RoomInfoSection from '@pages/room/components/room-info-section';
+import ResidentCardList from '@pages/room/components/resident-card-list';
+import ResidentsSectionHeader from '@pages/room/components/residents-section-header';
+import { Stack } from '@mantine/core';
 
 const RoomPage = () => {
 	const gatRoomDetailsUseCase = useInjection(GetRoomDetailsUseCase)
@@ -20,12 +21,7 @@ const RoomPage = () => {
 		refetch()
 	}, []);
 
-	const boxesData = [
-		{ label: 'Этаж', value: room?.floor },
-		{ label: 'Номер блока', value: room?.blockNumber },
-		{ label: 'Тип блока', value: BlockType.getDisplayName(room?.blockType ?? BlockType.MALE) },
-		{ label: 'Свободно мест', value: room?.availablePlacesCount }
-	]
+	const onAddResident = () => {}
 
 	return <RoomPageLayout
 		dormitoryNumber={room?.dormitoryNumber}
@@ -33,11 +29,20 @@ const RoomPage = () => {
 		isLoading={isLoading}
 		error={error}
 	>
-		<Group gap={'xl'}>
-			{ boxesData.map((d) => (
-				<LabelValueBox value={d.value} label={d.label} minWidth={'150px'}/>
-			)) }
-		</Group>
+		<Stack gap={'xl'}>
+			<RoomInfoSection
+				room={room}
+			/>
+
+			<ResidentsSectionHeader
+				onAddResident={onAddResident}
+			/>
+
+			<ResidentCardList
+				residents={room?.residents ?? []}
+				isLoading={isLoading}
+			/>
+		</Stack>
 	</RoomPageLayout>
 }
 

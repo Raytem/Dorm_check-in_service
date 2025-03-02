@@ -1,0 +1,18 @@
+
+.key-value-table {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.key-value-table__row {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    justify-content: flex-start;
+}
+
+.key-value-table__cell {
+
+}
