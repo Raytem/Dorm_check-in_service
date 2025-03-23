@@ -1,6 +1,6 @@
 import React from 'react';
 import { Group } from '@mantine/core';
-import LabelValueBox from '@pages/room/components/label-value-box/label-value-box.tsx';
+import LabelValueBox, { LabelValueBoxData } from '@pages/room/components/label-value-box/label-value-box.tsx';
 import { BlockType } from '@domain/enums';
 import { RoomDetailsEntity } from '@domain/entities';
 
@@ -14,7 +14,7 @@ const RoomInfoSection: React.FC<RoomInfoSectionProps> = ({
 }) => {
 	if (!room) return null;
 
-	const boxesData = [
+	const boxesData: LabelValueBoxData[] = [
 		{ label: 'Этаж', value: room.floor },
 		{ label: 'Номер блока', value: room.blockNumber },
 		{ label: 'Тип блока', value: BlockType.getDisplayName(room.blockType) },
@@ -23,10 +23,10 @@ const RoomInfoSection: React.FC<RoomInfoSectionProps> = ({
 
 	return (
 		<Group gap={'md'}>
-			{ boxesData.map((d) => (
+			{ boxesData.map((d, idx) => (
 				<LabelValueBox
-					value={d.value}
-					label={d.label}
+					key={idx}
+					data={d}
 					minWidth={'150px'}
 				/>
 			)) }

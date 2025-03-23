@@ -12,12 +12,20 @@ export interface ResidentCardListProps {
 	residents: ResidentEntity[];
 	isLoading: boolean;
 	skeletonCardsCount?: number;
+	onEvict?: (resident: ResidentEntity) => void
+	onRelocate?: (resident: ResidentEntity) => void,
+	onConfirmCheckIn?: (resident: ResidentEntity) => void,
+	onCancelResidentCheckIn?: (resident: ResidentEntity) => void,
 }
 
 const ResidentCardList: React.FC<ResidentCardListProps> = ({
 	residents,
 	isLoading,
-	skeletonCardsCount = 3
+	onEvict,
+	onRelocate,
+	onConfirmCheckIn,
+   	onCancelResidentCheckIn,
+	skeletonCardsCount = 3,
 }) => {
 	const dataLength = isLoading
 		? skeletonCardsCount
@@ -31,13 +39,15 @@ const ResidentCardList: React.FC<ResidentCardListProps> = ({
 	return <DataStatusContainer
 		skipLoadingState
 		dataLength={dataLength}
-		EmptyComponent={<EmptyView
-			icon={<IconUserOff size={''}/>}
-			title={'Проживающих нет'}
-			description={'В эту комнату еще никого не заселили'}
-		/>}
+		EmptyComponent={
+			<EmptyView
+				icon={<IconUserOff size={''}/>}
+				title={'Проживающих нет'}
+				description={'В эту комнату еще никого не заселили'}
+			/>
+		}
 	>
-		<Group>
+		<Group align={'stretch'}>
 			{
 				isLoading
 				? Array.from({ length: skeletonCardsCount }).map((_, index) => (
@@ -51,6 +61,10 @@ const ResidentCardList: React.FC<ResidentCardListProps> = ({
 						key={resident.id}
 						resident={resident}
 						maw={maxWidthStyles}
+						onEvict={onEvict}
+						onConfirmCheckIn={onConfirmCheckIn}
+						onCancelResidentCheckIn={onCancelResidentCheckIn}
+						onRelocate={onRelocate}
 					/>
 				))
 			}

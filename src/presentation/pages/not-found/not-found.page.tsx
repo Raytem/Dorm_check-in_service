@@ -1,11 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { Button, Center, Stack, Title } from "@mantine/core";
+import { AppRoutes } from '@routing/app-routes.ts';
 
 const NotFoundPage = () => {
     const navigate = useNavigate()
 
     const handleToMainPageBtnClick = () => {
-        navigate('/')
+        navigate(AppRoutes.HOME)
     }
 
     return <Center maw={'100%'} h={'100dvh'}>

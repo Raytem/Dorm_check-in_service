@@ -19,7 +19,7 @@ const KeyValueTable: React.FC<KeyValueTableProps> = ({
 	return (
 		<div className={classes['key-value-table']}>
 			{Object.entries(data).map(([key, value]) => (
-				<div className={classes['key-value-table__row']}>
+				<div key={key} className={classes['key-value-table__row']}>
 					<div
 						style={{ width: keyWidth }}
 						className={classes['key-value-table__cell']}

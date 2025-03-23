@@ -1,0 +1,20 @@
+.room-card {
+    display: flex;
+    justify-content: space-between;
+
+    padding: 10px 20px;
+    border-radius: var(--mantine-radius-md);
+    background: var(--mantine-color-gray-outline-hover);
+    border-width: 2px;
+    border-color: transparent;
+    border-style: solid;
+
+    user-select: none;
+
+    transition: .2s;
+}
+
+.room-card_active {
+    background: var(--mantine-color-indigo-light);
+    border-color: var(--mantine-color-indigo-light-hover);
+}

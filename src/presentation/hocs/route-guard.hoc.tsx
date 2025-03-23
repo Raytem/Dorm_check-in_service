@@ -3,6 +3,7 @@ import { Navigate } from "react-router-dom";
 import ForbiddenPage from "@pages/forbidden";
 import { useAppSelector } from '@application/store';
 import { isUserAuthenticated, selectAuthenticatedUser } from '@application/store/slices';
+import { AppRoutes } from '@routing/app-routes.ts';
 
 export interface RouteGuardProps {
     allowedRoles?: string[]
@@ -12,7 +13,7 @@ export interface RouteGuardProps {
 
 export const RouteGuard = ({
     allowedRoles = [],
-    redirectTo = '/auth/login',
+    redirectTo = AppRoutes.LOGIN,
     children,
 }: RouteGuardProps) => {
     const isAuthenticated = useAppSelector(isUserAuthenticated)

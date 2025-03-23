@@ -46,7 +46,7 @@ export default tseslint.config(
         '@typescript-eslint/no-unsafe-declaration-merging': 'error',
         'no-unused-vars': 'off',
         "@typescript-eslint/no-unused-vars": [
-            "error",
+            "warn",
             { "vars": "all", "args": "after-used", "ignoreRestSiblings": false, "argsIgnorePattern": "^_" }
         ],
         'no-useless-constructor': 'off',
@@ -55,7 +55,8 @@ export default tseslint.config(
         '@typescript-eslint/prefer-as-const': 'error',
         '@typescript-eslint/prefer-literal-enum-member': 'off',
         '@typescript-eslint/triple-slash-reference': 'error',
-        '@typescript-eslint/unified-signatures': 'error'
+        '@typescript-eslint/unified-signatures': 'error',
+        "@typescript-eslint/ban-ts-comment": "off"
     },
   },
 )

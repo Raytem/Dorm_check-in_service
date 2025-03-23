@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
-import { PaginatedData } from '@domain/types';
-import { PaginationFilterEntity, RoomDetailsEntity, RoomEntity, RoomSearchFiltersEntity } from '@domain/entities';
+import { PaginatedData, PaginationFilter, RoomSearchFilters } from '@domain/types';
+import { RoomDetailsEntity, RoomEntity } from '@domain/entities';
 import { ROOM_MOCK_DATA } from '@domain/mocks';
 import { ROOM_DETAILS_MOCK_DATA } from '@domain/mocks/room-details.mock.ts';
 import { IRoomRepository } from '@domain/repositories';
@@ -15,7 +15,7 @@ export class RoomRepository implements IRoomRepository {
 	// ) {}
 
 
-	async findAll(filters: RoomSearchFiltersEntity & PaginationFilterEntity): Promise<PaginatedData<RoomEntity>> {
+	async findAll(filters: RoomSearchFilters & PaginationFilter): Promise<PaginatedData<RoomEntity>> {
 		console.log('RoomRepository.findAll filters: ', filters)
 
 		const timeout = Math.ceil(Math.random() * 600 + 120);
@@ -30,7 +30,7 @@ export class RoomRepository implements IRoomRepository {
 		}, timeout))
 	}
 
-	async getRoomDetailsById(roomId: string): Promise<RoomDetailsEntity> {
+	async getRoomDetailsById(roomId: number): Promise<RoomDetailsEntity> {
 		console.log('RoomRepository.findById: ', roomId);
 
 		const timeout = Math.ceil(Math.random() * 1000 + 700);

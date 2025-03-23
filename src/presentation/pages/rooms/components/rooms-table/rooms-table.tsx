@@ -3,9 +3,10 @@ import { RoomEntity } from '@domain/entities';
 import TableRowSkeleton from '@components/shared/table-row-skeleton';
 import RoomsTableRow from '@pages/rooms/components/rooms-table-row';
 import TableThWithFilters from '@components/shared/table-th-with-filters';
-import { RoomSortParam, SortDirection } from '@domain/enums';
+import { RoomSortParams, SortDirection } from '@domain/enums';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AppRoutes } from '@routing/app-routes.ts';
 
 export interface RoomsTableProps {
 	rooms: RoomEntity[];
@@ -23,13 +24,13 @@ export interface RoomsTableHeaderProps {
 }
 
 
-const columns: { key: RoomSortParam; label: string; skeletonProps: SkeletonProps }[] = [
-	{ key: RoomSortParam.DORMITORY_NUMBER, label: 'Номер общежития', skeletonProps: { width: 20 } },
-	{ key: RoomSortParam.FLOOR, label: 'Этаж', skeletonProps: { width: 20 } },
-	{ key: RoomSortParam.BLOCK_NUMBER, label: 'Номер блока', skeletonProps: { width: 20 } },
-	{ key: RoomSortParam.ROOM, label: 'Комната', skeletonProps: { width: 50 } },
-	{ key: RoomSortParam.BLOCK_TYPE, label: 'Тип блока', skeletonProps: { width: 60 } },
-	{ key: RoomSortParam.AVAILABLE_PLACES, label: 'Свободно мест', skeletonProps: { width: 20 } },
+const columns: { key: RoomSortParams; label: string; skeletonProps: SkeletonProps }[] = [
+	{ key: RoomSortParams.DORMITORY_NUMBER, label: 'Номер общежития', skeletonProps: { width: 20 } },
+	{ key: RoomSortParams.FLOOR, label: 'Этаж', skeletonProps: { width: 20 } },
+	{ key: RoomSortParams.BLOCK_NUMBER, label: 'Номер блока', skeletonProps: { width: 20 } },
+	{ key: RoomSortParams.ROOM, label: 'Комната', skeletonProps: { width: 50 } },
+	{ key: RoomSortParams.BLOCK_TYPE, label: 'Тип блока', skeletonProps: { width: 60 } },
+	{ key: RoomSortParams.AVAILABLE_PLACES, label: 'Свободно мест', skeletonProps: { width: 20 } },
 ];
 
 const RoomsTableHeader: React.FC<RoomsTableHeaderProps> = ({
@@ -66,7 +67,10 @@ const RoomsTableBody = ({ rooms, isLoading, skeletonRowsCount }: RoomsTableProps
 	const navigate = useNavigate();
 
 	const handleRowClick = (roomId: number) => {
-		navigate(`/rooms/${roomId}`)
+		const roomPath = AppRoutes.getPath(AppRoutes.ROOM, {
+			roomId: String(roomId)
+		});
+		navigate(roomPath);
 	}
 
 	return <Table.Tbody>

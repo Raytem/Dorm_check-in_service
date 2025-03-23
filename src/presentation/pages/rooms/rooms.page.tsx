@@ -16,8 +16,7 @@ import DataStatusContainer from '@components/shared/data-status-container';
 import AlignedPagination from '@components/shared/aligned-pagination';
 
 import { GetRoomsUseCase } from '@/usecases';
-import { PaginationFilterEntity } from '@domain/entities';
-import { RoomSortParam, SortDirection } from '@domain/enums';
+import { RoomSortParams, SortDirection } from '@domain/enums';
 
 
 const RoomsPage = () => {
@@ -25,17 +24,21 @@ const RoomsPage = () => {
 	const getRoomsUseCase = useInjection(GetRoomsUseCase)
 	const documentVisibility = useDocumentVisibility();
 
-	const { page, limit, setPage } = usePaginationFilter(new PaginationFilterEntity(rowsCount))
+	const { page, limit, setPage } = usePaginationFilter({
+		page: 1,
+		limit: rowsCount,
+	})
+
 	const {
 		filters,
 		setFilters,
 		resetFilters,
-	} = useRoomFilters({ sortBy: RoomSortParam.DORMITORY_NUMBER, sortDir: SortDirection.ASC })
+	} = useRoomFilters({ sortBy: RoomSortParams.DORMITORY_NUMBER, sortDir: SortDirection.ASC })
+
 	const { data, isLoading, error, refetch } = useFetch(async () => {
 		return await getRoomsUseCase.execute({ ...filters, page, limit })
 	}, true)
 
-	// on filters change - reset page, refetch
 	useEffect(() => {
 		if (page === 1) {
 			refetch();
@@ -44,12 +47,15 @@ const RoomsPage = () => {
 		}
 	}, [filters.blockType, filters.roomName, filters.onlyAvailableRooms, filters.blockNumber, filters.dormitoryNumber, filters.studentGroup, filters.floor]);
 
-	// on document visibility, sort change - refetch
 	useEffect(() => {
 		if (documentVisibility === 'visible') {
 			refetch();
 		}
-	}, [documentVisibility, page, limit, filters.sortBy, filters.sortDir]);
+	}, [documentVisibility, page, limit, filters.sortBy, filters.sortDir, refetch]);
+
+	useEffect(() => {
+		window.scrollTo({ top: 0 });
+	}, [])
 
 
 	return <PageLayout
@@ -79,7 +85,7 @@ const RoomsPage = () => {
 						sortDir={filters.sortDir!}
 						selectedSortBy={filters.sortBy}
 						onSortChange={(sortBy, sortDir) => {
-							setFilters({ sortBy: sortBy as RoomSortParam, sortDir })
+							setFilters({ sortBy: sortBy as RoomSortParams, sortDir })
 						}}
 					/>
 				</DataStatusContainer>

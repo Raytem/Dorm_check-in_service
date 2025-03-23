@@ -1,10 +1,10 @@
 import { useCallback } from 'react';
 import { BooleanParam, NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params';
+import { RoomSortParams } from '@domain/enums';
+import { SortParams } from '@domain/types/sort-params.ts';
+import { RoomSearchFilters } from '@domain/types/room-search-filters.ts';
 
-import { RoomSearchFiltersEntity, SortParamsEntity } from '@domain/entities';
-import { RoomSortParam } from '@domain/enums';
-
-type ExtendedRoomFilters = RoomSearchFiltersEntity & SortParamsEntity<RoomSortParam>;
+type ExtendedRoomFilters = RoomSearchFilters & SortParams<RoomSortParams>;
 
 export function useRoomFilters(initialValue?: ExtendedRoomFilters) {
 	const [query, setQuery] = useQueryParams({
@@ -38,16 +38,16 @@ export function useRoomFilters(initialValue?: ExtendedRoomFilters) {
 
 	return {
 		filters: {
-			dormitoryNumber: query.dormitoryNumber as RoomSearchFiltersEntity['dormitoryNumber'] ?? undefined,
-			floor: query.floor as RoomSearchFiltersEntity['floor'] ?? undefined,
-			blockNumber: query.blockNumber as RoomSearchFiltersEntity['blockNumber'] ?? undefined,
-			roomName: query.roomName as RoomSearchFiltersEntity['roomName'] ?? undefined,
-			blockType: query.blockType as RoomSearchFiltersEntity['blockType'] ?? undefined ,
-			studentGroup: query.studentGroup as RoomSearchFiltersEntity['studentGroup'] ?? undefined,
-			onlyAvailableRooms: query.onlyAvailableRooms as RoomSearchFiltersEntity['onlyAvailableRooms'] ?? undefined,
+			dormitoryNumber: query.dormitoryNumber as RoomSearchFilters['dormitoryNumber'],
+			floor: query.floor as RoomSearchFilters['floor'],
+			blockNumber: query.blockNumber as RoomSearchFilters['blockNumber'],
+			roomName: query.roomName as RoomSearchFilters['roomName'],
+			blockType: query.blockType as RoomSearchFilters['blockType'] ,
+			studentGroup: query.studentGroup as RoomSearchFilters['studentGroup'],
+			onlyAvailableRooms: query.onlyAvailableRooms as RoomSearchFilters['onlyAvailableRooms'],
 			// sort params
-			sortBy: query.sortBy as SortParamsEntity<RoomSortParam>['sortBy'] ?? undefined,
-			sortDir: query.sortDir as SortParamsEntity<RoomSortParam>['sortDir'] ?? undefined,
+			sortBy: query.sortBy as SortParams<RoomSortParams>['sortBy'],
+			sortDir: query.sortDir as SortParams<RoomSortParams>['sortDir'],
 		},
 		setFilters,
 		resetFilters,

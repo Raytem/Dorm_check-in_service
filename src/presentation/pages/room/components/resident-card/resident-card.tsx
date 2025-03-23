@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ResidentEntity } from '@domain/entities';
-import { Avatar, Box, BoxProps, Button, Title } from '@mantine/core';
+import { Avatar, Box, BoxProps, Button, Textarea, Title } from '@mantine/core';
 import KeyValueTable from '@components/shared/key-value-table';
 import { Sex } from '@domain/enums';
 import CheckInStatusChip from '@pages/room/components/resident-card/check-in-status-chip';
@@ -10,13 +10,21 @@ import { DateFormatterUtil } from '@presentation/utils';
 
 export interface ResidentCardProps extends BoxProps {
 	resident: ResidentEntity,
+	onEvict?: (resident: ResidentEntity) => void
+	onRelocate?: (resident: ResidentEntity) => void,
+	onConfirmCheckIn?: (resident: ResidentEntity) => void,
+	onCancelResidentCheckIn?: (resident: ResidentEntity) => void,
 }
 
 const ResidentCard: React.FC<ResidentCardProps> = ({
 	resident,
+	onEvict = () => {},
+	onRelocate = () => {},
+	onConfirmCheckIn = () => {},
+	onCancelResidentCheckIn = () => {},
 	...props
 }) => {
-	if (!resident) return null;
+	const [note, setNote] = useState(resident.note);
 
 	const baseInfoKeyValueData: Record<string, any>  = {
 		'Номер зачетки': resident.gradeBookNumber,
@@ -43,7 +51,7 @@ const ResidentCard: React.FC<ResidentCardProps> = ({
 						/>
 
 						<div className={classes['resident-card__base-info__right']}>
-							<Title order={4}>{resident.lastName} {resident.firstName} {resident.patronymic}</Title>
+							<Title order={4}>{resident.getFullName()}</Title>
 
 							<KeyValueTable
 								data={baseInfoKeyValueData}
@@ -59,9 +67,14 @@ const ResidentCard: React.FC<ResidentCardProps> = ({
 							data={midInfoKeyValueData}
 							keyWidth={'100px'}
 						/>
-						{/*<Textarea*/}
-						{/*	placeholder="Напишите что-нибудь"*/}
-						{/*/>*/}
+
+						<Textarea
+							label={'Заметки'}
+							autosize
+							placeholder="Напишите что-нибудь"
+							value={note}
+							onChange={(e) => setNote(e.target.value)}
+						/>
 					</div>
 				</div>
 
@@ -71,18 +84,26 @@ const ResidentCard: React.FC<ResidentCardProps> = ({
 						<Button
 							color={'red'}
 							fullWidth
+							onClick={() => onEvict(resident)}
 						>
 							Выселить
 						</Button>
 
 						<Button
 							fullWidth
+							onClick={() => onRelocate(resident)}
 						>
 							Переселить
 						</Button>
 					</div>
 
-					<Button>
+					<Button
+						onClick={() => {
+							return resident.isCheckInConfirmed
+								? onCancelResidentCheckIn(resident)
+								: onConfirmCheckIn(resident);
+						}}
+					>
 						{resident.isCheckInConfirmed ? 'Отменить подтверждение' : 'Подтвердить заселение'}
 					</Button>
 				</div>

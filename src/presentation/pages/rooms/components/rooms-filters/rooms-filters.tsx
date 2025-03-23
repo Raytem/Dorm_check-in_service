@@ -1,13 +1,13 @@
 import React from 'react';
 import { BoxProps, Button, Checkbox, CloseButton, Group, Input, NumberInput, Select, Stack } from '@mantine/core';
 import { BlockType } from '@domain/enums';
-import { RoomSearchFiltersEntity } from '@domain/entities/room-search-filters.entity.ts';
 import { useDebouncedFilter } from '@presentation/hooks';
 import { IconFilterCancel } from '@tabler/icons-react';
+import { RoomSearchFilters } from '@domain/types/room-search-filters.ts';
 
 export interface RoomFiltersProps extends BoxProps {
-	filters: RoomSearchFiltersEntity;
-	setFilters: (filters: RoomSearchFiltersEntity) => void;
+	filters: RoomSearchFilters;
+	setFilters: (filters: RoomSearchFilters) => void;
 	resetFilters: () => void;
 }
 
@@ -25,35 +25,35 @@ const RoomsFilters: React.FC<RoomFiltersProps> = ({
 	resetFilters,
 	...props
 }) => {
-	const debounceDelay = 700
+	const DEBOUNCE_DELAY = 700
 
-	const [localRoomName, setRoomName] = useDebouncedFilter<RoomSearchFiltersEntity['roomName']>(
+	const [localRoomName, setRoomName] = useDebouncedFilter<RoomSearchFilters['roomName']>(
 		roomName,
-		debounceDelay,
+		DEBOUNCE_DELAY,
 		(value) => setFilters({ roomName: value })
 	)
 
-	const [localFloor, setFloor] = useDebouncedFilter<RoomSearchFiltersEntity['floor']>(
+	const [localFloor, setFloor] = useDebouncedFilter<RoomSearchFilters['floor']>(
 		floor,
-		debounceDelay,
+		DEBOUNCE_DELAY,
 		(value) => setFilters({ floor: value })
 	)
 
-	const [localDormitoryNumber, setDormitoryNumber] = useDebouncedFilter<RoomSearchFiltersEntity['dormitoryNumber']>(
+	const [localDormitoryNumber, setDormitoryNumber] = useDebouncedFilter<RoomSearchFilters['dormitoryNumber']>(
 		dormitoryNumber,
-		debounceDelay,
+		DEBOUNCE_DELAY,
 		(value) => setFilters({ dormitoryNumber: value })
 	)
 
-	const [localBlockNumber, setBlockNumber] = useDebouncedFilter<RoomSearchFiltersEntity['blockNumber']>(
+	const [localBlockNumber, setBlockNumber] = useDebouncedFilter<RoomSearchFilters['blockNumber']>(
 		blockNumber,
-		debounceDelay,
+		DEBOUNCE_DELAY,
 		(value) => setFilters({ blockNumber: value })
 	)
 
-	const [localStudentGroup, setStudentGroup] = useDebouncedFilter<RoomSearchFiltersEntity['studentGroup']>(
+	const [localStudentGroup, setStudentGroup] = useDebouncedFilter<RoomSearchFilters['studentGroup']>(
 		studentGroup,
-		debounceDelay,
+		DEBOUNCE_DELAY,
 		(value) => setFilters({ studentGroup: value })
 	)
 

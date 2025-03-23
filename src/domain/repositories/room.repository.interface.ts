@@ -1,11 +1,12 @@
 import { interfaces } from 'inversify';
-import { PaginationFilterEntity, RoomSearchFiltersEntity, RoomEntity, RoomDetailsEntity } from '@domain/entities';
-import { PaginatedData } from '@domain/types';
+import { RoomEntity, RoomDetailsEntity } from '@domain/entities';
+import { PaginatedData, PaginationFilter } from '@domain/types';
+import { RoomSearchFilters } from '@domain/types/room-search-filters.ts';
 
 export interface IRoomRepository {
-	findAll(filters: RoomSearchFiltersEntity & PaginationFilterEntity): Promise<PaginatedData<RoomEntity>>;
+	findAll(filters: RoomSearchFilters & PaginationFilter): Promise<PaginatedData<RoomEntity>>;
 
-	getRoomDetailsById(roomId: string): Promise<RoomDetailsEntity>;
+	getRoomDetailsById(roomId: number): Promise<RoomDetailsEntity>;
 }
 
 export namespace IRoomRepository {

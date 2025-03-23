@@ -1,17 +1,20 @@
 import React from 'react';
 import { Stack, Text, Skeleton } from '@mantine/core';
 
-export interface LabelValueBoxProps {
+export interface LabelValueBoxData {
 	value: any;
 	label: string;
+}
+
+export interface LabelValueBoxProps {
+	data: LabelValueBoxData;
 	minWidth?: React.CSSProperties['minWidth'];
 	maxWidth?: React.CSSProperties['maxWidth'];
 	isLoading?: boolean;
 }
 
 export const LabelValueBox: React.FC<LabelValueBoxProps> = ({
-	label,
-	value,
+	data,
 	maxWidth,
 	minWidth,
 	isLoading = false,
@@ -30,14 +33,14 @@ export const LabelValueBox: React.FC<LabelValueBoxProps> = ({
 				<Skeleton height={24} width={50} />
 			) : (
 				<Text fw={700} size="lg">
-					{value}
+					{data.value}
 				</Text>
 			)}
 
 			{isLoading ? (
 				<Skeleton height={24} width={100} />
 			) : (
-				<Text color="dimmed">{label}</Text>
+				<Text color="dimmed">{data.label}</Text>
 			)}
 		</Stack>
 	);

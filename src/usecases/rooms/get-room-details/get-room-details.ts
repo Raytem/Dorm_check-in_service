@@ -9,7 +9,7 @@ export class GetRoomDetailsUseCase {
 		private readonly roomRepository: IRoomRepository,
 	) {}
 
-	async execute(roomId: string): Promise<RoomDetailsEntity> {
+	async execute(roomId: number): Promise<RoomDetailsEntity> {
 		return await this.roomRepository.getRoomDetailsById(roomId);
 	}
 }

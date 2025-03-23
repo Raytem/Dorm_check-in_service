@@ -1,8 +1,9 @@
 import { injectable, inject } from 'inversify';
 import { PaginatedData } from '@domain/types';
-import { PaginationFilterEntity, RoomEntity } from '@domain/entities';
-import { RoomSearchFiltersEntity } from '@domain/entities/room-search-filters.entity.ts';
+import { RoomEntity } from '@domain/entities';
 import { IRoomRepository } from '@domain/repositories';
+import { RoomSearchFilters } from '@domain/types/room-search-filters.ts';
+import { PaginationFilter } from '@domain/types/pagination-filter.ts';
 
 @injectable()
 export class GetRoomsUseCase {
@@ -11,7 +12,7 @@ export class GetRoomsUseCase {
 		private readonly roomRepository: IRoomRepository,
 	) {}
 
-	async execute(filters: RoomSearchFiltersEntity & PaginationFilterEntity): Promise<PaginatedData<RoomEntity>> {
+	async execute(filters: RoomSearchFilters & PaginationFilter): Promise<PaginatedData<RoomEntity>> {
 		return await this.roomRepository.findAll(filters);
 	}
 }

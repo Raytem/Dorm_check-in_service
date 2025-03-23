@@ -9,7 +9,10 @@ const RoomPageSkeleton = () => {
 	return <Stack gap={'xl'}>
 		<Group gap={'md'}>
 			{Array.from({ length: valueBoxesCount }).map((_, i) => (
-				<LabelValueBox label={''} value={''} key={i} isLoading />
+				<LabelValueBox data={{
+					label: '',
+					value: '',
+				}} key={i} isLoading />
 			))}
 		</Group>
 

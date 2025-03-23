@@ -19,6 +19,7 @@ import ThemeButton from './components/theme-button';
 
 import classes from './header.module.css';
 import LogoutButton from '../logout-button';
+import { AppRoutes } from '@routing/app-routes.ts';
 
 
 export interface HeaderProps {
@@ -49,7 +50,7 @@ const Header: React.FC<HeaderProps> = ({
 			<Box
 				className={classes['header__logo']!}
 			>
-				<Link to={'/'}>
+				<Link to={AppRoutes.HOME}>
 					<Title
 						order={logoTitleOrder}
 						lineClamp={2}

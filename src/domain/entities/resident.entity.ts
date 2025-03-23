@@ -15,4 +15,8 @@ export class ResidentEntity {
 		public evictionDate: Date | null,
 		public note: string,
 	) {}
+
+	getFullName(): string {
+		return `${this.lastName} ${this.firstName} ${this.patronymic}`;
+	}
 }

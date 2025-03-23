@@ -1,8 +1,9 @@
 import { useRoutes } from 'react-router-dom';
-import NotFoundPage from "@pages/not-found";
+import NotFoundPage from '@pages/not-found';
 import { RouteGuard } from '@presentation/hocs';
 import { lazy } from 'react';
 import AppLayout from 'presentation/layouts/app-layout';
+import { AppRoutes } from '@routing/app-routes.ts';
 
 const Rooms = lazy(() => import('@pages/rooms/rooms.page.tsx'));
 const Room = lazy(() => import('@pages/room'));
@@ -10,35 +11,35 @@ const Login = lazy(() => import('@pages/login'));
 const CheckInConfirmation = lazy(() => import('@pages/check-in-confirmation'));
 const PopulatedStatistics = lazy(() => import('@pages/populated-statistics'));
 
-export const ApplicationRoutes = () => {
+export const AppRouter = () => {
     const routesElement = useRoutes([
         {
             path: '/',
             element: <AppLayout />,
             children: [
                 {
-                    path: 'auth/login',
+                    path: AppRoutes.LOGIN,
                     element: <Login/>,
                 },
                 {
-                    path: 'rooms',
+                    path: AppRoutes.ROOMS,
                     children: [
                         {
                             index: true,
                             element: <RouteGuard allowedRoles={[]} children={<Rooms />} />
                         },
                         {
-                            path: ':roomId',
+                            path: AppRoutes.ROOM,
                             element: <RouteGuard allowedRoles={[]} children={<Room />} />
                         }
                     ]
                 },
                 {
-                    path: 'check-in-confirmation',
+                    path: AppRoutes.CHECK_IN_CONFIRMATION,
                     element: <RouteGuard allowedRoles={[]} children={<CheckInConfirmation />} />
                 },
                 {
-                    path: 'populated-statistics',
+                    path: AppRoutes.POPULATED_STATISTICS,
                     element: <RouteGuard allowedRoles={[]} children={<PopulatedStatistics />} />
                 }
             ]

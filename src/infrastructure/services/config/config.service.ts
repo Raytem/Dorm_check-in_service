@@ -1,5 +1,7 @@
 import { Config } from './config.type.ts';
+import { injectable } from 'inversify';
 
+@injectable()
 export class ConfigService {
 	private config: Config
 
