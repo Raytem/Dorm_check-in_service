@@ -6,7 +6,8 @@ import { useInjection } from 'inversify-react';
 import PageLayout from '@layouts/page-layout';
 
 import { useDocumentVisibility } from '@mantine/hooks';
-import { useFetch, usePaginationFilter, useRoomFilters } from '@presentation/hooks';
+import { useFetch, useQueryPagination, useQuerySort } from '@presentation/hooks';
+import { useQueryRoomFilters } from '@pages/rooms/hooks';
 
 import RoomsTable from './components/rooms-table';
 import RoomsFilters from './components/rooms-filters';
@@ -20,43 +21,70 @@ import { RoomSortParams, SortDirection } from '@domain/enums';
 
 
 const RoomsPage = () => {
-	const rowsCount = 20;
+	const ROOMS_PER_PAGE = 20;
+
 	const getRoomsUseCase = useInjection(GetRoomsUseCase)
 	const documentVisibility = useDocumentVisibility();
 
-	const { page, limit, setPage } = usePaginationFilter({
-		page: 1,
-		limit: rowsCount,
-	})
+	const {
+		data,
+		isLoading,
+		error,
+		refetch
+	} = useFetch(async () => {
+		return await getRoomsUseCase.execute(
+			{ ...filters, ...sort, page, limit }
+		)
+	}, true)
+
+	const onPageChange = () => {
+		window.scrollTo({ top: 0, behavior: 'smooth' });
+		refetch();
+	}
+	const onFiltersChange = () => {
+		if (page === 1) {
+			refetch();
+		} else {
+			setPage(1)
+		}
+	}
+	const onSortChange = () => {
+		refetch()
+	}
+
+	const {
+		page,
+		limit,
+		setPage
+	} = useQueryPagination(
+		{
+			page: 1,
+			limit: ROOMS_PER_PAGE,
+		},
+		onPageChange,
+	)
 
 	const {
 		filters,
 		setFilters,
 		resetFilters,
-	} = useRoomFilters({ sortBy: RoomSortParams.DORMITORY_NUMBER, sortDir: SortDirection.ASC })
+	} = useQueryRoomFilters(onFiltersChange)
 
-	const { data, isLoading, error, refetch } = useFetch(async () => {
-		return await getRoomsUseCase.execute({ ...filters, page, limit })
-	}, true)
-
-	useEffect(() => {
-		if (page === 1) {
-			refetch();
-		} else {
-			setPage(1);
+	const {
+		sort,
+		setSort,
+	} = useQuerySort<RoomSortParams>(
+		onSortChange,
+		{
+			sortBy: RoomSortParams.DORMITORY_NUMBER,
+			sortDir: SortDirection.ASC
 		}
-	}, [filters.blockType, filters.roomName, filters.onlyAvailableRooms, filters.blockNumber, filters.dormitoryNumber, filters.studentGroup, filters.floor]);
+	)
 
 	useEffect(() => {
-		if (documentVisibility === 'visible') {
-			refetch();
-		}
-	}, [documentVisibility, page, limit, filters.sortBy, filters.sortDir, refetch]);
-
-	useEffect(() => {
-		window.scrollTo({ top: 0 });
-	}, [])
-
+		if (documentVisibility === 'hidden') return;
+		refetch();
+	}, [documentVisibility]);
 
 	return <PageLayout
 		title={'Комнаты общежитий'}
@@ -81,16 +109,22 @@ const RoomsPage = () => {
 					<RoomsTable
 						rooms={data?.data ?? []}
 						isLoading={isLoading}
-						skeletonRowsCount={rowsCount}
-						sortDir={filters.sortDir!}
-						selectedSortBy={filters.sortBy}
+						skeletonRowsCount={limit}
+						sortDir={sort.sortDir!}
+						selectedSortBy={sort.sortBy}
 						onSortChange={(sortBy, sortDir) => {
-							setFilters({ sortBy: sortBy as RoomSortParams, sortDir })
+							setSort(sortBy as RoomSortParams, sortDir)
 						}}
 					/>
 				</DataStatusContainer>
 
-				<AlignedPagination pagination={{ value: page, total: data?.totalPages ?? 0, onChange: setPage }} />
+				<AlignedPagination
+					pagination={{
+						value: page,
+						total: data?.totalPages ?? 0,
+						onChange: setPage
+					}}
+				/>
 			</Stack>
 		</Stack>
 	</PageLayout>

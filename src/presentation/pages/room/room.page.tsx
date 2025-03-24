@@ -11,32 +11,44 @@ import { Stack } from '@mantine/core';
 import { AppRoutes, AppRoutesParams } from '@routing/app-routes.ts';
 import { ResidentEntity } from '@domain/entities';
 import { modalManager } from '@presentation/modals/modal-manager.tsx';
+import { useDocumentVisibility } from '@mantine/hooks';
 
 const RoomPage = () => {
+	const { roomId } =
+		useParams<AppRoutesParams[AppRoutes.ROOM]>()
+	const documentVisibility = useDocumentVisibility();
 	const gatRoomDetailsUseCase = useInjection(GetRoomDetailsUseCase)
 
-	const { roomId } = useParams<AppRoutesParams[AppRoutes.ROOM]>()
-
-	const { data: room, isLoading, error, refetch } = useFetch(async () => {
+	const {
+		data: room,
+		isLoading: isRoomLoading,
+		error: roomError,
+		refetch: refetchRoom,
+	} = useFetch(async () => {
 		if (roomId === undefined) return null;
 		return await gatRoomDetailsUseCase.execute(Number(roomId));
 	}, true)
 
 	useEffect(() => {
+		if (documentVisibility === 'hidden') return;
+		refetchRoom(false);
+	}, [documentVisibility]);
+
+	useEffect(() => {
 		window.scrollTo({ top: 0 });
-		refetch(true);
+		refetchRoom();
 	}, []);
 
 	const onAddResident = () => {
 		// TODO: запуск юзкейса
-		refetch(false);
+		refetchRoom(false);
 		modalManager.showSuccess('Студент успешно заселен')
 	}
 
 	const onEvictResident = (resident: ResidentEntity) => {
 		modalManager.openConfirmResidentEvictionModal(resident.getFullName(), () => {
 			// TODO: запуск юзкейса
-			refetch(false);
+			refetchRoom(false);
 			modalManager.showSuccess('Студент успешно выселен')
 		})
 	}
@@ -49,29 +61,29 @@ const RoomPage = () => {
 			resident, room,
 			false, // TODO: add relocate loading state
 			async (roomId) => {
+				refetchRoom(false);
 				modalManager.showSuccess(`Студент успешно переселен ${roomId}`) //TODO: удалить id
-				refetch(false);
 			}
 		)
 	}
 
 	const onConfirmResidentCheckIn = (_resident: ResidentEntity) => {
 		// TODO: запуск юзкейса
-		refetch(false);
+		refetchRoom(false);
 		modalManager.showSuccess('Заселение успешно подтверждено')
 	}
 
 	const onCancelResidentCheckIn = (_resident: ResidentEntity) => {
 		// TODO: запуск юзкейса
-		refetch(false);
+		refetchRoom(false);
 		modalManager.showSuccess('Подтверждение о заселении отменено')
 	}
 
 	return <RoomPageLayout
 		dormitoryNumber={room?.dormitoryNumber}
 		roomName={room?.roomName}
-		isLoading={isLoading}
-		error={error}
+		isLoading={isRoomLoading}
+		error={roomError}
 	>
 		<Stack gap={'xl'}>
 			<RoomInfoSection
@@ -84,7 +96,7 @@ const RoomPage = () => {
 
 			<ResidentCardList
 				residents={room?.residents ?? []}
-				isLoading={isLoading}
+				isLoading={isRoomLoading}
 				onEvict={onEvictResident}
 				onRelocate={onRelocateResident}
 				onConfirmCheckIn={onConfirmResidentCheckIn}

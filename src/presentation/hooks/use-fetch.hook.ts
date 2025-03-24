@@ -22,13 +22,11 @@ export const useFetch = <T, Args extends unknown[]>(
 				} catch (err) {
 					setError(err);
 				} finally {
-					if (showLoadingState) {
-						setIsLoading(false);
-					}
+					setIsLoading(false);
 				}
 			})();
 		},
-		[callback]
+		[]
 	);
 
 	return {

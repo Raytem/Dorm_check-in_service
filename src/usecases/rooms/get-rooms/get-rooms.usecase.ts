@@ -12,7 +12,7 @@ export class GetRoomsUseCase {
 		private readonly roomRepository: IRoomRepository,
 	) {}
 
-	async execute(filters: RoomSearchFilters & PaginationFilter): Promise<PaginatedData<RoomEntity>> {
-		return await this.roomRepository.findAll(filters);
+	async execute(queryParams: RoomSearchFilters & PaginationFilter): Promise<PaginatedData<RoomEntity>> {
+		return await this.roomRepository.findAll(queryParams);
 	}
 }

@@ -1,12 +1,13 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { BooleanParam, NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params';
-import { RoomSortParams } from '@domain/enums';
-import { SortParams } from '@domain/types/sort-params.ts';
 import { RoomSearchFilters } from '@domain/types/room-search-filters.ts';
 
-type ExtendedRoomFilters = RoomSearchFilters & SortParams<RoomSortParams>;
 
-export function useRoomFilters(initialValue?: ExtendedRoomFilters) {
+export function useQueryRoomFilters(
+	onFiltersChange: (filters: RoomSearchFilters) => void
+		= () => {},
+	initialValue?: RoomSearchFilters
+) {
 	const [query, setQuery] = useQueryParams({
 		dormitoryNumber: withDefault(NumberParam, initialValue?.dormitoryNumber),
 		floor: withDefault(NumberParam, initialValue?.floor),
@@ -15,17 +16,14 @@ export function useRoomFilters(initialValue?: ExtendedRoomFilters) {
 		blockType: withDefault(StringParam, initialValue?.blockType),
 		studentGroup: withDefault(StringParam, initialValue?.studentGroup),
 		onlyAvailableRooms: withDefault(BooleanParam, initialValue?.onlyAvailableRooms),
-		// sort params
-		sortBy: withDefault(StringParam, initialValue?.sortBy),
-		sortDir: withDefault(StringParam, initialValue?.sortDir),
 	})
 
-	const setFilters = useCallback((filters: ExtendedRoomFilters) => {
+	const setFilters = useCallback((filters: RoomSearchFilters) => {
 		setQuery(filters)
 	}, [])
 
 	const resetFilters = useCallback(() => {
-		setFilters({
+		const filters: RoomSearchFilters = {
 			dormitoryNumber: undefined,
 			floor: undefined,
 			blockNumber: undefined,
@@ -33,8 +31,22 @@ export function useRoomFilters(initialValue?: ExtendedRoomFilters) {
 			blockType: undefined,
 			studentGroup: undefined,
 			onlyAvailableRooms: undefined,
-		})
+		}
+		setFilters(filters)
 	}, [])
+
+	useEffect(() => {
+		const filters: RoomSearchFilters = {
+			dormitoryNumber: query.dormitoryNumber,
+			floor: query.floor,
+			blockNumber: query.blockNumber,
+			roomName: query.roomName,
+			blockType: query.blockType as RoomSearchFilters['blockType'],
+			studentGroup: query.studentGroup,
+			onlyAvailableRooms: query.onlyAvailableRooms,
+		}
+		onFiltersChange(filters);
+	}, [query]);
 
 	return {
 		filters: {
@@ -45,9 +57,6 @@ export function useRoomFilters(initialValue?: ExtendedRoomFilters) {
 			blockType: query.blockType as RoomSearchFilters['blockType'] ,
 			studentGroup: query.studentGroup as RoomSearchFilters['studentGroup'],
 			onlyAvailableRooms: query.onlyAvailableRooms as RoomSearchFilters['onlyAvailableRooms'],
-			// sort params
-			sortBy: query.sortBy as SortParams<RoomSortParams>['sortBy'],
-			sortDir: query.sortDir as SortParams<RoomSortParams>['sortDir'],
 		},
 		setFilters,
 		resetFilters,

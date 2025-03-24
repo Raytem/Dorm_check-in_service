@@ -1,16 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useDebounce } from 'use-debounce';
 
-export function useDebouncedFilter<T>(
+export function useDebouncedValue<T>(
 	initialValue: T,
 	debounceDelay: number = 500,
-	onFilterChange: (value: T) => void
+	onChange: (value: T) => void
 ) {
 	const [localValue, setLocalValue] = useState<T>(initialValue);
 	const [debouncedValue] = useDebounce(localValue, debounceDelay);
 
+	const debouncedOnFilterChange = useCallback(() => {
+		onChange(debouncedValue);
+	}, [debouncedValue, onChange]);
+
 	useEffect(() => {
-		onFilterChange(debouncedValue);
+		debouncedOnFilterChange();
 	}, [debouncedValue]);
 
 	return [localValue, setLocalValue] as const;
