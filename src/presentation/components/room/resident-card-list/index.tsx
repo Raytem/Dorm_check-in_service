@@ -1,1 +1,1 @@
-export { default } from './resident-card-list'
+export { default } from './resident-card-list';

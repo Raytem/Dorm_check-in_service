@@ -3,11 +3,12 @@ import { LoginDto } from './dto';
 import { LoginResponse, TokensResponse } from './responses';
 
 export interface IAuthService {
-	login(dto: LoginDto): Promise<LoginResponse>;
-	logout(): Promise<void>;
-	refreshTokens(): Promise<TokensResponse>
+  login(dto: LoginDto): Promise<LoginResponse>;
+  logout(): Promise<void>;
+  refreshTokens(): Promise<TokensResponse>;
 }
 
 export namespace IAuthService {
-	export const $: interfaces.ServiceIdentifier<IAuthService> = Symbol('IAuthService');
+  export const $: interfaces.ServiceIdentifier<IAuthService> =
+    Symbol('IAuthService');
 }

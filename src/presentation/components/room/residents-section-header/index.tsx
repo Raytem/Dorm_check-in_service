@@ -1,1 +1,1 @@
-export { default } from './residents-section-header'
+export { default } from './residents-section-header';

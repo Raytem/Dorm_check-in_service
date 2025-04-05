@@ -1,3 +1,1 @@
-export class RoomMapper {
-
-}
+export class RoomMapper {}

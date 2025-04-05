@@ -5,20 +5,20 @@ import { isUserAuthenticated } from '@application/store/slices';
 import { AppRoutes } from '@routing/app-routes.ts';
 
 export interface AppProps {
-    children?: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 function App({ children = <></> }: AppProps) {
-    const navigate = useNavigate();
-    const isAuthenticated = useAppSelector(isUserAuthenticated)
+  const navigate = useNavigate();
+  const isAuthenticated = useAppSelector(isUserAuthenticated);
 
-    useEffect(() => {
-        if (!isAuthenticated) {
-            navigate(AppRoutes.LOGIN)
-        }
-    }, [isAuthenticated, navigate]);
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate(AppRoutes.LOGIN);
+    }
+  }, [isAuthenticated, navigate]);
 
-    return children
+  return children;
 }
 
-export default App
+export default App;

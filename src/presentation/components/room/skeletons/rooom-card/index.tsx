@@ -1,1 +1,1 @@
-export { default } from './room-card.skeleton'
+export { default } from './room-card.skeleton';

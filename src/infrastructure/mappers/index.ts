@@ -1,2 +1,2 @@
 export * from './room.mapper';
-export * from './paginated-data.mapper'
+export * from './paginated-data.mapper';

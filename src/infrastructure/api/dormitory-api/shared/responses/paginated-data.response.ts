@@ -1,4 +1,4 @@
 export interface PaginatedDataResponse<T> {
-	data: T;
-	total: number;
+  data: T;
+  total: number;
 }

@@ -1,1 +1,1 @@
-export { default } from './key-value-table'
+export { default } from './key-value-table';

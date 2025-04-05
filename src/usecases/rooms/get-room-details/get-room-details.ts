@@ -4,12 +4,12 @@ import { RoomDetailsEntity } from '@domain/entities';
 
 @injectable()
 export class GetRoomDetailsUseCase {
-	constructor(
-		@inject(IRoomRepository.$)
-		private readonly roomRepository: IRoomRepository,
-	) {}
+  constructor(
+    @inject(IRoomRepository.$)
+    private readonly roomRepository: IRoomRepository,
+  ) {}
 
-	async execute(roomId: number): Promise<RoomDetailsEntity> {
-		return await this.roomRepository.getRoomDetailsById(roomId);
-	}
+  async execute(roomId: number): Promise<RoomDetailsEntity> {
+    return await this.roomRepository.getRoomDetailsById(roomId);
+  }
 }

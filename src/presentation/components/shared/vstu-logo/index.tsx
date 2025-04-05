@@ -1,1 +1,1 @@
-export { default } from './vstu-logo'
+export { default } from './vstu-logo';

@@ -3,54 +3,50 @@ import { Loader, Stack } from '@mantine/core';
 import ErrorView from '@components/shared/error-view';
 import EmptyView from '@components/shared/empty-view';
 
-
 interface DataStatusContainerProps {
-	skipLoadingState?: boolean
+  skipLoadingState?: boolean;
 
-	isLoading?: boolean;
-	error?: unknown | null;
-	dataLength?: number;
+  isLoading?: boolean;
+  error?: unknown | null;
+  dataLength?: number;
 
-	LoadingComponent?: React.ReactNode;
-	ErrorComponent?: React.ReactNode;
-	EmptyComponent?: React.ReactNode;
+  LoadingComponent?: React.ReactNode;
+  ErrorComponent?: React.ReactNode;
+  EmptyComponent?: React.ReactNode;
 
-	children: React.ReactNode;
+  children: React.ReactNode;
 }
 
 const DataStatusContainer: React.FC<DataStatusContainerProps> = ({
-	skipLoadingState = false,
+  skipLoadingState = false,
 
-	isLoading = false,
-	error = null,
-	dataLength,
+  isLoading = false,
+  error = null,
+  dataLength,
 
-	LoadingComponent = (
-		<Stack w={'100%'} h={'100%'} align={'center'} justify={'center'}>
-			<Loader />
-		</Stack>
-	),
-	ErrorComponent,
-	EmptyComponent = <EmptyView />,
+  LoadingComponent = (
+    <Stack w={'100%'} h={'100%'} align={'center'} justify={'center'}>
+      <Loader />
+    </Stack>
+  ),
+  ErrorComponent,
+  EmptyComponent = <EmptyView />,
 
-	children,
- }) => {
-	if (isLoading && !skipLoadingState) {
-		return <>{LoadingComponent}</>;
-	}
+  children,
+}) => {
+  if (isLoading && !skipLoadingState) {
+    return <>{LoadingComponent}</>;
+  }
 
-	if (error && !isLoading) {
-		return <>{
-			ErrorComponent ?? <ErrorView error={error}/>
-		}</>;
-	}
+  if (error && !isLoading) {
+    return <>{ErrorComponent ?? <ErrorView error={error} />}</>;
+  }
 
-	if (dataLength === 0 && !isLoading && !error) {
-		return <>{EmptyComponent}</>;
-	}
+  if (dataLength === 0 && !isLoading && !error) {
+    return <>{EmptyComponent}</>;
+  }
 
-	return <>{children}</>;
+  return <>{children}</>;
 };
-
 
 export default DataStatusContainer;

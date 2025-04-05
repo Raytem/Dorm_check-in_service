@@ -3,24 +3,24 @@ import { injectable } from 'inversify';
 
 @injectable()
 export class ConfigService {
-	private config: Config
+  private config: Config;
 
-	constructor() {
-		const env = import.meta.env;
-		this.config = {
-			app: {
-				title: env.VITE_APP_TITLE ?? '',
-			},
-			authApi: {
-				baseUrl: env.VITE_AUTH_API_BASE_URL ?? '',
-			},
-			dormitoryApi: {
-				baseUrl: env.VITE_DORMITORY_API_BASE_URL ?? '',
-			}
-		}
-	}
+  constructor() {
+    const env = import.meta.env;
+    this.config = {
+      app: {
+        title: env.VITE_APP_TITLE ?? '',
+      },
+      authApi: {
+        baseUrl: env.VITE_AUTH_API_BASE_URL ?? '',
+      },
+      dormitoryApi: {
+        baseUrl: env.VITE_DORMITORY_API_BASE_URL ?? '',
+      },
+    };
+  }
 
-	public getConfig(): Config {
-		return this.config;
-	}
+  public getConfig(): Config {
+    return this.config;
+  }
 }

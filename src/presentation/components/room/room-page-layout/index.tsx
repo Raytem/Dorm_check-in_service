@@ -1,1 +1,1 @@
-export { default } from './room-page-layout'
+export { default } from './room-page-layout';

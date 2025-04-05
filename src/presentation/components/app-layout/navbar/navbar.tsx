@@ -1,72 +1,78 @@
 import React, { useEffect, useState } from 'react';
-import {
-	AppShell, Transition,
-} from '@mantine/core';
+import { AppShell, Transition } from '@mantine/core';
 import { useLocation, useNavigate } from 'react-router-dom';
-import MobileNavbar from '@components/app-layout/navbar/components/mobile-navbar';
-import DesktopNavbar from '@components/app-layout/navbar/components/desktop-navbar';
+import MobileNavbar from 'presentation/components/app-layout/mobile-navbar';
+import DesktopNavbar from 'presentation/components/app-layout/desktop-navbar';
 import { linksData } from '@components/app-layout/navbar/navbar.constants.tsx';
 
-
 export interface NavbarProps {
-	isMobile?: boolean;
-	headerHeight?: number;
-	isNavbarCollapsed?: boolean;
-	toggleNavbarCollapsed?: () => void;
-	onMobileLinkClick?: () => void;
+  isMobile?: boolean;
+  headerHeight?: number;
+  isNavbarCollapsed?: boolean;
+  toggleNavbarCollapsed?: () => void;
+  onMobileLinkClick?: () => void;
 }
 
 const Navbar: React.FC<NavbarProps> = ({
-   	isMobile = false,
-	headerHeight = 0,
-	isNavbarCollapsed = true,
-   	toggleNavbarCollapsed = () => {},
-	onMobileLinkClick = () => {},
+  isMobile = false,
+  headerHeight = 0,
+  isNavbarCollapsed = true,
+  toggleNavbarCollapsed = () => {},
+  onMobileLinkClick = () => {},
 }) => {
-	const [active, setActive] = useState(0);
-	const navigate = useNavigate()
-	const location = useLocation()
+  const [active, setActive] = useState(0);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-	useEffect(() => {
-		const index = linksData.findIndex((linkData) => location.pathname.includes(linkData.link))
-		setActive(index === -1 ? 0 : index)
-		if (index === -1) {
-			navigate(linksData[0]!.link, { replace: true });
-		}
-	}, [location])
+  useEffect(() => {
+    const index = linksData.findIndex((linkData) =>
+      location.pathname.includes(linkData.link),
+    );
+    setActive(index === -1 ? 0 : index);
+    if (index === -1) {
+      navigate(linksData[0]!.link, { replace: true });
+    }
+  }, [location]);
 
-	return <>
-		<AppShell.Navbar>
-			{ !isMobile
-				?
-				<MobileNavbar
-					activeLinkIdx={active}
-					isNavbarCollapsed={isNavbarCollapsed}
-					toggleNavbarCollapsed={toggleNavbarCollapsed}
-					onLinkClick={onMobileLinkClick}
-				/>
-				:
-				<DesktopNavbar activeLinkIdx={active} toggleNavbarCollapsed={toggleNavbarCollapsed}/>
-			}
-		</AppShell.Navbar>
+  return (
+    <>
+      <AppShell.Navbar>
+        {!isMobile ? (
+          <MobileNavbar
+            activeLinkIdx={active}
+            isNavbarCollapsed={isNavbarCollapsed}
+            toggleNavbarCollapsed={toggleNavbarCollapsed}
+            onLinkClick={onMobileLinkClick}
+          />
+        ) : (
+          <DesktopNavbar
+            activeLinkIdx={active}
+            toggleNavbarCollapsed={toggleNavbarCollapsed}
+          />
+        )}
+      </AppShell.Navbar>
 
-		<Transition mounted={isMobile && !isNavbarCollapsed} transition={'slide-right'}>
-			{(styles) => (
-				<MobileNavbar
-					pos={'fixed'}
-					w={400}
-					top={headerHeight}
-					bottom={0}
-					left={0}
-					activeLinkIdx={active}
-					isNavbarCollapsed={isNavbarCollapsed}
-					toggleNavbarCollapsed={toggleNavbarCollapsed}
-					onLinkClick={onMobileLinkClick}
-					style={styles}
-				/>
-			)}
-		</Transition>
-	</>
-}
+      <Transition
+        mounted={isMobile && !isNavbarCollapsed}
+        transition={'slide-right'}
+      >
+        {(styles) => (
+          <MobileNavbar
+            pos={'fixed'}
+            w={400}
+            top={headerHeight}
+            bottom={0}
+            left={0}
+            activeLinkIdx={active}
+            isNavbarCollapsed={isNavbarCollapsed}
+            toggleNavbarCollapsed={toggleNavbarCollapsed}
+            onLinkClick={onMobileLinkClick}
+            style={styles}
+          />
+        )}
+      </Transition>
+    </>
+  );
+};
 
-export default Navbar
+export default Navbar;

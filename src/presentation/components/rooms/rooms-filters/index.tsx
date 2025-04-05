@@ -1,1 +1,1 @@
-export { default } from './rooms-filters.tsx'
+export { default } from './rooms-filters.tsx';

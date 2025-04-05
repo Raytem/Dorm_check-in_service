@@ -1,1 +1,1 @@
-export { default } from './resident-card.skeleton.tsx'
+export { default } from './resident-card.skeleton.tsx';

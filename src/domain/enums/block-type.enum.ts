@@ -1,15 +1,15 @@
 export enum BlockType {
-	MALE = 'male',
-	FEMALE = 'female',
+  MALE = 'male',
+  FEMALE = 'female',
 }
 
 export namespace BlockType {
-	export function getDisplayName(blockType: BlockType) {
-		const blockTypeMap: Record<BlockType, string> = {
-			[BlockType.MALE]: 'Мужской',
-			[BlockType.FEMALE]: 'Женский'
-		}
+  export function getDisplayName(blockType: BlockType) {
+    const blockTypeMap: Record<BlockType, string> = {
+      [BlockType.MALE]: 'Мужской',
+      [BlockType.FEMALE]: 'Женский',
+    };
 
-		return blockTypeMap[blockType];
-	}
+    return blockTypeMap[blockType];
+  }
 }

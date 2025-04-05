@@ -4,22 +4,28 @@ import ResidentCardList from '@components/room/resident-card-list';
 import LabelValueBox from '@components/room/label-value-box';
 
 const RoomPageSkeleton = () => {
-	const valueBoxesCount = 4;
+  const VALUE_BOXES_COUNT = 4;
 
-	return <Stack gap={'xl'}>
-		<Group gap={'md'}>
-			{Array.from({ length: valueBoxesCount }).map((_, i) => (
-				<LabelValueBox data={{
-					label: '',
-					value: '',
-				}} key={i} isLoading />
-			))}
-		</Group>
+  return (
+    <Stack gap={'xl'}>
+      <Group gap={'md'}>
+        {Array.from({ length: VALUE_BOXES_COUNT }).map((_, i) => (
+          <LabelValueBox
+            data={{
+              label: '',
+              value: '',
+            }}
+            key={i}
+            isLoading
+          />
+        ))}
+      </Group>
 
-		<ResidentsSectionHeader isLoading />
+      <ResidentsSectionHeader isLoading />
 
-		<ResidentCardList residents={[]} isLoading skeletonCardsCount={3} />
-	</Stack>
+      <ResidentCardList residents={[]} isLoading skeletonCardsCount={3} />
+    </Stack>
+  );
 };
 
 export default RoomPageSkeleton;

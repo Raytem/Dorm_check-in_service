@@ -7,12 +7,14 @@ import { PaginationFilter } from '@domain/types/pagination-filter.ts';
 
 @injectable()
 export class GetRoomsUseCase {
-	constructor(
-		@inject(IRoomRepository.$)
-		private readonly roomRepository: IRoomRepository,
-	) {}
+  constructor(
+    @inject(IRoomRepository.$)
+    private readonly roomRepository: IRoomRepository,
+  ) {}
 
-	async execute(queryParams: RoomSearchFilters & PaginationFilter): Promise<PaginatedData<RoomEntity>> {
-		return await this.roomRepository.findAll(queryParams);
-	}
+  async execute(
+    queryParams: RoomSearchFilters & PaginationFilter,
+  ): Promise<PaginatedData<RoomEntity>> {
+    return await this.roomRepository.findAll(queryParams);
+  }
 }

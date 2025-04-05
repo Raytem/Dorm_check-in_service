@@ -1,2 +1,2 @@
 export * from './get-rooms';
-export * from './get-room-details'
+export * from './get-room-details';

@@ -1,1 +1,1 @@
-export { default } from './aligned-pagination'
+export { default } from './aligned-pagination';

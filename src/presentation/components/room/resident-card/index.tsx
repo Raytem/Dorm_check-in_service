@@ -1,1 +1,1 @@
-export { default } from './resident-card'
+export { default } from './resident-card';

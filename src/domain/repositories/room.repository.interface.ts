@@ -4,11 +4,14 @@ import { PaginatedData, PaginationFilter } from '@domain/types';
 import { RoomSearchFilters } from '@domain/types/room-search-filters.ts';
 
 export interface IRoomRepository {
-	findAll(filters: RoomSearchFilters & PaginationFilter): Promise<PaginatedData<RoomEntity>>;
+  findAll(
+    filters: RoomSearchFilters & PaginationFilter,
+  ): Promise<PaginatedData<RoomEntity>>;
 
-	getRoomDetailsById(roomId: number): Promise<RoomDetailsEntity>;
+  getRoomDetailsById(roomId: number): Promise<RoomDetailsEntity>;
 }
 
 export namespace IRoomRepository {
-	export const $: interfaces.ServiceIdentifier<IRoomRepository> = Symbol('IRoomRepository');
+  export const $: interfaces.ServiceIdentifier<IRoomRepository> =
+    Symbol('IRoomRepository');
 }

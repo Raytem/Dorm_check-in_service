@@ -1,1 +1,1 @@
-export { default } from './rooms.page.tsx'
+export { default } from './rooms.page.tsx';

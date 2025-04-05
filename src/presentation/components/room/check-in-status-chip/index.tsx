@@ -1,1 +1,1 @@
-export { default } from './check-in-status-chip.tsx'
+export { default } from './check-in-status-chip.tsx';

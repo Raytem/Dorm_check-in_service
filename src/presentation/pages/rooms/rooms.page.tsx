@@ -19,113 +19,110 @@ import { GetRoomsUseCase } from '@/usecases';
 import { RoomSortParams, SortDirection } from '@domain/enums';
 import { useQueryRoomFilters } from '@hooks/rooms';
 
-
 const RoomsPage = () => {
-	const ROOMS_PER_PAGE = 20;
+  const ROOMS_PER_PAGE = 20;
 
-	const getRoomsUseCase = useInjection(GetRoomsUseCase)
-	const documentVisibility = useDocumentVisibility();
+  const getRoomsUseCase = useInjection(GetRoomsUseCase);
+  const documentVisibility = useDocumentVisibility();
 
-	const {
-		data,
-		isLoading,
-		error,
-		refetch
-	} = useFetch(async () => {
-		return await getRoomsUseCase.execute(
-			{ ...filters, ...sort, page, limit }
-		)
-	}, true)
+  const { data, isLoading, error, refetch } = useFetch(async () => {
+    return await getRoomsUseCase.execute({ ...filters, ...sort, page, limit });
+  }, true);
 
-	const {
-		page,
-		limit,
-		setPage
-	} = useQueryPagination(
-		{
-			page: 1,
-			limit: ROOMS_PER_PAGE,
-		},
-	)
+  const { page, limit, setPage } = useQueryPagination({
+    page: 1,
+    limit: ROOMS_PER_PAGE,
+  });
 
-	const {
-		filters,
-		setFilters,
-		resetFilters,
-	} = useQueryRoomFilters()
+  const { filters, setFilters, resetFilters } = useQueryRoomFilters();
 
-	const {
-		sort,
-		setSort,
-	} = useQuerySort<RoomSortParams>(
-		{
-			sortBy: RoomSortParams.DORMITORY_NUMBER,
-			sortDir: SortDirection.ASC
-		}
-	)
+  const { sort, setSort } = useQuerySort<RoomSortParams>({
+    sortBy: RoomSortParams.DORMITORY_NUMBER,
+    sortDir: SortDirection.ASC,
+  });
 
-	useEffect(() => {
-		refetch();
-	}, [filters.blockType, filters.roomName, filters.onlyAvailableRooms, filters.blockNumber, filters.dormitoryNumber, filters.studentGroup, filters.floor, page, limit, sort.sortBy, sort.sortDir]);
+  useEffect(() => {
+    refetch();
+  }, [
+    filters.blockType,
+    filters.roomName,
+    filters.onlyAvailableRooms,
+    filters.blockNumber,
+    filters.dormitoryNumber,
+    filters.studentGroup,
+    filters.floor,
+    page,
+    limit,
+    sort.sortBy,
+    sort.sortDir,
+  ]);
 
-	const wasHidden = useRef(false);
+  const wasHidden = useRef(false);
 
-	useEffect(() => {
-		if (documentVisibility === 'hidden') {
-			wasHidden.current = true;
-		}
+  useEffect(() => {
+    if (documentVisibility === 'hidden') {
+      wasHidden.current = true;
+    }
 
-		if (documentVisibility === 'visible' && wasHidden.current) {
-			refetch();
-			wasHidden.current = false;
-		}
-	}, [documentVisibility]);
+    if (documentVisibility === 'visible' && wasHidden.current) {
+      refetch();
+      wasHidden.current = false;
+    }
+  }, [documentVisibility]);
 
-	return <PageLayout
-		title={'Комнаты общежитий'}
-	>
-		<Stack gap={'xl'}>
-			<RoomsFilters
-				filters={filters}
-				setFilters={setFilters}
-				resetFilters={() => {
-					resetFilters()
-					setPage(1)
-				}}
-			/>
+  const onResetFilters = () => {
+    resetFilters();
+    setPage(1);
+  };
 
-			<Divider/>
+  return (
+    <PageLayout title={'Комнаты общежитий'}>
+      <Stack gap={'xl'}>
+        <RoomsFilters
+          filters={filters}
+          setFilters={setFilters}
+          resetFilters={onResetFilters}
+        />
 
-			<Stack>
-				<DataStatusContainer
-					skipLoadingState
-					isLoading={isLoading}
-					error={error}
-					dataLength={data?.data.length ?? 0}
-					EmptyComponent={<EmptyView icon={<IconDoor size={''}/>} title={'Комнаты не найдены'} description={'Попробуйте изменить параметры фильтра'} />}
-				>
-					<RoomsTable
-						rooms={data?.data ?? []}
-						isLoading={isLoading}
-						skeletonRowsCount={limit}
-						sortDir={sort.sortDir!}
-						selectedSortBy={sort.sortBy}
-						onSortChange={(sortBy, sortDir) => {
-							setSort(sortBy as RoomSortParams, sortDir)
-						}}
-					/>
-				</DataStatusContainer>
+        <Divider />
 
-				<AlignedPagination
-					pagination={{
-						value: page,
-						total: data?.totalPages ?? 0,
-						onChange: setPage
-					}}
-				/>
-			</Stack>
-		</Stack>
-	</PageLayout>
-}
+        <Stack>
+          <DataStatusContainer
+            skipLoadingState
+            isLoading={isLoading}
+            error={error}
+            dataLength={data?.data.length ?? 0}
+            EmptyComponent={
+              <EmptyView
+                icon={<IconDoor size={''} />}
+                title={'Комнаты не найдены'}
+                description={'Попробуйте изменить параметры фильтра'}
+              />
+            }
+          >
+            <RoomsTable
+              rooms={data?.data ?? []}
+              isLoading={isLoading}
+              skeletonRowsCount={limit}
+              sortDir={sort.sortDir!}
+              selectedSortBy={sort.sortBy}
+              onSortChange={(sortBy, sortDir) => {
+                setSort(sortBy as RoomSortParams, sortDir);
+              }}
+            />
+          </DataStatusContainer>
+
+          <AlignedPagination
+            pagination={{
+              value: page,
+              total: data?.totalPages ?? 0,
+              onChange: setPage,
+            }}
+          />
+        </Stack>
+      </Stack>
+    </PageLayout>
+  );
+};
 
 export default RoomsPage;

@@ -1,1 +1,1 @@
-export { default } from './logout-button.tsx'
+export { default } from './logout-button.tsx';

@@ -1,1 +1,1 @@
-export * from './dormitory-api-http.service'
+export * from './dormitory-api-http.service';

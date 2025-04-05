@@ -1,1 +1,1 @@
-export { default } from './room-info-section'
+export { default } from './room-info-section';
