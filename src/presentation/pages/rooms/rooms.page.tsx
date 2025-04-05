@@ -1,16 +1,15 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Divider, Stack } from '@mantine/core';
 import { IconDoor } from '@tabler/icons-react';
 import { useInjection } from 'inversify-react';
 
-import PageLayout from '@layouts/page-layout';
+import PageLayout from 'presentation/layouts/page';
 
 import { useDocumentVisibility } from '@mantine/hooks';
-import { useFetch, useQueryPagination, useQuerySort } from '@presentation/hooks';
-import { useQueryRoomFilters } from '@pages/rooms/hooks';
+import { useFetch, useQueryPagination, useQuerySort } from '@hooks/shared';
 
-import RoomsTable from './components/rooms-table';
-import RoomsFilters from './components/rooms-filters';
+import RoomsTable from '../../components/rooms/rooms-table';
+import RoomsFilters from '../../components/rooms/rooms-filters';
 
 import EmptyView from '@components/shared/empty-view';
 import DataStatusContainer from '@components/shared/data-status-container';
@@ -18,6 +17,7 @@ import AlignedPagination from '@components/shared/aligned-pagination';
 
 import { GetRoomsUseCase } from '@/usecases';
 import { RoomSortParams, SortDirection } from '@domain/enums';
+import { useQueryRoomFilters } from '@hooks/rooms';
 
 
 const RoomsPage = () => {
@@ -37,21 +37,6 @@ const RoomsPage = () => {
 		)
 	}, true)
 
-	const onPageChange = () => {
-		window.scrollTo({ top: 0, behavior: 'smooth' });
-		refetch();
-	}
-	const onFiltersChange = () => {
-		if (page === 1) {
-			refetch();
-		} else {
-			setPage(1)
-		}
-	}
-	const onSortChange = () => {
-		refetch()
-	}
-
 	const {
 		page,
 		limit,
@@ -61,20 +46,18 @@ const RoomsPage = () => {
 			page: 1,
 			limit: ROOMS_PER_PAGE,
 		},
-		onPageChange,
 	)
 
 	const {
 		filters,
 		setFilters,
 		resetFilters,
-	} = useQueryRoomFilters(onFiltersChange)
+	} = useQueryRoomFilters()
 
 	const {
 		sort,
 		setSort,
 	} = useQuerySort<RoomSortParams>(
-		onSortChange,
 		{
 			sortBy: RoomSortParams.DORMITORY_NUMBER,
 			sortDir: SortDirection.ASC
@@ -82,8 +65,20 @@ const RoomsPage = () => {
 	)
 
 	useEffect(() => {
-		if (documentVisibility === 'hidden') return;
 		refetch();
+	}, [filters.blockType, filters.roomName, filters.onlyAvailableRooms, filters.blockNumber, filters.dormitoryNumber, filters.studentGroup, filters.floor, page, limit, sort.sortBy, sort.sortDir]);
+
+	const wasHidden = useRef(false);
+
+	useEffect(() => {
+		if (documentVisibility === 'hidden') {
+			wasHidden.current = true;
+		}
+
+		if (documentVisibility === 'visible' && wasHidden.current) {
+			refetch();
+			wasHidden.current = false;
+		}
 	}, [documentVisibility]);
 
 	return <PageLayout
@@ -93,7 +88,10 @@ const RoomsPage = () => {
 			<RoomsFilters
 				filters={filters}
 				setFilters={setFilters}
-				resetFilters={resetFilters}
+				resetFilters={() => {
+					resetFilters()
+					setPage(1)
+				}}
 			/>
 
 			<Divider/>

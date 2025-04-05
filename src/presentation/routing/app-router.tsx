@@ -2,7 +2,7 @@ import { useRoutes } from 'react-router-dom';
 import NotFoundPage from '@pages/not-found';
 import { RouteGuard } from '@presentation/hocs';
 import { lazy } from 'react';
-import AppLayout from 'presentation/layouts/app-layout';
+import AppLayout from 'presentation/layouts/app';
 import { AppRoutes } from '@routing/app-routes.ts';
 
 const Rooms = lazy(() => import('@pages/rooms/rooms.page.tsx'));

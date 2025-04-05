@@ -1,17 +1,17 @@
 import { useParams } from 'react-router-dom';
 import { useInjection } from 'inversify-react';
 import { GetRoomDetailsUseCase } from '@/usecases';
-import { useFetch } from '@presentation/hooks';
+import { useFetch } from '@hooks/shared';
 import { useEffect } from 'react';
-import RoomPageLayout from '@pages/room/components/room-page-layout';
-import RoomInfoSection from '@pages/room/components/room-info-section';
-import ResidentCardList from '@pages/room/components/resident-card-list';
-import ResidentsSectionHeader from '@pages/room/components/residents-section-header';
 import { Stack } from '@mantine/core';
 import { AppRoutes, AppRoutesParams } from '@routing/app-routes.ts';
 import { ResidentEntity } from '@domain/entities';
-import { modalManager } from '@presentation/modals/modal-manager.tsx';
+import { modalManager } from '@infrastructure/services/modal-manager/modal-manager.tsx';
 import { useDocumentVisibility } from '@mantine/hooks';
+import RoomPageLayout from '@components/room/room-page-layout';
+import RoomInfoSection from '@components/room/room-info-section';
+import ResidentsSectionHeader from '@components/room/residents-section-header';
+import ResidentCardList from '@components/room/resident-card-list';
 
 const RoomPage = () => {
 	const { roomId } =

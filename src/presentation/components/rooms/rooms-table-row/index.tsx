@@ -1,0 +1,1 @@
+export { default } from './rooms-table-row.tsx';
