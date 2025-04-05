@@ -7,8 +7,6 @@ import {
 } from '@tabler/icons-react';
 import { ErrorUtil } from '@presentation/utils';
 import StatusModal from '@components/shared/modals/status-modal.tsx';
-import { ResidentEntity, RoomEntity } from '@domain/entities';
-import RelocateResidentModal from '@components/room/modals/relocate-resident/relocate-resident.modal.tsx';
 
 class ModalManager {
   private static readonly STATUS_MODAL_ICON_SIZE = 60;
@@ -85,25 +83,6 @@ class ModalManager {
       ),
       labels: { confirm: 'Выселить', cancel: 'Отменить' },
       onConfirm,
-    });
-  }
-
-  openRelocateResidentModal(
-    resident: ResidentEntity,
-    roomFrom: RoomEntity,
-    isRelocateLoading: boolean,
-    onRelocate: (roomId: number) => void,
-  ): string {
-    return modals.open({
-      title: `Переселение студента ${resident.getFullName()} из комнаты ${roomFrom.roomName}`,
-      centered: true,
-      children: (
-        <RelocateResidentModal
-          resident={resident}
-          onRelocate={onRelocate}
-          isRelocateLoading={isRelocateLoading}
-        />
-      ),
     });
   }
 }

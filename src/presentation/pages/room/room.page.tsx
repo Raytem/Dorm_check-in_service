@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useInjection } from 'inversify-react';
 import { GetRoomDetailsUseCase } from '@/usecases';
@@ -8,16 +8,25 @@ import { Stack } from '@mantine/core';
 import { AppRoutes, AppRoutesParams } from '@routing/app-routes.ts';
 import { ResidentEntity } from '@domain/entities';
 import { modalManager } from '@infrastructure/services/modal-manager/modal-manager.tsx';
-import { useDocumentVisibility } from '@mantine/hooks';
+import { useDisclosure, useDocumentVisibility } from '@mantine/hooks';
 import RoomPageLayout from '@components/room/room-page-layout';
 import RoomInfoSection from '@components/room/room-info-section';
 import ResidentsSectionHeader from '@components/room/residents-section-header';
 import ResidentCardList from '@components/room/resident-card-list';
+import RelocateResidentModal from '@components/room/modals/relocate-resident/relocate-resident.modal.tsx';
 
 const RoomPage: React.FC = () => {
   const { roomId } = useParams<AppRoutesParams[AppRoutes.ROOM]>();
-  const documentVisibility = useDocumentVisibility();
   const gatRoomDetailsUseCase = useInjection(GetRoomDetailsUseCase);
+  const documentVisibility = useDocumentVisibility();
+
+  const [selectedResident, setSelectedResident] =
+    useState<ResidentEntity | null>(null);
+
+  const [
+    isRelocateResidentModalOpened,
+    { open: openRelocateResidentModal, close: closeRelocateResidentModal },
+  ] = useDisclosure(false);
 
   const {
     data: room,
@@ -39,6 +48,10 @@ const RoomPage: React.FC = () => {
     refetchRoom();
   }, []);
 
+  const relocateResident = (_resident: ResidentEntity, _newRoomId: number) => {
+    // TODO: запуск юзкейса
+  };
+
   const onAddResident = () => {
     // TODO: запуск юзкейса
     refetchRoom(false);
@@ -57,18 +70,9 @@ const RoomPage: React.FC = () => {
   };
 
   const onRelocateResident = (resident: ResidentEntity) => {
-    // TODO: запуск юзкейса
     if (!room) return;
-
-    modalManager.openRelocateResidentModal(
-      resident,
-      room,
-      false, // TODO: add relocate loading state
-      async (roomId) => {
-        refetchRoom(false);
-        modalManager.showSuccess(`Студент успешно переселен ${roomId}`); //TODO: удалить id
-      },
-    );
+    openRelocateResidentModal();
+    setSelectedResident(resident);
   };
 
   const onConfirmResidentCheckIn = (_resident: ResidentEntity) => {
@@ -90,20 +94,32 @@ const RoomPage: React.FC = () => {
       isLoading={isRoomLoading}
       error={roomError}
     >
-      <Stack gap={'xl'}>
-        <RoomInfoSection room={room} />
+      {room !== null && (
+        <Stack gap={'xl'}>
+          <RoomInfoSection room={room} />
 
-        <ResidentsSectionHeader onAddResident={onAddResident} />
+          <ResidentsSectionHeader onAddResident={onAddResident} />
 
-        <ResidentCardList
-          residents={room?.residents ?? []}
-          isLoading={isRoomLoading}
-          onEvict={onEvictResident}
-          onRelocate={onRelocateResident}
-          onConfirmCheckIn={onConfirmResidentCheckIn}
-          onCancelResidentCheckIn={onCancelResidentCheckIn}
-        />
-      </Stack>
+          <ResidentCardList
+            residents={room.residents}
+            isLoading={isRoomLoading}
+            onEvict={onEvictResident}
+            onRelocate={onRelocateResident}
+            onConfirmCheckIn={onConfirmResidentCheckIn}
+            onCancelResidentCheckIn={onCancelResidentCheckIn}
+          />
+
+          {selectedResident !== null && (
+            <RelocateResidentModal
+              isOpened={isRelocateResidentModalOpened}
+              onClose={closeRelocateResidentModal}
+              resident={selectedResident}
+              roomFrom={room}
+              onRelocate={relocateResident}
+            />
+          )}
+        </Stack>
+      )}
     </RoomPageLayout>
   );
 };

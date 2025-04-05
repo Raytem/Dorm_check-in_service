@@ -84,8 +84,9 @@ export default defineConfig([
       '@typescript-eslint/no-empty-function': 'off',
       '@typescript-eslint/consistent-type-imports': 'off',
       '@typescript-eslint/no-empty-object-type': 'off',
-      'no-constant-condition': 'off',
 
+      'no-unused-vars': 'warn',
+      'no-constant-condition': 'off',
       'react/no-children-prop': 'off',
       'react/react-in-jsx-scope': 'off',
     }

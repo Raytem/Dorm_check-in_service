@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import {
-  Box,
   Button,
   Center,
   CloseButton,
   Input,
   LoadingOverlay,
+  Modal,
   Stack,
 } from '@mantine/core';
 import { ResidentEntity, RoomEntity } from '@domain/entities';
@@ -16,13 +16,19 @@ import { GetRoomsUseCase } from '@/usecases';
 import { useFetch } from '@hooks/shared';
 
 export interface RelocateResidentModalProps {
+  isOpened: boolean;
+  onClose: () => void;
   resident: ResidentEntity;
-  onRelocate: (newRoomId: number) => void;
+  roomFrom: RoomEntity;
+  onRelocate: (resident: ResidentEntity, newRoomId: number) => void;
   isRelocateLoading?: boolean;
 }
 
 const RelocateResidentModal: React.FC<RelocateResidentModalProps> = ({
-  //resident,
+  isOpened,
+  onClose,
+  resident,
+  roomFrom,
   onRelocate,
   isRelocateLoading = false,
 }) => {
@@ -85,7 +91,12 @@ const RelocateResidentModal: React.FC<RelocateResidentModalProps> = ({
   }, [searchRoomName.length, debouncedSearchRoomName.length]);
 
   return (
-    <Box>
+    <Modal
+      opened={isOpened}
+      onClose={onClose}
+      centered
+      title={`Переселение студента ${resident.getFullName()} из комнаты ${roomFrom.roomName}`}
+    >
       <LoadingOverlay visible={isRelocateLoading} />
       <Stack gap={20}>
         <Input.Wrapper label={'Введите название новой комнаты'}>
@@ -94,7 +105,7 @@ const RelocateResidentModal: React.FC<RelocateResidentModalProps> = ({
             rightSectionPointerEvents="all"
             rightSection={
               <CloseButton
-                onClick={() => onRoomNameInputClear()}
+                onClick={onRoomNameInputClear}
                 style={{ display: searchTextLength === 0 ? 'none' : undefined }}
               />
             }
@@ -124,7 +135,7 @@ const RelocateResidentModal: React.FC<RelocateResidentModalProps> = ({
           <Button
             fullWidth
             disabled={selectedRoom === null || searchTextLength === 0}
-            onClick={() => onRelocate(1)}
+            onClick={() => onRelocate(resident, 1)}
           >
             {selectedRoom === null || searchTextLength === 0
               ? 'Переселить'
@@ -133,7 +144,7 @@ const RelocateResidentModal: React.FC<RelocateResidentModalProps> = ({
         </Center>
       </Stack>
       <LoadingOverlay />
-    </Box>
+    </Modal>
   );
 };
 
