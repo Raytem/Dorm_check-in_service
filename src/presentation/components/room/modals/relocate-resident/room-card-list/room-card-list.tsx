@@ -11,7 +11,7 @@ export interface RoomCardListProps {
   rooms: RoomEntity[];
   onCardClick: (room: RoomEntity) => void;
   isLoading: boolean;
-  searchTextLength?: number;
+  isShowStartTypingHint?: boolean;
   selectedRoom: null | RoomEntity;
   error?: null | unknown;
   skeletonCardsCount?: number;
@@ -21,11 +21,16 @@ const RoomCardList: React.FC<RoomCardListProps> = ({
   rooms,
   onCardClick,
   isLoading,
-  searchTextLength = 0,
+  isShowStartTypingHint,
   selectedRoom = null,
   error = null,
   skeletonCardsCount = 5,
 }) => {
+  let emptyViewTitle = 'Не удалось найти комнаты';
+  if (isShowStartTypingHint) {
+    emptyViewTitle = 'Начните вводить название комнаты';
+  }
+
   return (
     <DataStatusContainer
       skipLoadingState
@@ -33,14 +38,7 @@ const RoomCardList: React.FC<RoomCardListProps> = ({
       isLoading={isLoading}
       error={error}
       EmptyComponent={
-        <EmptyView
-          icon={<IconDoor size={''} />}
-          title={
-            searchTextLength === 0
-              ? 'Начните вводить название комнаты'
-              : 'Не удалось найти комнаты'
-          }
-        />
+        <EmptyView icon={<IconDoor size={''} />} title={emptyViewTitle} />
       }
     >
       <Stack gap={10}>

@@ -1,12 +1,12 @@
 import { SkeletonProps, Table } from '@mantine/core';
 import { RoomEntity } from '@domain/entities';
 import TableRowSkeleton from '@components/shared/table-row-skeleton';
-import RoomsTableRow from '@components/rooms/rooms-table-row';
 import TableThWithFilters from '@components/shared/table-th-with-filters';
 import { RoomSortParams, SortDirection } from '@domain/enums';
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppRoutes } from '@routing/app-routes.ts';
+import RoomsTableRow from '@components/rooms/rooms-table/rooms-table-row.tsx';
 
 export interface RoomsTableProps {
   rooms: RoomEntity[];
@@ -117,39 +117,42 @@ const RoomsTableBody = ({
   );
 };
 
-const RoomsTable: React.FC<RoomsTableProps> = ({
-  rooms,
-  isLoading,
-  skeletonRowsCount = 20,
-  selectedSortBy,
-  sortDir,
-  onSortChange,
-}) => {
-  return (
-    <div
-      style={{
-        overflowX: 'scroll',
-      }}
-    >
-      <Table
-        horizontalSpacing="md"
-        withRowBorders
-        withTableBorder
-        highlightOnHover
-      >
-        <RoomsTableHeader
-          selectedSortBy={selectedSortBy}
-          sortDir={sortDir}
-          onSortChange={onSortChange}
-        />
-        <RoomsTableBody
-          rooms={rooms}
-          isLoading={isLoading}
-          skeletonRowsCount={skeletonRowsCount}
-        />
-      </Table>
-    </div>
-  );
-};
+// eslint-disable-next-line react/display-name
+const RoomsTable = forwardRef<HTMLTableElement, RoomsTableProps>(
+  (
+    {
+      rooms,
+      isLoading,
+      skeletonRowsCount = 20,
+      selectedSortBy,
+      sortDir,
+      onSortChange,
+    },
+    ref,
+  ) => {
+    return (
+      <div style={{ overflowX: 'scroll' }}>
+        <Table
+          ref={ref}
+          horizontalSpacing="md"
+          withRowBorders
+          withTableBorder
+          highlightOnHover={!isLoading}
+        >
+          <RoomsTableHeader
+            selectedSortBy={selectedSortBy}
+            sortDir={sortDir}
+            onSortChange={onSortChange}
+          />
+          <RoomsTableBody
+            rooms={rooms}
+            isLoading={isLoading}
+            skeletonRowsCount={skeletonRowsCount}
+          />
+        </Table>
+      </div>
+    );
+  },
+);
 
 export default RoomsTable;

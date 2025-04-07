@@ -19,12 +19,10 @@ const RoomsTableRow: React.FC<RoomsTableRowProps> = ({
   ...props
 }) => {
   const rowColor =
-    availablePlacesCount > 0
-      ? 'transparent'
-      : 'var(--mantine-color-yellow-light)';
+    availablePlacesCount > 0 ? undefined : 'var(--mantine-color-yellow-light)';
 
   return (
-    <Table.Tr {...props} bg={rowColor}>
+    <Table.Tr bg={rowColor} {...props} style={{ cursor: 'pointer' }}>
       <Table.Td>{dormitoryNumber}</Table.Td>
       <Table.Td>{floor}</Table.Td>
       <Table.Td>{blockNumber}</Table.Td>

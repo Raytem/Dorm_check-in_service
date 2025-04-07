@@ -33,5 +33,6 @@ export const mantineTheme = createTheme({
     ],
   },
   primaryColor: 'main',
+  primaryShade: 6,
   activeClassName: activeClasses['active'] ?? '',
 });

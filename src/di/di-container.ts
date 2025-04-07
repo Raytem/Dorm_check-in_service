@@ -18,7 +18,7 @@ import { AuthService } from '@infrastructure/services/auth';
 import { IRoomRepository, ITokenRepository } from '@domain/repositories';
 // Repositories impl
 import {
-  RoomRepository,
+  MockRoomRepository,
   LocalStorageTokenRepository,
 } from '@infrastructure/repositories';
 // Usecases
@@ -28,6 +28,10 @@ import {
   RefreshTokensUseCase,
   GetRoomsUseCase,
   GetRoomDetailsUseCase,
+  EvictResidentUseCase,
+  GetAvailableRoomsToRelocateResidentUseCase,
+  UpdateResidentInfoUseCase,
+  RelocateResidentUseCase,
 } from '@/usecases';
 import { IUINotificationService } from '@domain/adapters/services/ui-notification';
 
@@ -48,12 +52,16 @@ diContainer.bind(ConfigService).toSelf().inSingletonScope();
 diContainer.bind(LocalStorageService).toSelf();
 // Repositories
 diContainer.bind(ITokenRepository.$).to(LocalStorageTokenRepository);
-diContainer.bind(IRoomRepository.$).to(RoomRepository);
+diContainer.bind(IRoomRepository.$).to(MockRoomRepository);
 // UseCases
 diContainer.bind(LoginUseCase).toSelf();
 diContainer.bind(LogoutUseCase).toSelf();
 diContainer.bind(RefreshTokensUseCase).toSelf();
 diContainer.bind(GetRoomsUseCase).toSelf();
 diContainer.bind(GetRoomDetailsUseCase).toSelf();
+diContainer.bind(EvictResidentUseCase).toSelf();
+diContainer.bind(RelocateResidentUseCase).toSelf();
+diContainer.bind(GetAvailableRoomsToRelocateResidentUseCase).toSelf();
+diContainer.bind(UpdateResidentInfoUseCase).toSelf();
 
 export { diContainer };

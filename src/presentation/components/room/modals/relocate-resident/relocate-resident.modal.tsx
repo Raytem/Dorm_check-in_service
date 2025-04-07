@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   Center,
@@ -9,10 +9,10 @@ import {
   Stack,
 } from '@mantine/core';
 import { ResidentEntity, RoomEntity } from '@domain/entities';
-import { useDebounce } from 'use-debounce';
+import { useDebouncedCallback } from 'use-debounce';
 import RoomCardList from '@components/room/modals/relocate-resident/room-card-list/room-card-list.tsx';
 import { useInjection } from 'inversify-react';
-import { GetRoomsUseCase } from '@/usecases';
+import { GetAvailableRoomsToRelocateResidentUseCase } from '@/usecases';
 import { useFetch } from '@hooks/shared';
 
 export interface RelocateResidentModalProps {
@@ -33,14 +33,13 @@ const RelocateResidentModal: React.FC<RelocateResidentModalProps> = ({
   isRelocateLoading = false,
 }) => {
   const MIN_ROOM_NAME_LENGTH_TO_SEARCH = 2;
+  const DEBOUNCE_DELAY = 700;
 
-  const getRoomsUseCase = useInjection(GetRoomsUseCase);
+  const getAvailableRoomsToRelocateResidentUseCase = useInjection(
+    GetAvailableRoomsToRelocateResidentUseCase,
+  );
 
   const [searchRoomName, setSearchRoomName] = useState('');
-  const [debouncedSearchRoomName, setDebouncedRoomName] = useDebounce(
-    searchRoomName,
-    700,
-  );
   const [selectedRoom, setSelectedRoom] = useState<RoomEntity | null>(null);
 
   const {
@@ -50,30 +49,38 @@ const RelocateResidentModal: React.FC<RelocateResidentModalProps> = ({
     refetch: refetchRooms,
     setData: setRooms,
   } = useFetch(async () => {
-    return await getRoomsUseCase.execute({
-      page: 1,
-      limit: 1,
-      roomName: debouncedSearchRoomName,
-    });
+    return await getAvailableRoomsToRelocateResidentUseCase.execute(
+      searchRoomName,
+      resident.id,
+    );
   });
 
-  useEffect(() => {
+  const refetchRoomsDebounced = useDebouncedCallback(() => {
     setSelectedRoom(null);
-
-    if (debouncedSearchRoomName.length >= MIN_ROOM_NAME_LENGTH_TO_SEARCH) {
-      refetchRooms();
+    if (searchRoomName.length < MIN_ROOM_NAME_LENGTH_TO_SEARCH) {
+      return;
     }
-  }, [debouncedSearchRoomName]);
+    refetchRooms();
+  }, DEBOUNCE_DELAY);
+
+  useEffect(() => {
+    refetchRoomsDebounced();
+  }, [searchRoomName]);
+
+  const clearState = () => {
+    setSearchRoomName('');
+    setRooms(null);
+    setSelectedRoom(null);
+  };
 
   const onRoomNameChange = (value: string) => {
-    if (value.length === 0) {
-      onRoomNameInputClear();
+    if (value.length <= MIN_ROOM_NAME_LENGTH_TO_SEARCH) {
+      setRooms(null);
     }
     setSearchRoomName(value);
   };
 
   const onRoomNameInputClear = () => {
-    setDebouncedRoomName('');
     setSearchRoomName('');
     setRooms(null);
   };
@@ -86,27 +93,32 @@ const RelocateResidentModal: React.FC<RelocateResidentModalProps> = ({
     setSelectedRoom(room);
   };
 
-  const searchTextLength = useMemo(() => {
-    return searchRoomName.length === 0 ? 0 : debouncedSearchRoomName.length;
-  }, [searchRoomName.length, debouncedSearchRoomName.length]);
+  const onExitTransitionEnd = () => {
+    clearState();
+  };
 
   return (
     <Modal
+      centered
       opened={isOpened}
       onClose={onClose}
-      centered
       title={`Переселение студента ${resident.getFullName()} из комнаты ${roomFrom.roomName}`}
+      size={'lg'}
+      onExitTransitionEnd={onExitTransitionEnd}
     >
       <LoadingOverlay visible={isRelocateLoading} />
       <Stack gap={20}>
         <Input.Wrapper label={'Введите название новой комнаты'}>
           <Input
             value={searchRoomName}
+            data-autofocus
             rightSectionPointerEvents="all"
             rightSection={
               <CloseButton
                 onClick={onRoomNameInputClear}
-                style={{ display: searchTextLength === 0 ? 'none' : undefined }}
+                style={{
+                  display: searchRoomName.length === 0 ? 'none' : undefined,
+                }}
               />
             }
             onChange={(e) => {
@@ -118,13 +130,15 @@ const RelocateResidentModal: React.FC<RelocateResidentModalProps> = ({
         <div
           style={{
             overflowY: 'scroll',
-            height: '300px',
+            height: '350px',
           }}
         >
           <RoomCardList
-            rooms={rooms?.data ?? []}
+            rooms={rooms ?? []}
             selectedRoom={selectedRoom}
-            searchTextLength={searchTextLength}
+            isShowStartTypingHint={
+              searchRoomName.length <= MIN_ROOM_NAME_LENGTH_TO_SEARCH
+            }
             onCardClick={onRoomCardClick}
             isLoading={isRoomsLoading}
             error={roomsError}
@@ -134,10 +148,10 @@ const RelocateResidentModal: React.FC<RelocateResidentModalProps> = ({
         <Center>
           <Button
             fullWidth
-            disabled={selectedRoom === null || searchTextLength === 0}
+            disabled={selectedRoom === null || searchRoomName.length === 0}
             onClick={() => onRelocate(resident, 1)}
           >
-            {selectedRoom === null || searchTextLength === 0
+            {selectedRoom === null || searchRoomName.length === 0
               ? 'Переселить'
               : `Переселить в комнату ${selectedRoom.roomName}`}
           </Button>

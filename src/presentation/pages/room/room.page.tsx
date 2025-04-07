@@ -1,31 +1,40 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useInjection } from 'inversify-react';
-import { GetRoomDetailsUseCase } from '@/usecases';
+import {
+  EvictResidentUseCase,
+  GetRoomDetailsUseCase,
+  RelocateResidentUseCase,
+  UpdateResidentInfoUseCase,
+} from '@/usecases';
 import { useFetch } from '@hooks/shared';
 import { useEffect } from 'react';
-import { Stack } from '@mantine/core';
+import { Stack, Text } from '@mantine/core';
 import { AppRoutes, AppRoutesParams } from '@routing/app-routes.ts';
 import { ResidentEntity } from '@domain/entities';
 import { modalManager } from '@infrastructure/services/modal-manager/modal-manager.tsx';
-import { useDisclosure, useDocumentVisibility } from '@mantine/hooks';
+import { useDisclosure } from '@mantine/hooks';
 import RoomPageLayout from '@components/room/room-page-layout';
 import RoomInfoSection from '@components/room/room-info-section';
 import ResidentsSectionHeader from '@components/room/residents-section-header';
 import ResidentCardList from '@components/room/resident-card-list';
 import RelocateResidentModal from '@components/room/modals/relocate-resident/relocate-resident.modal.tsx';
+import { modals } from '@mantine/modals';
 
 const RoomPage: React.FC = () => {
   const { roomId } = useParams<AppRoutesParams[AppRoutes.ROOM]>();
+
   const gatRoomDetailsUseCase = useInjection(GetRoomDetailsUseCase);
-  const documentVisibility = useDocumentVisibility();
+  const evictResidentUseCase = useInjection(EvictResidentUseCase);
+  const updateResidentInfoUseCase = useInjection(UpdateResidentInfoUseCase);
+  const relocateResidentUseCase = useInjection(RelocateResidentUseCase);
 
   const [selectedResident, setSelectedResident] =
     useState<ResidentEntity | null>(null);
 
   const [
-    isRelocateResidentModalOpened,
-    { open: openRelocateResidentModal, close: closeRelocateResidentModal },
+    isRelocateModalOpened,
+    { open: openRelocateModal, close: closeRelocateModal },
   ] = useDisclosure(false);
 
   const {
@@ -38,53 +47,134 @@ const RoomPage: React.FC = () => {
     return await gatRoomDetailsUseCase.execute(Number(roomId));
   }, true);
 
-  useEffect(() => {
-    if (documentVisibility === 'hidden') return;
-    refetchRoom(false);
-  }, [documentVisibility]);
+  const { isLoading: isRelocateLoading, refetch: refetchRelocate } = useFetch(
+    async (params: { residentId: number; newRoomId: number }) => {
+      await relocateResidentUseCase.execute(
+        params.residentId,
+        params.newRoomId,
+      );
+    },
+  );
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
-    refetchRoom();
+    (async () => refetchRoom())();
   }, []);
 
-  const relocateResident = (_resident: ResidentEntity, _newRoomId: number) => {
-    // TODO: запуск юзкейса
+  const onRelocateResident = async (
+    resident: ResidentEntity,
+    newRoomId: number,
+  ) => {
+    try {
+      await refetchRelocate({
+        params: {
+          residentId: resident.id,
+          newRoomId,
+        },
+      });
+      modalManager.showSuccess('Студент был успешно переселен');
+    } catch (e) {
+      modalManager.showError('Не удалось переселить студента', { error: e });
+    } finally {
+      closeRelocateModal();
+    }
+
+    await refetchRoom({ showLoadingState: false });
   };
 
-  const onAddResident = () => {
+  // handlers
+
+  const onAddResidentClick = async () => {
     // TODO: запуск юзкейса
-    refetchRoom(false);
+    await refetchRoom({ showLoadingState: false });
     modalManager.showSuccess('Студент успешно заселен');
   };
 
-  const onEvictResident = (resident: ResidentEntity) => {
-    modalManager.openConfirmResidentEvictionModal(
-      resident.getFullName(),
-      () => {
-        // TODO: запуск юзкейса
-        refetchRoom(false);
-        modalManager.showSuccess('Студент успешно выселен');
+  const onEvictResidentClick = async (resident: ResidentEntity) => {
+    modals.openConfirmModal({
+      title: 'Выселение студента',
+      centered: true,
+      confirmProps: { color: 'red' },
+      children: (
+        <Text>
+          Вы уверены что хотите выселить студента {resident.getFullName()}?
+        </Text>
+      ),
+      labels: { confirm: 'Выселить', cancel: 'Отменить' },
+      onConfirm: async () => {
+        try {
+          await evictResidentUseCase.execute(resident.id);
+          modalManager.showSuccess(
+            `Студент ${resident.getFullName()} был успешно выселен`,
+          );
+        } catch (e) {
+          modalManager.showError('Не удалось выселить студента', {
+            error: e,
+          });
+        }
+        await refetchRoom({ showLoadingState: false });
       },
-    );
+    });
   };
 
-  const onRelocateResident = (resident: ResidentEntity) => {
+  const onRelocateResidentClick = (resident: ResidentEntity) => {
     if (!room) return;
-    openRelocateResidentModal();
+    openRelocateModal();
     setSelectedResident(resident);
   };
 
-  const onConfirmResidentCheckIn = (_resident: ResidentEntity) => {
-    // TODO: запуск юзкейса
-    refetchRoom(false);
-    modalManager.showSuccess('Заселение успешно подтверждено');
+  const onConfirmResidentCheckInClick = async (resident: ResidentEntity) => {
+    modals.openConfirmModal({
+      title: 'Подтверждение заселения студента',
+      centered: true,
+      children: (
+        <Text>Подтвердить заселение студента {resident.getFullName()}?</Text>
+      ),
+      labels: { confirm: 'Подтвердить', cancel: 'Отменить' },
+      onConfirm: async () => {
+        try {
+          await updateResidentInfoUseCase.execute(resident.id, {
+            isCheckInConfirmed: true,
+          });
+          modalManager.showSuccess('Заселение было успешно подтверждено');
+        } catch (e) {
+          modalManager.showError('Не удалось подтвердить заселение', {
+            error: e,
+          });
+        }
+        await refetchRoom({ showLoadingState: false });
+      },
+    });
   };
 
-  const onCancelResidentCheckIn = (_resident: ResidentEntity) => {
-    // TODO: запуск юзкейса
-    refetchRoom(false);
-    modalManager.showSuccess('Подтверждение о заселении отменено');
+  const onCancelResidentCheckInClick = async (resident: ResidentEntity) => {
+    modals.openConfirmModal({
+      title: 'Отмена подтверждения заселения',
+      centered: true,
+      confirmProps: { color: 'red' },
+      children: (
+        <Text>
+          Отменить подтверждение о заселении студента {resident.getFullName()}?
+        </Text>
+      ),
+      labels: { confirm: 'Да', cancel: 'Нет' },
+      onConfirm: async () => {
+        try {
+          await updateResidentInfoUseCase.execute(resident.id, {
+            isCheckInConfirmed: false,
+          });
+          modalManager.showSuccess('Подтверждение заселения отменено');
+        } catch (e) {
+          modalManager.showError(
+            'Не удалось отменить подтверждение заселения',
+            {
+              error: e,
+            },
+          );
+        }
+        await refetchRoom({ showLoadingState: false });
+      },
+    });
   };
 
   return (
@@ -98,24 +188,25 @@ const RoomPage: React.FC = () => {
         <Stack gap={'xl'}>
           <RoomInfoSection room={room} />
 
-          <ResidentsSectionHeader onAddResident={onAddResident} />
+          <ResidentsSectionHeader onAddResident={onAddResidentClick} />
 
           <ResidentCardList
             residents={room.residents}
             isLoading={isRoomLoading}
-            onEvict={onEvictResident}
-            onRelocate={onRelocateResident}
-            onConfirmCheckIn={onConfirmResidentCheckIn}
-            onCancelResidentCheckIn={onCancelResidentCheckIn}
+            onEvict={onEvictResidentClick}
+            onRelocate={onRelocateResidentClick}
+            onConfirmCheckIn={onConfirmResidentCheckInClick}
+            onCancelResidentCheckIn={onCancelResidentCheckInClick}
           />
 
           {selectedResident !== null && (
             <RelocateResidentModal
-              isOpened={isRelocateResidentModalOpened}
-              onClose={closeRelocateResidentModal}
+              isOpened={isRelocateModalOpened}
+              onClose={closeRelocateModal}
               resident={selectedResident}
               roomFrom={room}
-              onRelocate={relocateResident}
+              onRelocate={onRelocateResident}
+              isRelocateLoading={isRelocateLoading}
             />
           )}
         </Stack>

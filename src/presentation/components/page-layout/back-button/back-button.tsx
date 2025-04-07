@@ -1,20 +1,30 @@
 import React from 'react';
 import { Button } from '@mantine/core';
-import { Link } from 'react-router-dom';
+import { To, useNavigate } from 'react-router-dom';
 import { IconArrowLeft } from '@tabler/icons-react';
 
 export interface BackButtonProps {
   title?: string;
-  link: string;
+  to?: To;
 }
 
-const BackButton: React.FC<BackButtonProps> = ({ title = 'Назад', link }) => {
+const BackButton: React.FC<BackButtonProps> = ({ title = 'Назад', to }) => {
+  const navigate = useNavigate();
+
+  const onClick = () => {
+    navigate(to ?? (-1 as To));
+  };
+
   return (
-    <Link to={link} style={{ alignSelf: 'flex-start' }}>
-      <Button variant={'transparent'} pl={0} leftSection={<IconArrowLeft />}>
-        {title}
-      </Button>
-    </Link>
+    <Button
+      variant={'transparent'}
+      pl={0}
+      leftSection={<IconArrowLeft />}
+      style={{ alignSelf: 'flex-start' }}
+      onClick={onClick}
+    >
+      {title}
+    </Button>
   );
 };
 

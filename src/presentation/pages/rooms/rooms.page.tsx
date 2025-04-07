@@ -23,7 +23,9 @@ const RoomsPage = () => {
   const ROOMS_PER_PAGE = 20;
 
   const getRoomsUseCase = useInjection(GetRoomsUseCase);
+
   const documentVisibility = useDocumentVisibility();
+  const tableRef = useRef<HTMLTableElement>(null);
 
   const { data, isLoading, error, refetch } = useFetch(async () => {
     return await getRoomsUseCase.execute({ ...filters, ...sort, page, limit });
@@ -57,8 +59,20 @@ const RoomsPage = () => {
     sort.sortDir,
   ]);
 
-  const wasHidden = useRef(false);
+  useEffect(() => {
+    if (tableRef.current === null) return;
 
+    const rect = tableRef.current.getBoundingClientRect();
+    const scrollTop = window.scrollY;
+    const offsetTop = rect.top + scrollTop;
+
+    scrollTo({
+      top: offsetTop / 2,
+      behavior: 'smooth',
+    });
+  }, [page]);
+
+  const wasHidden = useRef(false);
   useEffect(() => {
     if (documentVisibility === 'hidden') {
       wasHidden.current = true;
@@ -101,6 +115,7 @@ const RoomsPage = () => {
             }
           >
             <RoomsTable
+              ref={tableRef}
               rooms={data?.data ?? []}
               isLoading={isLoading}
               skeletonRowsCount={limit}

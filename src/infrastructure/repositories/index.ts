@@ -1,2 +1,2 @@
-export * from './room.repository';
+export * from './mock-room-repository.ts';
 export * from './local-storage-token.repository';

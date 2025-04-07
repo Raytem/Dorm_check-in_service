@@ -20,7 +20,7 @@ const RoomPageLayout: React.FC<RoomPageLayoutProps> = ({
 }) => {
   return (
     <PageLayout
-      backButton={{ title: 'К списку комнат', link: '/rooms' }}
+      backButton={{ title: 'К списку комнат' }}
       title={`Общежитие ${dormitoryNumber ?? '_'}, комната ${roomName ?? '_'}`}
       isTitleLoading={isLoading}
     >

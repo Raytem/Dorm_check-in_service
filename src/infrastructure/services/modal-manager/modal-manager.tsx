@@ -1,5 +1,4 @@
 import { modals } from '@mantine/modals';
-import { Text } from '@mantine/core';
 import {
   IconAlertCircle,
   IconCircleCheck,
@@ -30,8 +29,8 @@ class ModalManager {
     });
   }
 
-  showError(title?: string, body?: string, error?: unknown): void {
-    const errorMessage = ErrorUtil.parseError(error);
+  showError(title?: string, params?: { body?: string; error?: unknown }): void {
+    const errorMessage = ErrorUtil.parseError(params?.error);
 
     modals.open({
       centered: true,
@@ -44,7 +43,7 @@ class ModalManager {
             />
           }
           title={title ?? 'Ошибка'}
-          body={body ?? errorMessage}
+          body={params?.body ?? errorMessage}
           onButtonClick={() => modals.closeAll()}
         />
       ),
@@ -67,22 +66,6 @@ class ModalManager {
           onButtonClick={() => modals.closeAll()}
         />
       ),
-    });
-  }
-
-  openConfirmResidentEvictionModal(
-    residentFullName: string,
-    onConfirm: () => void,
-  ): string {
-    return modals.openConfirmModal({
-      title: 'Выселение студента',
-      centered: true,
-      confirmProps: { color: 'red' },
-      children: (
-        <Text>Вы уверены что хотите выселить студента {residentFullName}?</Text>
-      ),
-      labels: { confirm: 'Выселить', cancel: 'Отменить' },
-      onConfirm,
     });
   }
 }

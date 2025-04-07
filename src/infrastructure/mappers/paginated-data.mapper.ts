@@ -9,7 +9,7 @@ export interface BasePaginationData {
 export class PaginatedDataMapper {
   static toDomain<T>(
     paginationData: BasePaginationData,
-    dataMapperFuc: () => T[],
+    dataMapperFn: () => T[],
   ): PaginatedData<T> {
     const curPage = paginationData.page + 1;
     const totalPages =
@@ -21,7 +21,7 @@ export class PaginatedDataMapper {
       totalPages,
       limit: paginationData.limit,
       currentPage: curPage,
-      data: dataMapperFuc(),
+      data: dataMapperFn(),
     };
   }
 }
