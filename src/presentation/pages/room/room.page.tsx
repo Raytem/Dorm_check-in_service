@@ -6,7 +6,7 @@ import {
   GetRoomDetailsUseCase,
   RelocateResidentUseCase,
   UpdateResidentInfoUseCase,
-} from '@/usecases';
+} from '@/usecases/rooms';
 import { useFetch } from '@hooks/shared';
 import { useEffect } from 'react';
 import { Stack, Text } from '@mantine/core';
@@ -21,6 +21,7 @@ import ResidentCardList from '@components/room/resident-card-list';
 import RelocateResidentModal from '@components/room/modals/relocate-resident/relocate-resident.modal.tsx';
 import { modals } from '@mantine/modals';
 import AddResidentModal from '@components/room/modals/add-resident/add-resident.modal.tsx';
+import { AddResidentUseCase } from '@usecases/rooms/add-resident/add-resident.usecase.ts';
 
 const RoomPage: React.FC = () => {
   const { roomId } = useParams<AppRoutesParams[AppRoutes.ROOM]>();
@@ -29,6 +30,7 @@ const RoomPage: React.FC = () => {
   const evictResidentUseCase = useInjection(EvictResidentUseCase);
   const updateResidentInfoUseCase = useInjection(UpdateResidentInfoUseCase);
   const relocateResidentUseCase = useInjection(RelocateResidentUseCase);
+  const addResidentUseCase = useInjection(AddResidentUseCase);
 
   const [selectedResident, setSelectedResident] =
     useState<ResidentEntity | null>(null);
@@ -62,6 +64,11 @@ const RoomPage: React.FC = () => {
     },
   );
 
+  const { isLoading: isAddResidentLoading, refetch: refetchAddResident } =
+    useFetch(async (params: { roomId: number; residentId: number }) => {
+      await addResidentUseCase.execute(params.roomId, params.residentId);
+    });
+
   useEffect(() => {
     window.scrollTo({ top: 0 });
     (async () => refetchRoom())();
@@ -88,13 +95,30 @@ const RoomPage: React.FC = () => {
     await refetchRoom({ showLoadingState: false });
   };
 
+  const onAddResident = async (residentId: number) => {
+    if (room === null) return;
+
+    try {
+      await refetchAddResident({
+        params: {
+          roomId: room.id,
+          residentId: residentId,
+        },
+      });
+      modalManager.showSuccess('Студент был успешно заселен');
+    } catch (e) {
+      modalManager.showError('Не удалось заселить студента', { error: e });
+    } finally {
+      closeAddResidentModal();
+    }
+
+    await refetchRoom({ showLoadingState: false });
+  };
+
   // handlers
 
   const onAddResidentClick = async () => {
-    // TODO: запуск юзкейса
     openAddResidentModal();
-    // await refetchRoom({ showLoadingState: false });
-    // modalManager.showSuccess('Студент успешно заселен');
   };
 
   const onEvictResidentClick = async (resident: ResidentEntity) => {
@@ -222,8 +246,8 @@ const RoomPage: React.FC = () => {
             onClose={closeAddResidentModal}
             roomName={room.roomName}
             roomId={room.id}
-            isAddResidentLoading={false}
-            onAddResident={() => {}}
+            isAddResidentLoading={isAddResidentLoading}
+            onAddResident={onAddResident}
           />
         </Stack>
       )}

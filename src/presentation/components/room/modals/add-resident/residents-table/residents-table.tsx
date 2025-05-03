@@ -1,10 +1,10 @@
-import { SkeletonProps, Table } from '@mantine/core';
+import { SkeletonProps, Table, TableProps } from '@mantine/core';
 import { ResidentEntity } from '@domain/entities';
 import TableRowSkeleton from '@components/shared/table-row-skeleton';
 import React, { forwardRef } from 'react';
 import ResidentsTableRow from '@components/room/modals/add-resident/residents-table/residents-table-row.tsx';
 
-export interface ResidentsTableProps {
+export interface ResidentsTableProps extends TableProps {
   residents: ResidentEntity[];
   selectedResident?: ResidentEntity | null;
   isLoading: boolean;
@@ -19,30 +19,34 @@ interface ResidentsTableColumnData {
 
 const columns: ResidentsTableColumnData[] = [
   {
-    label: 'Фамилия',
-    skeletonProps: { width: 60 },
+    label: 'Фото',
+    skeletonProps: { circle: true, w: 40, h: 40 },
   },
-  { label: 'Имя', skeletonProps: { width: 60 } },
+  {
+    label: 'Фамилия',
+    skeletonProps: { w: 70 },
+  },
+  { label: 'Имя', skeletonProps: { w: 60 } },
   {
     label: 'Отчество',
-    skeletonProps: { width: 60 },
+    skeletonProps: { w: 80 },
   },
-  { label: 'Пол', skeletonProps: { width: 50 } },
+  { label: 'Пол', skeletonProps: { w: 60 } },
   {
     label: 'Номер зачетки',
-    skeletonProps: { width: 20 },
+    skeletonProps: { w: 70 },
   },
   {
     label: 'Группа',
-    skeletonProps: { width: 40 },
+    skeletonProps: { w: 40 },
   },
   {
     label: 'Статус заселения',
-    skeletonProps: { width: 20 },
+    skeletonProps: { w: 150 },
   },
   {
     label: 'Дата заселения',
-    skeletonProps: { width: 20 },
+    skeletonProps: { w: 70 },
   },
 ];
 
@@ -84,7 +88,7 @@ const ResidentsTableBody = ({
           <ResidentsTableRow
             key={resident.id}
             resident={resident}
-            isSelected={resident === selectedResident}
+            isSelected={resident.id === selectedResident?.id}
             onClick={() => onRowClick(resident)}
           />
         ))
@@ -104,6 +108,7 @@ const RoomsTable = forwardRef<HTMLTableElement, ResidentsTableProps>(
       skeletonRowsCount = 20,
     },
     ref,
+    ...props
   ) => {
     return (
       <div style={{ overflowX: 'scroll' }}>
@@ -113,6 +118,7 @@ const RoomsTable = forwardRef<HTMLTableElement, ResidentsTableProps>(
           withRowBorders
           withTableBorder
           highlightOnHover={!isLoading}
+          {...props}
         >
           <ResidentsTableHeader />
           <ResidentsTableBody

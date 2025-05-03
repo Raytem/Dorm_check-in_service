@@ -14,7 +14,7 @@ import EmptyView from '@components/shared/empty-view';
 import DataStatusContainer from '@components/shared/data-status-container';
 import AlignedPagination from '@components/shared/aligned-pagination';
 
-import { GetRoomsUseCase } from '@/usecases';
+import { GetRoomsUseCase } from '@/usecases/rooms';
 import { RoomSortParams, SortDirection } from '@domain/enums';
 import { useQueryRoomFilters } from '@hooks/rooms';
 
@@ -58,25 +58,19 @@ const RoomsPage = () => {
   ]);
 
   useEffect(() => {
-    scrollTo({
-      top: getTableScrollOffset(),
-      behavior: 'smooth',
-    });
-  }, [page]);
-
-  const getTableScrollOffset = () => {
-    if (tableRef.current === null) return 0;
-
-    const rect = tableRef.current.getBoundingClientRect();
-    const scrollTop = window.scrollY;
-    const offsetTop = rect.top + scrollTop;
-
-    return offsetTop / 2;
-  };
+    setPage(1);
+  }, [
+    filters.blockType,
+    filters.roomName,
+    filters.onlyAvailableRooms,
+    filters.blockNumber,
+    filters.dormitoryNumber,
+    filters.studentGroup,
+    filters.floor,
+  ]);
 
   const onResetFilters = () => {
     resetFilters();
-    setPage(1);
   };
 
   return (

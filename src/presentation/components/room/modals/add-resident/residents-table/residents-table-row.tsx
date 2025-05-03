@@ -1,6 +1,6 @@
 import React from 'react';
 import { ResidentEntity } from '@domain/entities';
-import { Table, TableTrProps } from '@mantine/core';
+import { Avatar, Table, TableTrProps } from '@mantine/core';
 import { Sex } from '@domain/enums';
 import CheckInStatusChip from '@components/room/check-in-status-chip';
 import { DateFormatterUtil } from '@presentation/utils';
@@ -12,6 +12,7 @@ export interface ResidentsTableRowProps extends TableTrProps {
 
 const ResidentsTableRow: React.FC<ResidentsTableRowProps> = ({
   resident: {
+    avatarUrl,
     firstName,
     lastName,
     patronymic,
@@ -33,6 +34,17 @@ const ResidentsTableRow: React.FC<ResidentsTableRowProps> = ({
 
   return (
     <Table.Tr bg={rowColor} {...props} style={{ cursor: 'pointer' }}>
+      <Table.Td>
+        {
+          <Avatar
+            radius={'xl'}
+            size={40}
+            src={avatarUrl}
+            color={'gray.6'}
+            variant={'filled'}
+          />
+        }
+      </Table.Td>
       <Table.Td>{lastName}</Table.Td>
       <Table.Td>{firstName}</Table.Td>
       <Table.Td>{patronymic}</Table.Td>

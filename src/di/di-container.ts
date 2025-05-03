@@ -32,14 +32,17 @@ import {
   LoginUseCase,
   LogoutUseCase,
   RefreshTokensUseCase,
+} from '@usecases/auth';
+import {
   GetRoomsUseCase,
   GetRoomDetailsUseCase,
   EvictResidentUseCase,
   GetAvailableRoomsToRelocateResidentUseCase,
   UpdateResidentInfoUseCase,
   RelocateResidentUseCase,
-  GetCandidatesForRoomUseCase,
-} from '@/usecases';
+  AddResidentUseCase,
+} from '@usecases/rooms';
+import { GetCandidatesForRoomUseCase } from '@usecases/residents';
 // Core
 import { ILogger } from '@domain/logger/logger.interface.ts';
 import { LoggerImpl } from '@infrastructure/logger/logger.ts';
@@ -76,5 +79,6 @@ diContainer.bind(RelocateResidentUseCase).toSelf();
 diContainer.bind(GetAvailableRoomsToRelocateResidentUseCase).toSelf();
 diContainer.bind(UpdateResidentInfoUseCase).toSelf();
 diContainer.bind(GetCandidatesForRoomUseCase).toSelf();
+diContainer.bind(AddResidentUseCase).toSelf();
 
 export { diContainer };

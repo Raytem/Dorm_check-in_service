@@ -4,7 +4,7 @@ import axios, { AxiosInstance, HttpStatusCode } from 'axios';
 
 import { ConfigService } from '@infrastructure/services';
 import { ITokenRepository } from '@domain/repositories';
-import { RefreshTokensUseCase } from '@/usecases';
+import { RefreshTokensUseCase } from '@/usecases/auth';
 import { diContainer } from '@/di';
 import { ILogger } from '@domain/logger/logger.interface.ts';
 

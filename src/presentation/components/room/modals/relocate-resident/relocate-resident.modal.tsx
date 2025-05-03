@@ -12,7 +12,7 @@ import { ResidentEntity, RoomEntity } from '@domain/entities';
 import { useDebouncedCallback } from 'use-debounce';
 import RoomCardList from '@components/room/modals/relocate-resident/room-card-list/room-card-list.tsx';
 import { useInjection } from 'inversify-react';
-import { GetAvailableRoomsToRelocateResidentUseCase } from '@/usecases';
+import { GetAvailableRoomsToRelocateResidentUseCase } from '@/usecases/rooms';
 import { useFetch } from '@hooks/shared';
 
 export interface RelocateResidentModalProps {
@@ -152,7 +152,7 @@ const RelocateResidentModal: React.FC<RelocateResidentModalProps> = ({
             onClick={() => onRelocate(resident, 1)}
           >
             {selectedRoom === null || searchRoomName.length === 0
-              ? 'Переселить'
+              ? 'Выберите комнату'
               : `Переселить в комнату ${selectedRoom.roomName}`}
           </Button>
         </Center>

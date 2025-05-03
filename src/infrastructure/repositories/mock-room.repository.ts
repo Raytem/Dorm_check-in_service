@@ -81,4 +81,11 @@ export class MockRoomRepository implements IRoomRepository {
 
     await DelayUtil.withRandomDelay(() => {});
   }
+
+  async addResident(roomId: number, residentId: number): Promise<void> {
+    this.logger.debug(
+      `add resident, roomId: ${roomId}, residentId: ${residentId}`,
+    );
+    await DelayUtil.withRandomDelay(() => {});
+  }
 }

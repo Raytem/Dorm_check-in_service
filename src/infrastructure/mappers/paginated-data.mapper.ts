@@ -12,9 +12,10 @@ export class PaginatedDataMapper {
     dataMapperFn: () => T[],
   ): PaginatedData<T> {
     const curPage = paginationData.page + 1;
-    const totalPages =
+    const totalPages = Math.ceil(
       paginationData.totalItems /
-      (paginationData.limit <= 0 ? 1 : paginationData.limit);
+        (paginationData.limit <= 0 ? 1 : paginationData.limit),
+    );
 
     return {
       totalItems: paginationData.totalItems,

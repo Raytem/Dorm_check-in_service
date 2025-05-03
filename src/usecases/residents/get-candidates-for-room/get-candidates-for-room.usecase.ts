@@ -1,5 +1,9 @@
 import { ResidentEntity } from '@domain/entities';
-import { GetCandidatesForRoomFilters, PaginatedData } from '@domain/types';
+import {
+  GetCandidatesForRoomFilters,
+  PaginatedData,
+  PaginationFilter,
+} from '@domain/types';
 import { inject, injectable } from 'inversify';
 import { IResidentRepository } from '@domain/repositories';
 
@@ -12,7 +16,7 @@ export class GetCandidatesForRoomUseCase {
 
   async execute(
     roomId: number,
-    filters: GetCandidatesForRoomFilters,
+    filters: GetCandidatesForRoomFilters & PaginationFilter,
   ): Promise<PaginatedData<ResidentEntity>> {
     return await this.residentRepository.getCandidatesForRoom(roomId, filters);
   }

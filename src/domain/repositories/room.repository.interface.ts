@@ -27,6 +27,8 @@ export interface IRoomRepository {
     residentId: number,
     data: Partial<Pick<ResidentEntity, 'isCheckInConfirmed' | 'note'>>,
   ): Promise<void>;
+
+  addResident(roomId: number, residentId: number): Promise<void>;
 }
 
 export namespace IRoomRepository {

@@ -8,8 +8,10 @@ import ResidentsTable from '@components/room/modals/add-resident/residents-table
 import { ResidentEntity } from '@domain/entities';
 import { useMediaQuery } from '@mantine/hooks';
 import { useInjection } from 'inversify-react';
-import { GetCandidatesForRoomUseCase } from '@/usecases';
+import { GetCandidatesForRoomUseCase } from '@/usecases/residents';
 import { useFetch } from '@hooks/shared';
+import ResidentFilters from '@components/room/modals/add-resident/resident-filters';
+import { GetCandidatesForRoomFilters } from '@domain/types';
 
 export interface AddResidentModalProps {
   isOpened: boolean;
@@ -33,7 +35,9 @@ const AddResidentModal: React.FC<AddResidentModalProps> = ({
   const getCandidatesForRoomUseCase = useInjection(GetCandidatesForRoomUseCase);
   const isMobile = useMediaQuery('(max-width: 50em)');
 
+  const [filters, setFilters] = useState<GetCandidatesForRoomFilters>({});
   const [page, setPage] = useState<number>(1);
+
   const { data, isLoading, error, refetch, setData } = useFetch(async () => {
     return await getCandidatesForRoomUseCase.execute(roomId, {
       limit: RESIDENTS_PER_PAGE,
@@ -47,7 +51,28 @@ const AddResidentModal: React.FC<AddResidentModalProps> = ({
   useEffect(() => {
     if (!isOpened) return;
     refetch();
-  }, [page, isOpened]);
+  }, [
+    page,
+    isOpened,
+    filters.fullName,
+    filters.groupName,
+    filters.facultyName,
+    filters.gradeBookNumber,
+  ]);
+
+  useEffect(() => {
+    setPage(1);
+    setSelectedResident(null);
+  }, [
+    filters.fullName,
+    filters.groupName,
+    filters.facultyName,
+    filters.gradeBookNumber,
+  ]);
+
+  const onResetFilters = () => {
+    setPage(1);
+  };
 
   const clearState = () => {
     setSelectedResident(null);
@@ -73,7 +98,7 @@ const AddResidentModal: React.FC<AddResidentModalProps> = ({
 
   const getAddResidentButtonLabel = () => {
     if (selectedResident === null) {
-      return 'Заселить';
+      return 'Выберите студента';
     }
     return `Заселить студента "${selectedResident.lastName} ${selectedResident.firstName}"`;
   };
@@ -89,41 +114,48 @@ const AddResidentModal: React.FC<AddResidentModalProps> = ({
       fullScreen={isMobile}
     >
       <LoadingOverlay visible={isAddResidentLoading} />
-      <Stack gap={'xl'}>
-        {/* filters */}
 
-        <Divider />
-
-        <Stack>
-          <DataStatusContainer
-            skipLoadingState
-            isLoading={isLoading}
-            error={error}
-            dataLength={data?.data?.length ?? 0}
-            EmptyComponent={
-              <EmptyView
-                icon={<IconUsers size={''} />}
-                title={'Студенты не найдены'}
-                description={'Попробуйте изменить параметры фильтра'}
-              />
-            }
-          >
-            <ResidentsTable
-              residents={data?.data ?? []}
-              selectedResident={selectedResident}
-              isLoading={isLoading}
-              skeletonRowsCount={RESIDENTS_PER_PAGE}
-              onRowClick={onResidentRowClick}
-            />
-          </DataStatusContainer>
-
-          <AlignedPagination
-            pagination={{
-              value: page,
-              total: data?.totalItems ?? 0,
-              onChange: setPage,
-            }}
+      <Stack>
+        <Stack gap={'xl'}>
+          <ResidentFilters
+            filters={filters}
+            setFilters={setFilters}
+            onResetFilters={onResetFilters}
           />
+
+          <Divider />
+
+          <Stack>
+            <DataStatusContainer
+              skipLoadingState
+              isLoading={isLoading}
+              error={error}
+              dataLength={data?.data?.length ?? 0}
+              EmptyComponent={
+                <EmptyView
+                  icon={<IconUsers size={''} />}
+                  title={'Студенты не найдены'}
+                  description={'Попробуйте изменить параметры фильтра'}
+                />
+              }
+            >
+              <ResidentsTable
+                residents={data?.data ?? []}
+                selectedResident={selectedResident}
+                isLoading={isLoading}
+                skeletonRowsCount={RESIDENTS_PER_PAGE}
+                onRowClick={onResidentRowClick}
+              />
+            </DataStatusContainer>
+
+            <AlignedPagination
+              pagination={{
+                value: page,
+                total: data?.totalPages ?? 0,
+                onChange: setPage,
+              }}
+            />
+          </Stack>
         </Stack>
 
         <Button

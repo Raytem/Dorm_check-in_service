@@ -1,5 +1,9 @@
 import { IResidentRepository } from '@domain/repositories';
-import { GetCandidatesForRoomFilters, PaginatedData } from '@domain/types';
+import {
+  GetCandidatesForRoomFilters,
+  PaginatedData,
+  PaginationFilter,
+} from '@domain/types';
 import { ResidentEntity } from '@domain/entities';
 import { PaginatedDataMapper } from '@infrastructure/mappers';
 import { RESIDENT_MOCK_DATA } from '@domain/mocks/resident.mock.ts';
@@ -20,10 +24,10 @@ export class MockResidentRepository implements IResidentRepository {
 
   getCandidatesForRoom(
     roomId: number,
-    filters: GetCandidatesForRoomFilters,
+    filters: GetCandidatesForRoomFilters & PaginationFilter,
   ): Promise<PaginatedData<ResidentEntity>> {
     this.logger.debug(
-      `getCandidatesForRoom, roomId: ${roomId}, filters: ${filters}`,
+      `getCandidatesForRoom, roomId: ${roomId}, filters: ${JSON.stringify(filters)}`,
     );
 
     const data = PaginatedDataMapper.toDomain(
