@@ -5,7 +5,6 @@ import { useInjection } from 'inversify-react';
 
 import PageLayout from 'presentation/layouts/page';
 
-import { useDocumentVisibility } from '@mantine/hooks';
 import { useFetch, useQueryPagination, useQuerySort } from '@hooks/shared';
 
 import RoomsTable from '../../components/rooms/rooms-table';
@@ -24,7 +23,6 @@ const RoomsPage = () => {
 
   const getRoomsUseCase = useInjection(GetRoomsUseCase);
 
-  const documentVisibility = useDocumentVisibility();
   const tableRef = useRef<HTMLTableElement>(null);
 
   const { data, isLoading, error, refetch } = useFetch(async () => {
@@ -60,29 +58,21 @@ const RoomsPage = () => {
   ]);
 
   useEffect(() => {
-    if (tableRef.current === null) return;
+    scrollTo({
+      top: getTableScrollOffset(),
+      behavior: 'smooth',
+    });
+  }, [page]);
+
+  const getTableScrollOffset = () => {
+    if (tableRef.current === null) return 0;
 
     const rect = tableRef.current.getBoundingClientRect();
     const scrollTop = window.scrollY;
     const offsetTop = rect.top + scrollTop;
 
-    scrollTo({
-      top: offsetTop / 2,
-      behavior: 'smooth',
-    });
-  }, [page]);
-
-  const wasHidden = useRef(false);
-  useEffect(() => {
-    if (documentVisibility === 'hidden') {
-      wasHidden.current = true;
-    }
-
-    if (documentVisibility === 'visible' && wasHidden.current) {
-      refetch();
-      wasHidden.current = false;
-    }
-  }, [documentVisibility]);
+    return offsetTop / 2;
+  };
 
   const onResetFilters = () => {
     resetFilters();

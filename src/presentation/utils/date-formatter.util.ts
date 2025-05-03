@@ -1,13 +1,18 @@
-export type DateFormatTemplate = 'd MMMM yyyy';
+export type DateFormatTemplate = 'D MMMM YYYY' | 'DD MM YYYY';
 
 export class DateFormatterUtil {
   private static formatterOptions: Record<
     DateFormatTemplate,
     Intl.DateTimeFormatOptions
   > = {
-    'd MMMM yyyy': {
+    'D MMMM YYYY': {
       day: 'numeric',
       month: 'long',
+      year: 'numeric',
+    },
+    'DD MM YYYY': {
+      day: 'numeric',
+      month: 'numeric',
       year: 'numeric',
     },
   };

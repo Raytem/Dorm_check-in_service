@@ -11,7 +11,7 @@ export class ResidentEntity {
     public groupName: string,
     public sex: Sex,
     public isCheckInConfirmed: boolean,
-    public checkInDate: Date,
+    public checkInDate: Date | null,
     public evictionDate: Date | null,
     public note: string,
   ) {}

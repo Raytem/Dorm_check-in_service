@@ -4,6 +4,7 @@ import {
   Button,
   Checkbox,
   CloseButton,
+  ComboboxData,
   Group,
   Input,
   NumberInput,
@@ -112,7 +113,7 @@ const RoomsFilters: React.FC<RoomFiltersProps> = ({
     return undefined;
   };
 
-  const blockTypeSelectData = [
+  const blockTypeSelectData: ComboboxData = [
     { value: BlockType.MALE, label: 'Мужской' },
     { value: BlockType.FEMALE, label: 'Женский' },
   ];

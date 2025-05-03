@@ -26,17 +26,23 @@ const ResidentCard: React.FC<ResidentCardProps> = ({
   const [note, setNote] = useState(resident.note);
 
   const baseInfoKeyValueData: Record<string, any> = {
-    'Номер зачетки': resident.gradeBookNumber,
-    Группа: resident.groupName,
-    Пол: Sex.getDisplayName(resident.sex),
+    ['Номер зачетки']: resident.gradeBookNumber,
+    ['Группа']: resident.groupName,
+    ['Пол']: Sex.getDisplayName(resident.sex),
   };
 
-  const midInfoKeyValueData: Record<string, any> = {
-    Заселен: DateFormatterUtil.format('d MMMM yyyy', resident.checkInDate),
-  };
+  const midInfoKeyValueData: Record<string, any> = {};
+
+  if (resident.checkInDate) {
+    midInfoKeyValueData['Заселен'] = DateFormatterUtil.format(
+      'D MMMM YYYY',
+      resident.checkInDate,
+    );
+  }
+
   if (resident.evictionDate) {
     midInfoKeyValueData['Выселен'] = DateFormatterUtil.format(
-      'd MMMM yyyy',
+      'D MMMM YYYY',
       resident.evictionDate,
     );
   }

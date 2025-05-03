@@ -2,7 +2,7 @@ import React from 'react';
 import { ResidentEntity } from '@domain/entities';
 import DataStatusContainer from '@components/shared/data-status-container';
 import EmptyView from '@components/shared/empty-view';
-import { IconUserOff } from '@tabler/icons-react';
+import { IconUsers } from '@tabler/icons-react';
 import { Group } from '@mantine/core';
 import ResidentCardSkeleton from '@components/room/skeletons/resident-card';
 import ResidentCard from '@components/room/resident-card';
@@ -39,7 +39,7 @@ const ResidentCardList: React.FC<ResidentCardListProps> = ({
       dataLength={dataLength}
       EmptyComponent={
         <EmptyView
-          icon={<IconUserOff size={''} />}
+          icon={<IconUsers size={''} />}
           title={'Проживающих нет'}
           description={'В эту комнату еще никого не заселили'}
         />

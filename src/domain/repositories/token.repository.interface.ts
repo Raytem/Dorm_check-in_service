@@ -7,5 +7,5 @@ export interface ITokenRepository {
 }
 export namespace ITokenRepository {
   export const $: interfaces.ServiceIdentifier<ITokenRepository> =
-    Symbol('ITokenRepository');
+    Symbol('TokenRepository');
 }

@@ -31,5 +31,5 @@ export interface IRoomRepository {
 
 export namespace IRoomRepository {
   export const $: interfaces.ServiceIdentifier<IRoomRepository> =
-    Symbol('IRoomRepository');
+    Symbol('RoomRepository');
 }

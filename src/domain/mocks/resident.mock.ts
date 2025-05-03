@@ -26,7 +26,7 @@ export const RESIDENT_MOCK_DATA: ResidentEntity[] = [
     'Б-02',
     Sex.FEMALE,
     false,
-    new Date('2023-09-01'),
+    null,
     new Date('2024-06-30'),
     'Хорошо себя вел',
   ),

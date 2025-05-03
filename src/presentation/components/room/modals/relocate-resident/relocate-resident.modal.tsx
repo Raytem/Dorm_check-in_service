@@ -102,7 +102,7 @@ const RelocateResidentModal: React.FC<RelocateResidentModalProps> = ({
       centered
       opened={isOpened}
       onClose={onClose}
-      title={`Переселение студента ${resident.getFullName()} из комнаты ${roomFrom.roomName}`}
+      title={`Переселение студента "${resident.getFullName()}" из комнаты ${roomFrom.roomName}`}
       size={'lg'}
       onExitTransitionEnd={onExitTransitionEnd}
     >

@@ -14,10 +14,10 @@ const ForbiddenPage: React.FC = () => {
     <Center maw={'100%'} h={'100dvh'}>
       <Stack gap={10} maw={300} align={'center'}>
         <Title order={1}>403</Title>
-        <Title order={2}>Не достаточно прав</Title>
+        <Title order={2}>Доступ заблокирован</Title>
 
         <Text size={'lg'} ta={'center'} mb={'xl'}>
-          У вас нет прав для простомтра данной страницы
+          У вас нет прав для просмотра данной страницы
         </Text>
 
         <Button size={'md'} onClick={handleToMainPageBtnClick}>

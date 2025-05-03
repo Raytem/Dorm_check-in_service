@@ -23,11 +23,13 @@ export interface RoomsTableHeaderProps {
   onSortChange?: <S>(sortBy: S, sortDir: SortDirection) => void;
 }
 
-const columns: {
+interface RoomsTableColumnData {
   key: RoomSortParams;
   label: string;
   skeletonProps: SkeletonProps;
-}[] = [
+}
+
+const columns: RoomsTableColumnData[] = [
   {
     key: RoomSortParams.DORMITORY_NUMBER,
     label: 'Номер общежития',

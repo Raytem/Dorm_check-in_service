@@ -20,6 +20,7 @@ import ResidentsSectionHeader from '@components/room/residents-section-header';
 import ResidentCardList from '@components/room/resident-card-list';
 import RelocateResidentModal from '@components/room/modals/relocate-resident/relocate-resident.modal.tsx';
 import { modals } from '@mantine/modals';
+import AddResidentModal from '@components/room/modals/add-resident/add-resident.modal.tsx';
 
 const RoomPage: React.FC = () => {
   const { roomId } = useParams<AppRoutesParams[AppRoutes.ROOM]>();
@@ -35,6 +36,11 @@ const RoomPage: React.FC = () => {
   const [
     isRelocateModalOpened,
     { open: openRelocateModal, close: closeRelocateModal },
+  ] = useDisclosure(false);
+
+  const [
+    isAddResidentModalOpened,
+    { open: openAddResidentModal, close: closeAddResidentModal },
   ] = useDisclosure(false);
 
   const {
@@ -86,8 +92,9 @@ const RoomPage: React.FC = () => {
 
   const onAddResidentClick = async () => {
     // TODO: запуск юзкейса
-    await refetchRoom({ showLoadingState: false });
-    modalManager.showSuccess('Студент успешно заселен');
+    openAddResidentModal();
+    // await refetchRoom({ showLoadingState: false });
+    // modalManager.showSuccess('Студент успешно заселен');
   };
 
   const onEvictResidentClick = async (resident: ResidentEntity) => {
@@ -209,6 +216,15 @@ const RoomPage: React.FC = () => {
               isRelocateLoading={isRelocateLoading}
             />
           )}
+
+          <AddResidentModal
+            isOpened={isAddResidentModalOpened}
+            onClose={closeAddResidentModal}
+            roomName={room.roomName}
+            roomId={room.id}
+            isAddResidentLoading={false}
+            onAddResident={() => {}}
+          />
         </Stack>
       )}
     </RoomPageLayout>

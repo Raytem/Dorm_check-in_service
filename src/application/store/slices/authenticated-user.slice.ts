@@ -17,7 +17,7 @@ const initialState: AuthenticatedUserStateType = {
     'daniilbakov',
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlOLBRK-3wEFFeCojWlHou4nooggl5iI2PJQ&s',
     'daniilbk@yandex.by',
-    [],
+    ['admin'],
   ),
 };
 

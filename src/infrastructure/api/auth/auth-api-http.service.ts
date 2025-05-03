@@ -6,17 +6,23 @@ import { ConfigService } from '@infrastructure/services';
 import { ITokenRepository } from '@domain/repositories';
 import { RefreshTokensUseCase } from '@/usecases';
 import { diContainer } from '@/di';
+import { ILogger } from '@domain/logger/logger.interface.ts';
 
 @injectable()
 export class AuthApiHttpService {
   public readonly instance: AxiosInstance;
+  private readonly logger: ILogger;
 
   constructor(
     @inject(ConfigService)
     private readonly config: ConfigService,
+    @inject(ILogger.$)
+    private readonly baseLogger: ILogger,
     @inject(ITokenRepository.$)
     private readonly tokenRepository: ITokenRepository,
   ) {
+    this.logger = this.baseLogger.withContext(AuthApiHttpService.name);
+
     const instance = axios.create({
       baseURL: this.config.getConfig().authApi.baseUrl,
       transformRequest: (data, headers) => {
@@ -43,7 +49,7 @@ export class AuthApiHttpService {
             // retry request
             return instance.request(originalRequest);
           } catch (e) {
-            console.log(e);
+            this.logger.error('Error', e);
           }
         }
         return Promise.reject(error);

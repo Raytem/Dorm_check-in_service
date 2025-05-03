@@ -22,7 +22,12 @@ const CheckInStatusChip: React.FC<CheckInStatusChipProps> = ({
   const chipColor = isCheckInConfirmed ? 'green' : 'red';
 
   return (
-    <Chip icon={chipIcon} color={chipColor} checked={true}>
+    <Chip
+      icon={chipIcon}
+      color={chipColor}
+      checked={true}
+      style={{ pointerEvents: 'none' }}
+    >
       {checkInChipText}
     </Chip>
   );
