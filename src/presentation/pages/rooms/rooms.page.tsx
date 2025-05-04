@@ -67,6 +67,8 @@ const RoomsPage = () => {
     filters.dormitoryNumber,
     filters.studentGroup,
     filters.floor,
+    sort.sortBy,
+    sort.sortDir,
   ]);
 
   const onResetFilters = () => {
@@ -92,7 +94,7 @@ const RoomsPage = () => {
             dataLength={data?.data.length ?? 0}
             EmptyComponent={
               <EmptyView
-                icon={<IconDoor size={''} />}
+                icon={<IconDoor size={'100%'} />}
                 title={'Комнаты не найдены'}
                 description={'Попробуйте изменить параметры фильтра'}
               />

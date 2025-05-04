@@ -1,5 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { IRoomRepository } from '@domain/repositories';
+import { ResidentId, RoomId } from '@domain/entities';
 
 @injectable()
 export class AddResidentUseCase {
@@ -8,7 +9,7 @@ export class AddResidentUseCase {
     private readonly roomRepository: IRoomRepository,
   ) {}
 
-  async execute(roomId: number, residentId: number): Promise<void> {
+  async execute(roomId: RoomId, residentId: ResidentId): Promise<void> {
     await this.roomRepository.addResident(roomId, residentId);
   }
 }

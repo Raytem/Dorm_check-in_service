@@ -3,14 +3,19 @@ import {
   PaginatedData,
   PaginationFilter,
 } from '@domain/types';
-import { ResidentEntity } from '@domain/entities';
+import { ResidentEntity, ResidentId, RoomId } from '@domain/entities';
 import { interfaces } from 'inversify';
 
 export interface IResidentRepository {
   getCandidatesForRoom(
-    roomId: number,
+    roomId: RoomId,
     filters: GetCandidatesForRoomFilters & PaginationFilter,
   ): Promise<PaginatedData<ResidentEntity>>;
+
+  updateResidentInfo(
+    residentId: ResidentId,
+    data: Partial<Pick<ResidentEntity, 'isCheckInConfirmed' | 'note'>>,
+  ): Promise<void>;
 }
 
 export namespace IResidentRepository {

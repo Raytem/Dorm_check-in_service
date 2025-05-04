@@ -1,4 +1,4 @@
-import { ResidentEntity } from '@domain/entities';
+import { ResidentEntity, RoomId } from '@domain/entities';
 import {
   GetCandidatesForRoomFilters,
   PaginatedData,
@@ -15,7 +15,7 @@ export class GetCandidatesForRoomUseCase {
   ) {}
 
   async execute(
-    roomId: number,
+    roomId: RoomId,
     filters: GetCandidatesForRoomFilters & PaginationFilter,
   ): Promise<PaginatedData<ResidentEntity>> {
     return await this.residentRepository.getCandidatesForRoom(roomId, filters);

@@ -1,4 +1,5 @@
 import { ILogger } from '@domain/logger/logger.interface.ts';
+import { StringUtil } from '@infrastructure/utils/string.util.ts';
 
 export enum LogLevel {
   DEBUG = 'debug',
@@ -13,20 +14,22 @@ export class LoggerImpl implements ILogger {
   private log(level: LogLevel, message: string, ...args: any[]) {
     const timestamp = new Date().toISOString();
     const ctx = this.context ? `[${this.context}]` : '';
-    const formatted = `${timestamp} [${level.toUpperCase()}] ${ctx}: ${message}`;
+    const formattedMessage = StringUtil.formatStringArgs(message, ...args);
+
+    const formattedLog = `${timestamp} [${level.toUpperCase()}] ${ctx}: ${formattedMessage}`;
 
     switch (level) {
       case LogLevel.DEBUG:
-        console.debug(formatted, ...args);
+        console.debug(`%c${formattedLog}`, 'color: violet');
         break;
       case LogLevel.INFO:
-        console.info(formatted, ...args);
+        console.info(`%c${formattedLog}`, 'color: skyblue');
         break;
       case LogLevel.WARN:
-        console.warn(formatted, ...args);
+        console.warn(`%c${formattedLog}`, 'color: yellow');
         break;
       case LogLevel.ERROR:
-        console.error(formatted, ...args);
+        console.error(`%c${formattedLog}`, 'color: red');
         break;
     }
   }

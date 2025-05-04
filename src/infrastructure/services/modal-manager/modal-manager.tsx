@@ -4,7 +4,7 @@ import {
   IconCircleCheck,
   IconCircleXFilled,
 } from '@tabler/icons-react';
-import { ErrorUtil } from '@presentation/utils';
+import { ErrorUtil } from 'infrastructure/utils';
 import StatusModal from '@components/shared/modals/status-modal.tsx';
 
 class ModalManager {

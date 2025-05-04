@@ -2,7 +2,8 @@ import { interfaces } from 'inversify';
 import {
   RoomEntity,
   RoomDetailsEntity,
-  ResidentEntity,
+  RoomId,
+  ResidentId,
 } from '@domain/entities';
 import { PaginatedData, PaginationFilter } from '@domain/types';
 import { RoomSearchFilters } from '@domain/types/room-search-filters.ts';
@@ -12,23 +13,18 @@ export interface IRoomRepository {
     filters: RoomSearchFilters & PaginationFilter,
   ): Promise<PaginatedData<RoomEntity>>;
 
-  getRoomDetailsById(roomId: number): Promise<RoomDetailsEntity>;
+  getRoomDetailsById(roomId: RoomId): Promise<RoomDetailsEntity>;
 
-  relocateResident(residentId: number, newRoomId: number): Promise<void>;
+  relocateResident(residentId: ResidentId, newRoomId: RoomId): Promise<void>;
 
   getAvailableRoomsToRelocateResident(
     roomName: string,
     residentId: number,
   ): Promise<RoomEntity[]>;
 
-  evictResident(residentId: number): Promise<void>;
+  evictResident(residentId: ResidentId): Promise<void>;
 
-  updateResidentInfo(
-    residentId: number,
-    data: Partial<Pick<ResidentEntity, 'isCheckInConfirmed' | 'note'>>,
-  ): Promise<void>;
-
-  addResident(roomId: number, residentId: number): Promise<void>;
+  addResident(roomId: RoomId, residentId: ResidentId): Promise<void>;
 }
 
 export namespace IRoomRepository {

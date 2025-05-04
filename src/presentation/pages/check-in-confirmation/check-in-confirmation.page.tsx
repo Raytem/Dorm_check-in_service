@@ -1,5 +1,11 @@
+import PageLayout from '@layouts/page';
+
 const CheckInConfirmationPage = () => {
-  return <div>Check in confirmation</div>;
+  return (
+    <PageLayout title={'Подтверждения заселения'}>
+      <div></div>
+    </PageLayout>
+  );
 };
 
 export default CheckInConfirmationPage;

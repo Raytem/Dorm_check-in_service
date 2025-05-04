@@ -4,7 +4,7 @@ import { Avatar, Box, BoxProps, Button, Textarea, Title } from '@mantine/core';
 import KeyValueTable from '@components/shared/key-value-table';
 import { Sex } from '@domain/enums';
 import classes from './resident-card.module.css';
-import { DateFormatterUtil } from '@presentation/utils';
+import { DateFormatterUtil } from 'infrastructure/utils';
 import CheckInStatusChip from '@components/room/check-in-status-chip';
 
 export interface ResidentCardProps extends BoxProps {

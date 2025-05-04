@@ -5,12 +5,16 @@ import {
   Burger as MantineBurger,
 } from '@mantine/core';
 
-export interface BurgerProps extends ActionIconProps {
+export interface HeaderBurgerProps extends ActionIconProps {
   opened: boolean;
   onClick: () => void;
 }
 
-const Burger: React.FC<BurgerProps> = ({ opened, onClick, ...props }) => {
+const HeaderBurger: React.FC<HeaderBurgerProps> = ({
+  opened,
+  onClick,
+  ...props
+}) => {
   return (
     <ActionIcon
       hiddenFrom="sm"
@@ -20,9 +24,15 @@ const Burger: React.FC<BurgerProps> = ({ opened, onClick, ...props }) => {
       onClick={onClick}
       {...props}
     >
-      <MantineBurger color={'white'} opened={opened} size="sm" />
+      <MantineBurger
+        component={'div'}
+        color={'white'}
+        opened={opened}
+        size="sm"
+        mt={'50%'}
+      />
     </ActionIcon>
   );
 };
 
-export default Burger;
+export default HeaderBurger;

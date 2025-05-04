@@ -1,10 +1,10 @@
-import { RoomEntity } from '@domain/entities/room.entity.ts';
+import { RoomEntity, RoomId } from '@domain/entities/room.entity.ts';
 import { ResidentEntity } from '@domain/entities/resident.entity.ts';
 import { BlockType } from '@domain/enums';
 
 export class RoomDetailsEntity extends RoomEntity {
   constructor(
-    id: number,
+    id: RoomId,
     dormitoryNumber: number,
     floor: number,
     blockNumber: number,

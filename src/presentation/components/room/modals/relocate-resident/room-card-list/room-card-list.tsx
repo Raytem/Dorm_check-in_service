@@ -38,7 +38,7 @@ const RoomCardList: React.FC<RoomCardListProps> = ({
       isLoading={isLoading}
       error={error}
       EmptyComponent={
-        <EmptyView icon={<IconDoor size={''} />} title={emptyViewTitle} />
+        <EmptyView icon={<IconDoor size={'100%'} />} title={emptyViewTitle} />
       }
     >
       <Stack gap={10}>

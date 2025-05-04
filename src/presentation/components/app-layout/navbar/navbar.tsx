@@ -3,7 +3,7 @@ import { AppShell, Transition } from '@mantine/core';
 import { useLocation, useNavigate } from 'react-router-dom';
 import MobileNavbar from 'presentation/components/app-layout/mobile-navbar';
 import DesktopNavbar from 'presentation/components/app-layout/desktop-navbar';
-import { linksData } from '@components/app-layout/navbar/navbar.constants.tsx';
+import { NAVBAR_LINKS } from '@components/app-layout/navbar/navbar-links.tsx';
 
 export interface NavbarProps {
   isMobile?: boolean;
@@ -25,12 +25,12 @@ const Navbar: React.FC<NavbarProps> = ({
   const location = useLocation();
 
   useEffect(() => {
-    const index = linksData.findIndex((linkData) =>
+    const index = NAVBAR_LINKS.findIndex((linkData) =>
       location.pathname.includes(linkData.link),
     );
     setActive(index === -1 ? 0 : index);
     if (index === -1) {
-      navigate(linksData[0]!.link, { replace: true });
+      navigate(NAVBAR_LINKS[0]!.link, { replace: true });
     }
   }, [location]);
 
@@ -40,7 +40,6 @@ const Navbar: React.FC<NavbarProps> = ({
         {!isMobile ? (
           <MobileNavbar
             activeLinkIdx={active}
-            isNavbarCollapsed={isNavbarCollapsed}
             toggleNavbarCollapsed={toggleNavbarCollapsed}
             onLinkClick={onMobileLinkClick}
           />
@@ -64,7 +63,6 @@ const Navbar: React.FC<NavbarProps> = ({
             bottom={0}
             left={0}
             activeLinkIdx={active}
-            isNavbarCollapsed={isNavbarCollapsed}
             toggleNavbarCollapsed={toggleNavbarCollapsed}
             onLinkClick={onMobileLinkClick}
             style={styles}

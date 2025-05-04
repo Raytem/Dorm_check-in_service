@@ -1,6 +1,6 @@
 import { Avatar, Group, Stack, Text, useMatches } from '@mantine/core';
 import React from 'react';
-import { TextUtil } from '@presentation/utils';
+import { TextUtil } from 'infrastructure/utils';
 
 export interface ProfileBlockProps {
   name: string;

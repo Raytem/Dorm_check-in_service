@@ -5,13 +5,13 @@ import {
   EvictResidentUseCase,
   GetRoomDetailsUseCase,
   RelocateResidentUseCase,
-  UpdateResidentInfoUseCase,
 } from '@/usecases/rooms';
+import { UpdateResidentInfoUseCase } from '@/usecases/residents';
 import { useFetch } from '@hooks/shared';
 import { useEffect } from 'react';
 import { Stack, Text } from '@mantine/core';
 import { AppRoutes, AppRoutesParams } from '@routing/app-routes.ts';
-import { ResidentEntity } from '@domain/entities';
+import { ResidentEntity, ResidentId, RoomId } from '@domain/entities';
 import { modalManager } from '@infrastructure/services/modal-manager/modal-manager.tsx';
 import { useDisclosure } from '@mantine/hooks';
 import RoomPageLayout from '@components/room/room-page-layout';
@@ -65,7 +65,7 @@ const RoomPage: React.FC = () => {
   );
 
   const { isLoading: isAddResidentLoading, refetch: refetchAddResident } =
-    useFetch(async (params: { roomId: number; residentId: number }) => {
+    useFetch(async (params: { roomId: RoomId; residentId: ResidentId }) => {
       await addResidentUseCase.execute(params.roomId, params.residentId);
     });
 

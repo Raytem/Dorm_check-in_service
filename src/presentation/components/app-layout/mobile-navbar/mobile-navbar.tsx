@@ -1,15 +1,17 @@
 import React from 'react';
 import { BoxProps, Group, NavLink, ScrollArea } from '@mantine/core';
-import { IconHome } from '@tabler/icons-react';
-import { Link } from 'react-router-dom';
-import { linksData } from '@components/app-layout/navbar/navbar.constants.tsx';
-import NavbarBurgerButton from '@components/app-layout/navbar-burger-button';
+import { useNavigate } from 'react-router-dom';
+import {
+  HOME_LINK,
+  NAVBAR_LINKS,
+} from '@components/app-layout/navbar/navbar-links.tsx';
+import NavbarBurger from 'presentation/components/app-layout/navbar-burger';
 import LogoutButton from '@components/app-layout/logout-button';
+import { LinkData } from '@components/app-layout/navbar/types';
 
 export interface MobileNavbarProps extends BoxProps {
   activeLinkIdx?: number;
   onLinkClick?: () => void;
-  isNavbarCollapsed?: boolean;
   toggleNavbarCollapsed?: () => void;
 }
 
@@ -19,6 +21,14 @@ const MobileNavbar = ({
   toggleNavbarCollapsed = () => {},
   ...props
 }: MobileNavbarProps): React.JSX.Element => {
+  const navigate = useNavigate();
+
+  const handleOnLinkClick = (linkData: LinkData) => {
+    onLinkClick();
+    toggleNavbarCollapsed();
+    navigate(linkData.link);
+  };
+
   return (
     <ScrollArea
       type={'auto'}
@@ -36,23 +46,18 @@ const MobileNavbar = ({
         align={'center'}
         pr={'xl'}
       >
-        <Link to={linksData[0]!.link} style={{ width: '100%' }}>
-          <NavLink
-            pl={'xl'}
-            p={0}
-            py={'45'}
-            label={'Главная'}
-            leftSection={<IconHome />}
-            variant={'filled'}
-            color={'main.6'}
-            onClick={() => {
-              onLinkClick();
-              toggleNavbarCollapsed();
-            }}
-          />
-        </Link>
+        <NavLink
+          pl={'xl'}
+          p={0}
+          py={'45'}
+          label={HOME_LINK.label}
+          leftSection={HOME_LINK.icon}
+          variant={'filled'}
+          color={'main.6'}
+          onClick={() => handleOnLinkClick(HOME_LINK)}
+        />
 
-        <NavbarBurgerButton
+        <NavbarBurger
           visibleFrom={'sm'}
           opened={true}
           onClick={toggleNavbarCollapsed}
@@ -60,23 +65,19 @@ const MobileNavbar = ({
         <LogoutButton hiddenFrom={'sm'} variant={'outline'} />
       </Group>
 
-      {linksData.map((data, idx) => {
+      {NAVBAR_LINKS.map((linkData, idx) => {
         return (
-          <Link to={data.link} key={idx}>
-            <NavLink
-              py={'lg'}
-              px={'xl'}
-              label={data.label}
-              leftSection={data.icon}
-              variant="filled"
-              active={idx === activeLinkIdx}
-              color={'main.6'}
-              onClick={() => {
-                onLinkClick();
-                toggleNavbarCollapsed();
-              }}
-            />
-          </Link>
+          <NavLink
+            key={linkData.link}
+            py={'lg'}
+            px={'xl'}
+            label={linkData.label}
+            leftSection={linkData.icon}
+            variant="filled"
+            active={idx === activeLinkIdx}
+            color={'main.6'}
+            onClick={() => handleOnLinkClick(linkData)}
+          />
         );
       })}
     </ScrollArea>

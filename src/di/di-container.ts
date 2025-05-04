@@ -38,11 +38,13 @@ import {
   GetRoomDetailsUseCase,
   EvictResidentUseCase,
   GetAvailableRoomsToRelocateResidentUseCase,
-  UpdateResidentInfoUseCase,
   RelocateResidentUseCase,
   AddResidentUseCase,
 } from '@usecases/rooms';
-import { GetCandidatesForRoomUseCase } from '@usecases/residents';
+import {
+  GetCandidatesForRoomUseCase,
+  UpdateResidentInfoUseCase,
+} from '@usecases/residents';
 // Core
 import { ILogger } from '@domain/logger/logger.interface.ts';
 import { LoggerImpl } from '@infrastructure/logger/logger.ts';

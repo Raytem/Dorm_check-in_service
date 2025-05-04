@@ -2,16 +2,16 @@ import React from 'react';
 import {
   ActionIcon,
   BoxProps,
-  Burger,
+  Burger as MantineBurger,
   useMantineColorScheme,
 } from '@mantine/core';
 
-export interface NavbarBurgerButtonProps extends BoxProps {
+export interface NavbarBurgerProps extends BoxProps {
   opened: boolean;
   onClick: () => void;
 }
 
-const NavbarBurgerButton: React.FC<NavbarBurgerButtonProps> = ({
+const NavbarBurger: React.FC<NavbarBurgerProps> = ({
   opened = false,
   onClick = () => {},
   ...props
@@ -20,12 +20,14 @@ const NavbarBurgerButton: React.FC<NavbarBurgerButtonProps> = ({
 
   return (
     <ActionIcon variant={'default'} size={'xl'} onClick={onClick} {...props}>
-      <Burger
+      <MantineBurger
+        component={'div'}
         color={colorScheme === 'dark' ? 'white' : 'main.6'}
         opened={opened}
+        mt={'50%'}
       />
     </ActionIcon>
   );
 };
 
-export default NavbarBurgerButton;
+export default NavbarBurger;

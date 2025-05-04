@@ -3,7 +3,7 @@ import { ResidentEntity } from '@domain/entities';
 import { Avatar, Table, TableTrProps } from '@mantine/core';
 import { Sex } from '@domain/enums';
 import CheckInStatusChip from '@components/room/check-in-status-chip';
-import { DateFormatterUtil } from '@presentation/utils';
+import { DateFormatterUtil } from 'infrastructure/utils';
 
 export interface ResidentsTableRowProps extends TableTrProps {
   resident: ResidentEntity;

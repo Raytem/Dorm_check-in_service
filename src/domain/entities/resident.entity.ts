@@ -1,8 +1,10 @@
 import { Sex } from '@domain/enums';
 
+export type ResidentId = number;
+
 export class ResidentEntity {
   constructor(
-    public id: number,
+    public id: ResidentId,
     public firstName: string,
     public lastName: string,
     public patronymic: string,

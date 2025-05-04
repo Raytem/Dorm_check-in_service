@@ -1,12 +1,19 @@
 import {
   IconClipboardCheck,
   IconDoor,
+  IconHome,
   IconReportAnalytics,
 } from '@tabler/icons-react';
 import { AppRoutes } from '@routing/app-routes.ts';
 import { LinkData } from '@components/app-layout/navbar/types';
 
-export const linksData: LinkData[] = [
+export const HOME_LINK: LinkData = {
+  label: 'Главная',
+  link: AppRoutes.HOME,
+  icon: <IconHome />,
+};
+
+export const NAVBAR_LINKS: LinkData[] = [
   {
     label: 'Комнаты',
     link: AppRoutes.ROOMS,

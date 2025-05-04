@@ -1,6 +1,8 @@
+export type UserId = number;
+
 export class AuthenticatedUserEntity {
   constructor(
-    public id: number,
+    public id: UserId,
     public firstName: string,
     public lastName: string,
     public patronymic: string,

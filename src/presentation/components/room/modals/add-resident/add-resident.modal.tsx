@@ -5,7 +5,7 @@ import EmptyView from '@components/shared/empty-view';
 import { IconUsers } from '@tabler/icons-react';
 import AlignedPagination from '@components/shared/aligned-pagination';
 import ResidentsTable from '@components/room/modals/add-resident/residents-table';
-import { ResidentEntity } from '@domain/entities';
+import { ResidentEntity, RoomId } from '@domain/entities';
 import { useMediaQuery } from '@mantine/hooks';
 import { useInjection } from 'inversify-react';
 import { GetCandidatesForRoomUseCase } from '@/usecases/residents';
@@ -16,7 +16,7 @@ import { GetCandidatesForRoomFilters } from '@domain/types';
 export interface AddResidentModalProps {
   isOpened: boolean;
   onClose: () => void;
-  roomId: number;
+  roomId: RoomId;
   roomName: string;
   isAddResidentLoading: boolean;
   onAddResident: (residentId: number) => void;
@@ -133,7 +133,7 @@ const AddResidentModal: React.FC<AddResidentModalProps> = ({
               dataLength={data?.data?.length ?? 0}
               EmptyComponent={
                 <EmptyView
-                  icon={<IconUsers size={''} />}
+                  icon={<IconUsers size={'100%'} />}
                   title={'Студенты не найдены'}
                   description={'Попробуйте изменить параметры фильтра'}
                 />

@@ -1,5 +1,5 @@
 import { SkeletonProps, Table } from '@mantine/core';
-import { RoomEntity } from '@domain/entities';
+import { RoomEntity, RoomId } from '@domain/entities';
 import TableRowSkeleton from '@components/shared/table-row-skeleton';
 import TableThWithFilters from '@components/shared/table-th-with-filters';
 import { RoomSortParams, SortDirection } from '@domain/enums';
@@ -95,7 +95,7 @@ const RoomsTableBody = ({
 }: RoomsTableProps) => {
   const navigate = useNavigate();
 
-  const handleRowClick = (roomId: number) => {
+  const handleRowClick = (roomId: RoomId) => {
     const roomPath = AppRoutes.getPath(AppRoutes.ROOM, {
       roomId: String(roomId),
     });

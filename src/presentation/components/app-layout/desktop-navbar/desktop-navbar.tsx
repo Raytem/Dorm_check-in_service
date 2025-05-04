@@ -7,8 +7,8 @@ import {
   useMantineColorScheme,
 } from '@mantine/core';
 import { Link } from 'react-router-dom';
-import NavbarBurgerButton from '@components/app-layout/navbar-burger-button';
-import { linksData } from '@components/app-layout/navbar/navbar.constants.tsx';
+import NavbarBurger from 'presentation/components/app-layout/navbar-burger';
+import { NAVBAR_LINKS } from '@components/app-layout/navbar/navbar-links.tsx';
 
 export interface DesktopNavbarProps {
   activeLinkIdx: number;
@@ -24,14 +24,10 @@ const DesktopNavbar: React.FC<DesktopNavbarProps> = ({
 
   return (
     <Stack align={'center'} gap={0} h={'100%'}>
-      <NavbarBurgerButton
-        my={35}
-        opened={false}
-        onClick={toggleNavbarCollapsed}
-      />
+      <NavbarBurger my={35} opened={false} onClick={toggleNavbarCollapsed} />
       <ScrollArea type={'auto'} w={'100%'}>
         <Stack align="center" py={'md'}>
-          {linksData.map((data, idx) => {
+          {NAVBAR_LINKS.map((data, idx) => {
             return (
               <Tooltip key={data.link} label={data.label} position={'right'}>
                 <Link to={data.link} key={idx}>

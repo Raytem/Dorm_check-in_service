@@ -4,10 +4,10 @@ import {
   PaginatedData,
   PaginationFilter,
 } from '@domain/types';
-import { ResidentEntity } from '@domain/entities';
+import { ResidentEntity, ResidentId, RoomId } from '@domain/entities';
 import { PaginatedDataMapper } from '@infrastructure/mappers';
 import { RESIDENT_MOCK_DATA } from '@domain/mocks/resident.mock.ts';
-import { DelayUtil } from '@presentation/utils';
+import { DelayUtil } from 'infrastructure/utils';
 import { inject, injectable } from 'inversify';
 import { ILogger } from '@domain/logger/logger.interface.ts';
 
@@ -23,11 +23,13 @@ export class MockResidentRepository implements IResidentRepository {
   }
 
   getCandidatesForRoom(
-    roomId: number,
+    roomId: RoomId,
     filters: GetCandidatesForRoomFilters & PaginationFilter,
   ): Promise<PaginatedData<ResidentEntity>> {
     this.logger.debug(
-      `getCandidatesForRoom, roomId: ${roomId}, filters: ${JSON.stringify(filters)}`,
+      'getCandidatesForRoom, roomId: {0}, filters: {1}',
+      roomId,
+      filters,
     );
 
     const data = PaginatedDataMapper.toDomain(
@@ -39,5 +41,18 @@ export class MockResidentRepository implements IResidentRepository {
       () => RESIDENT_MOCK_DATA,
     );
     return DelayUtil.withRandomDelay(() => data);
+  }
+
+  async updateResidentInfo(
+    residentId: ResidentId,
+    data: Partial<Pick<ResidentEntity, 'isCheckInConfirmed' | 'note'>>,
+  ): Promise<void> {
+    this.logger.debug(
+      'updateResidentInfo, residentId: {0}, data: {1}',
+      residentId,
+      data,
+    );
+
+    await DelayUtil.withRandomDelay(() => {});
   }
 }

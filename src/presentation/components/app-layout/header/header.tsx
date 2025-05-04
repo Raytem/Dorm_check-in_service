@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { selectAuthenticatedUser } from '@application/store/slices';
 import { Link } from 'react-router-dom';
 
-import Burger from '../burger';
+import HeaderBurger from '../header-burger';
 import ThemeButton from '../theme-button';
 
 import classes from './header.module.css';
@@ -63,7 +63,7 @@ const Header: React.FC<HeaderProps> = ({ burgerOpened, toggleBurger }) => {
 
               <Box className={classes['header__toolbarSpacer']!}></Box>
 
-              <Burger
+              <HeaderBurger
                 className={classes['header__toolbarBurger']}
                 opened={burgerOpened}
                 onClick={toggleBurger}

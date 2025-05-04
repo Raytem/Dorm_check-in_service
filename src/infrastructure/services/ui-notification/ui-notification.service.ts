@@ -3,7 +3,7 @@ import { injectable } from 'inversify';
 import { IUINotificationService } from '@domain/adapters/services/ui-notification';
 import { notifications } from '@mantine/notifications';
 import { IconAlertCircle, IconCheck, IconX } from '@tabler/icons-react';
-import { ErrorUtil } from '@presentation/utils';
+import { ErrorUtil } from 'infrastructure/utils';
 
 @injectable()
 export class UINotificationService implements IUINotificationService {

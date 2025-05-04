@@ -1,7 +1,7 @@
 import EmptyView from '@components/shared/empty-view';
 import { IconExclamationCircle } from '@tabler/icons-react';
 import { EmptyViewProps } from '@components/shared/empty-view/empty-view.tsx';
-import { ErrorUtil } from '@presentation/utils';
+import { ErrorUtil } from 'infrastructure/utils';
 import React from 'react';
 
 export interface ErrorViewProps extends Partial<EmptyViewProps> {
@@ -12,7 +12,7 @@ const ErrorView: React.FC<ErrorViewProps> = ({
   error,
   title = 'Произошла ошибка',
   description,
-  icon = <IconExclamationCircle size={''} />,
+  icon = <IconExclamationCircle size={'100%'} />,
 }) => {
   return (
     <EmptyView

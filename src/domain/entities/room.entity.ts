@@ -1,8 +1,10 @@
 import { BlockType } from '@domain/enums';
 
+export type RoomId = number;
+
 export class RoomEntity {
   constructor(
-    public id: number,
+    public id: RoomId,
     public dormitoryNumber: number,
     public floor: number,
     public blockNumber: number,

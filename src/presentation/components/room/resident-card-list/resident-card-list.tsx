@@ -39,7 +39,7 @@ const ResidentCardList: React.FC<ResidentCardListProps> = ({
       dataLength={dataLength}
       EmptyComponent={
         <EmptyView
-          icon={<IconUsers size={''} />}
+          icon={<IconUsers size={'100%'} />}
           title={'Проживающих нет'}
           description={'В эту комнату еще никого не заселили'}
         />
