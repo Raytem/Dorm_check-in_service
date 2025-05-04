@@ -1,0 +1,63 @@
+.editable-textarea-wrapper__editable {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    border-style: solid;
+    border-width: 1px;
+    border-radius: var(--mantine-radius-md);
+}
+
+html[data-mantine-color-scheme='light'] .editable-textarea-wrapper__editable {
+    border-color: var(--mantine-color-gray-3);
+}
+
+html[data-mantine-color-scheme='dark'] .editable-textarea-wrapper__editable {
+    border-color: var(--mantine-color-dark-4);
+}
+
+.editable-textarea-wrapper__textarea {
+    padding: 0px 5px;
+}
+
+.editable-textarea-wrapper__bottom-toolbar {
+    display: flex;
+    gap: 5px;
+    padding: 0 5px 5px 5px;
+}
+
+.editable-text-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 4px 8px;
+
+    border: 1px solid transparent;
+    border-radius: 8px;
+    transition: background 0.2s;
+
+    cursor: pointer;
+}
+
+html[data-mantine-color-scheme='light'] .editable-text-wrapper:hover {
+    border-color: var(--mantine-color-gray-3);
+}
+
+html[data-mantine-color-scheme='dark'] .editable-text-wrapper:hover {
+    border-color: var(--mantine-color-dark-4);
+}
+
+.editable-text-wrapper:hover .editable-icon {
+    display: block;
+}
+
+.editable-text {
+    flex: 1;
+}
+
+.editable-icon {
+    display: none;
+    color: var(--mantine-color-dimmed);
+    transition: background 0.2s;
+}

@@ -6,15 +6,23 @@ import { IconUsers } from '@tabler/icons-react';
 import { Group } from '@mantine/core';
 import ResidentCardSkeleton from '@components/room/skeletons/resident-card';
 import ResidentCard from '@components/room/resident-card';
+import {
+  CancelResidentCheckInHandler,
+  ConfirmResidentCheckInHandler,
+  EvictResidentHandler,
+  RelocateResidentHandler,
+  SaveResidentNotesHandler,
+} from '@components/room/resident-card/resident-card.tsx';
 
 export interface ResidentCardListProps {
   residents: ResidentEntity[];
   isLoading: boolean;
   skeletonCardsCount?: number;
-  onEvict?: (resident: ResidentEntity) => void;
-  onRelocate?: (resident: ResidentEntity) => void;
-  onConfirmCheckIn?: (resident: ResidentEntity) => void;
-  onCancelResidentCheckIn?: (resident: ResidentEntity) => void;
+  onEvict?: EvictResidentHandler;
+  onRelocate?: RelocateResidentHandler;
+  onConfirmCheckIn?: ConfirmResidentCheckInHandler;
+  onCancelCheckIn?: CancelResidentCheckInHandler;
+  onSaveNotes?: SaveResidentNotesHandler;
 }
 
 const ResidentCardList: React.FC<ResidentCardListProps> = ({
@@ -23,7 +31,8 @@ const ResidentCardList: React.FC<ResidentCardListProps> = ({
   onEvict,
   onRelocate,
   onConfirmCheckIn,
-  onCancelResidentCheckIn,
+  onCancelCheckIn,
+  onSaveNotes,
   skeletonCardsCount = 3,
 }) => {
   const dataLength = isLoading ? skeletonCardsCount : residents.length;
@@ -60,8 +69,9 @@ const ResidentCardList: React.FC<ResidentCardListProps> = ({
                 maw={maxWidthStyles}
                 onEvict={onEvict}
                 onConfirmCheckIn={onConfirmCheckIn}
-                onCancelResidentCheckIn={onCancelResidentCheckIn}
+                onCancelCheckIn={onCancelCheckIn}
                 onRelocate={onRelocate}
+                onSaveNotes={onSaveNotes}
               />
             ))}
       </Group>

@@ -160,7 +160,7 @@ const AddResidentModal: React.FC<AddResidentModalProps> = ({
 
         <Button
           onClick={onAddResidentClick}
-          disabled={selectedResident === null}
+          disabled={selectedResident === null || isLoading}
         >
           {getAddResidentButtonLabel()}
         </Button>

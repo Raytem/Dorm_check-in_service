@@ -14,7 +14,7 @@ export const RESIDENT_MOCK_DATA: ResidentEntity[] = [
     true,
     new Date('2024-01-15'),
     new Date('2024-06-30'),
-    'Хорошо себя вел',
+    '',
   ),
   new ResidentEntity(
     2,

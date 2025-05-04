@@ -115,6 +115,15 @@ const RoomPage: React.FC = () => {
     await refetchRoom({ showLoadingState: false });
   };
 
+  const onSaveResidentNotes = async (
+    resident: ResidentEntity,
+    notes: string,
+  ) => {
+    await updateResidentInfoUseCase.execute(resident.id, {
+      note: notes,
+    });
+  };
+
   // handlers
 
   const onAddResidentClick = async () => {
@@ -227,7 +236,8 @@ const RoomPage: React.FC = () => {
             onEvict={onEvictResidentClick}
             onRelocate={onRelocateResidentClick}
             onConfirmCheckIn={onConfirmResidentCheckInClick}
-            onCancelResidentCheckIn={onCancelResidentCheckInClick}
+            onCancelCheckIn={onCancelResidentCheckInClick}
+            onSaveNotes={onSaveResidentNotes}
           />
 
           {selectedResident !== null && (

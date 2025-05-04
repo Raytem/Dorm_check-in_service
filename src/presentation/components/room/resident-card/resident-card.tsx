@@ -1,18 +1,37 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ResidentEntity } from '@domain/entities';
-import { Avatar, Box, BoxProps, Button, Textarea, Title } from '@mantine/core';
+import {
+  Avatar,
+  Box,
+  BoxProps,
+  Button,
+  Stack,
+  Text,
+  Title,
+} from '@mantine/core';
 import KeyValueTable from '@components/shared/key-value-table';
 import { Sex } from '@domain/enums';
 import classes from './resident-card.module.css';
 import { DateFormatterUtil } from 'infrastructure/utils';
 import CheckInStatusChip from '@components/room/check-in-status-chip';
+import EditableText from 'presentation/components/shared/editable-text';
+
+export type EvictResidentHandler = (resident: ResidentEntity) => void;
+export type RelocateResidentHandler = (resident: ResidentEntity) => void;
+export type ConfirmResidentCheckInHandler = (resident: ResidentEntity) => void;
+export type CancelResidentCheckInHandler = (resident: ResidentEntity) => void;
+export type SaveResidentNotesHandler = (
+  resident: ResidentEntity,
+  notes: string,
+) => void;
 
 export interface ResidentCardProps extends BoxProps {
   resident: ResidentEntity;
-  onEvict?: (resident: ResidentEntity) => void;
-  onRelocate?: (resident: ResidentEntity) => void;
-  onConfirmCheckIn?: (resident: ResidentEntity) => void;
-  onCancelResidentCheckIn?: (resident: ResidentEntity) => void;
+  onEvict?: EvictResidentHandler;
+  onRelocate?: RelocateResidentHandler;
+  onConfirmCheckIn?: ConfirmResidentCheckInHandler;
+  onCancelCheckIn?: CancelResidentCheckInHandler;
+  onSaveNotes?: SaveResidentNotesHandler;
 }
 
 const ResidentCard: React.FC<ResidentCardProps> = ({
@@ -20,11 +39,10 @@ const ResidentCard: React.FC<ResidentCardProps> = ({
   onEvict = () => {},
   onRelocate = () => {},
   onConfirmCheckIn = () => {},
-  onCancelResidentCheckIn = () => {},
+  onCancelCheckIn = () => {},
+  onSaveNotes = () => {},
   ...props
 }) => {
-  const [note, setNote] = useState(resident.note);
-
   const baseInfoKeyValueData: Record<string, any> = {
     ['Номер зачетки']: resident.gradeBookNumber,
     ['Группа']: resident.groupName,
@@ -72,13 +90,17 @@ const ResidentCard: React.FC<ResidentCardProps> = ({
 
             <KeyValueTable data={midInfoKeyValueData} keyWidth={'100px'} />
 
-            <Textarea
-              label={'Заметки'}
-              autosize
-              placeholder="Напишите что-нибудь"
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
-            />
+            <Stack gap={0}>
+              <Text>Заметки:</Text>
+              <EditableText
+                onSave={(notes) => onSaveNotes(resident, notes)}
+                initialText={resident.note}
+                placeholder={'Введите что-нибудь'}
+                textAreaProps={{
+                  autosize: true,
+                }}
+              />
+            </Stack>
           </div>
         </div>
 
@@ -96,7 +118,7 @@ const ResidentCard: React.FC<ResidentCardProps> = ({
           <Button
             onClick={() => {
               return resident.isCheckInConfirmed
-                ? onCancelResidentCheckIn(resident)
+                ? onCancelCheckIn(resident)
                 : onConfirmCheckIn(resident);
             }}
           >
