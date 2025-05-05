@@ -244,7 +244,7 @@ export const useRoomPageActions = (roomId: RoomId | undefined) => {
       addResident: {
         isOpened: isAddResidentModalOpened,
         open: openAddResidentModal,
-        close: closeRelocateModal,
+        close: closeAddResidentModal,
       },
     },
     functions: {

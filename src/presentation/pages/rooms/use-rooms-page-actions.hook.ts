@@ -39,6 +39,10 @@ export const useRoomsPageActions = () => {
   const sortDeps = [sort.sortBy, sort.sortDir];
 
   useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
+
+  useEffect(() => {
     refetch();
   }, [...filtersDeps, ...sortDeps, page, limit]);
 

@@ -34,6 +34,8 @@ const RelocateResidentModal: React.FC<RelocateResidentModalProps> = (props) => {
     },
   } = useRelocateResidentModalActions(props);
 
+  const canCloseModal = !props.isRelocateLoading;
+
   return (
     <Modal
       centered
@@ -42,6 +44,11 @@ const RelocateResidentModal: React.FC<RelocateResidentModalProps> = (props) => {
       title={`Переселение студента "${props.resident.getFullName()}" из комнаты ${props.roomFrom.roomName}`}
       size={'lg'}
       onExitTransitionEnd={onExitTransitionEnd}
+      closeButtonProps={{
+        disabled: !canCloseModal,
+      }}
+      closeOnClickOutside={canCloseModal}
+      closeOnEscape={canCloseModal}
     >
       <LoadingOverlay visible={props.isRelocateLoading} />
       <Stack gap={20}>

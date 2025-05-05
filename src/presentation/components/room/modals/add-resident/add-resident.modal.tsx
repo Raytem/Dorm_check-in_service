@@ -34,6 +34,8 @@ const AddResidentModal: React.FC<AddResidentModalProps> = (props) => {
     functions: { getAddResidentButtonLabel },
   } = useAddResidentModalActions(props);
 
+  const canCloseModal = !props.isAddResidentLoading;
+
   return (
     <Modal
       opened={props.isOpened}
@@ -43,6 +45,11 @@ const AddResidentModal: React.FC<AddResidentModalProps> = (props) => {
       centered
       size={'var(--app-container-width)'}
       fullScreen={isMobile}
+      closeButtonProps={{
+        disabled: !canCloseModal,
+      }}
+      closeOnClickOutside={canCloseModal}
+      closeOnEscape={canCloseModal}
     >
       <LoadingOverlay visible={props.isAddResidentLoading} />
 

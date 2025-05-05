@@ -15,6 +15,7 @@ import classes from './resident-card.module.css';
 import { DateFormatterUtil } from 'infrastructure/utils';
 import CheckInStatusChip from '@components/room/check-in-status-chip';
 import EditableText from 'presentation/components/shared/editable-text';
+import classNames from 'classnames';
 
 export type EvictResidentHandler = (resident: ResidentEntity) => void;
 export type RelocateResidentHandler = (resident: ResidentEntity) => void;
@@ -66,7 +67,13 @@ const ResidentCard: React.FC<ResidentCardProps> = ({
   }
 
   return (
-    <Box className={classes['resident-card']} {...props}>
+    <Box
+      className={classNames(
+        classes['resident-card'],
+        classes['resident-card_non-skeleton'],
+      )}
+      {...props}
+    >
       <div className={classes['resident-card__inner']}>
         <div className={classes['resident-card__info-section']}>
           <div className={classes['resident-card__base-info']}>

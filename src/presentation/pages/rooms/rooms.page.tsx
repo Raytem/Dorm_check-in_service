@@ -11,7 +11,7 @@ import DataStatusContainer from '@components/shared/data-status-container';
 import AlignedPagination from '@components/shared/aligned-pagination';
 
 import { RoomSortParams } from '@domain/enums';
-import { useRoomsPageActions } from '@pages/rooms/use-rooms-page-actions-hook.ts';
+import { useRoomsPageActions } from '@pages/rooms/use-rooms-page-actions.hook';
 
 const RoomsPage = () => {
   const {
