@@ -1,4 +1,4 @@
-.editable-textarea-wrapper__editable {
+.editable-textarea-wrapper {
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -8,11 +8,11 @@
     border-radius: var(--mantine-radius-md);
 }
 
-html[data-mantine-color-scheme='light'] .editable-textarea-wrapper__editable {
+html[data-mantine-color-scheme='light'] .editable-textarea-wrapper {
     border-color: var(--mantine-color-gray-3);
 }
 
-html[data-mantine-color-scheme='dark'] .editable-textarea-wrapper__editable {
+html[data-mantine-color-scheme='dark'] .editable-textarea-wrapper {
     border-color: var(--mantine-color-dark-4);
 }
 
@@ -34,7 +34,7 @@ html[data-mantine-color-scheme='dark'] .editable-textarea-wrapper__editable {
     padding: 4px 8px;
 
     border: 1px solid transparent;
-    border-radius: 8px;
+    border-radius: var(--mantine-radius-md);
     transition: background 0.2s;
 
     cursor: pointer;

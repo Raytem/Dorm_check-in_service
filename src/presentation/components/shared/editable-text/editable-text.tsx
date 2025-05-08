@@ -71,7 +71,7 @@ const EditableText: React.FC<EditableTextProps> = ({
 
   const editingView = (
     <div
-      className={classes['editable-textarea-wrapper__editable']}
+      className={classes['editable-textarea-wrapper']}
       ref={editableTextAreaWrapperRef}
     >
       <Textarea
