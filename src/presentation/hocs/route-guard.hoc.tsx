@@ -7,16 +7,17 @@ import {
   selectAuthenticatedUser,
 } from '@application/store/slices';
 import { AppRoutes } from '@routing/app-routes.ts';
+import { Role } from '@domain/enums';
 
 export interface RouteGuardProps {
-  allowedRoles?: string[];
+  allowedRoles?: Role[];
   redirectTo?: string;
   children?: React.ReactNode;
 }
 
 export const RouteGuard = ({
   allowedRoles = [],
-  redirectTo = AppRoutes.LOGIN,
+  redirectTo = AppRoutes.HOME,
   children,
 }: RouteGuardProps) => {
   const isAuthenticated = useAppSelector(isUserAuthenticated);

@@ -1,14 +1,14 @@
-export type UserId = number;
+import { Role } from '@domain/enums';
 
-export class AuthenticatedUserEntity {
-  constructor(
-    public id: UserId,
-    public firstName: string,
-    public lastName: string,
-    public patronymic: string,
-    public userName: string,
-    public avatarUrl: string | null,
-    public email: string,
-    public roles: string[],
-  ) {}
+export type UserId = string;
+
+export interface AuthenticatedUserEntity {
+  id: UserId;
+  firstName: string;
+  lastName: string;
+  patronymic: string;
+  userName: string;
+  avatarUrl: string | null;
+  email: string;
+  roles: Role[];
 }

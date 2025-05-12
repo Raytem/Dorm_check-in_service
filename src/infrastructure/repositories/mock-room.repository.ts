@@ -50,7 +50,10 @@ export class MockRoomRepository implements IRoomRepository {
     return DelayUtil.withRandomDelay(() => ROOM_DETAILS_MOCK_DATA);
   }
 
-  async relocateResident(residentId: number, newRoomId: number): Promise<void> {
+  async relocateResident(
+    residentId: ResidentId,
+    newRoomId: RoomId,
+  ): Promise<void> {
     this.logger.debug(
       'relocateResident, residentId: {0}, newRoomId: {1}',
       residentId,
@@ -61,7 +64,7 @@ export class MockRoomRepository implements IRoomRepository {
 
   async getAvailableRoomsToRelocateResident(
     roomName: string,
-    residentId: number,
+    residentId: ResidentId,
   ): Promise<RoomEntity[]> {
     this.logger.debug(
       'getAvailableRoomsToRelocateResident, roomName: {0}, residentId: {1}',
@@ -71,7 +74,7 @@ export class MockRoomRepository implements IRoomRepository {
     return await DelayUtil.withRandomDelay(() => ROOM_MOCK_DATA.slice(0, 4));
   }
 
-  async evictResident(residentId: number): Promise<void> {
+  async evictResident(residentId: ResidentId): Promise<void> {
     this.logger.debug('evictResident, residentId: {0}', residentId);
     await DelayUtil.withRandomDelay(() => {});
   }

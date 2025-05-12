@@ -4,10 +4,10 @@ import { RouteGuard } from '@presentation/hocs';
 import React, { lazy } from 'react';
 import AppLayout from 'presentation/layouts/app';
 import { AppRoutes } from '@routing/app-routes.ts';
+import { Role } from '@domain/enums';
 
 const Rooms = lazy(() => import('@pages/rooms/rooms.page.tsx'));
 const Room = lazy(() => import('@pages/room'));
-const Login = lazy(() => import('@pages/login'));
 const CheckInConfirmation = lazy(() => import('@pages/check-in-confirmation'));
 const PopulatedStatistics = lazy(() => import('@pages/populated-statistics'));
 
@@ -18,32 +18,60 @@ export const AppRouter: React.FC = () => {
       element: <AppLayout />,
       children: [
         {
-          path: AppRoutes.LOGIN,
-          element: <Login />,
-        },
-        {
           path: AppRoutes.ROOMS,
           children: [
             {
               index: true,
-              element: <RouteGuard allowedRoles={[]} children={<Rooms />} />,
+              element: (
+                <RouteGuard
+                  allowedRoles={[
+                    Role.ROLE_HOSTEL,
+                    Role.ROLE_CIT,
+                    Role.ROLE_DEPUTY_DEAN,
+                  ]}
+                  children={<Rooms />}
+                />
+              ),
             },
             {
               path: AppRoutes.ROOM,
-              element: <RouteGuard allowedRoles={[]} children={<Room />} />,
+              element: (
+                <RouteGuard
+                  allowedRoles={[
+                    Role.ROLE_HOSTEL,
+                    Role.ROLE_CIT,
+                    Role.ROLE_DEPUTY_DEAN,
+                  ]}
+                  children={<Room />}
+                />
+              ),
             },
           ],
         },
         {
           path: AppRoutes.CHECK_IN_CONFIRMATION,
           element: (
-            <RouteGuard allowedRoles={[]} children={<CheckInConfirmation />} />
+            <RouteGuard
+              allowedRoles={[
+                Role.ROLE_HOSTEL,
+                Role.ROLE_CIT,
+                Role.ROLE_DEPUTY_DEAN,
+              ]}
+              children={<CheckInConfirmation />}
+            />
           ),
         },
         {
           path: AppRoutes.POPULATED_STATISTICS,
           element: (
-            <RouteGuard allowedRoles={[]} children={<PopulatedStatistics />} />
+            <RouteGuard
+              allowedRoles={[
+                Role.ROLE_HOSTEL,
+                Role.ROLE_CIT,
+                Role.ROLE_DEPUTY_DEAN,
+              ]}
+              children={<PopulatedStatistics />}
+            />
           ),
         },
       ],

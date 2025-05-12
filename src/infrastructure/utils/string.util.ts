@@ -29,4 +29,8 @@ export class StringUtil {
       return StringUtil.format(argValue);
     });
   }
+
+  static joinStr(...args: string[]): string {
+    return args.join('');
+  }
 }

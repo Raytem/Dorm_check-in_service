@@ -1,11 +1,12 @@
 import { interfaces } from 'inversify';
-import { LoginDto } from './dto';
-import { LoginResponse, TokensResponse } from './responses';
+import { Role } from '@domain/enums';
+import { AuthenticatedUserEntity } from '@domain/entities';
 
 export interface IAuthService {
-  login(dto: LoginDto): Promise<LoginResponse>;
-  logout(): Promise<void>;
-  refreshTokens(): Promise<TokensResponse>;
+  checkAuthorization(roles: Role[]): Promise<boolean>;
+  getUserProfile(): Promise<AuthenticatedUserEntity>;
+  redirectToLogin(): void;
+  logout(): void;
 }
 
 export namespace IAuthService {

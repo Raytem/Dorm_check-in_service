@@ -1,24 +1,25 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AuthenticatedUserEntity } from '@domain/entities';
+import { Role } from '@domain/enums';
 
 type AuthenticatedUserStateType = {
   authenticatedUser: AuthenticatedUserEntity | null;
 };
 
 const initialState: AuthenticatedUserStateType = {
-  // authenticatedUser: null
+  // authenticatedUser: null,
 
   // TODO: delete mock
-  authenticatedUser: new AuthenticatedUserEntity(
-    1,
-    'Даниил',
-    'Баков',
-    'Сергеевич',
-    'daniilbakov',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlOLBRK-3wEFFeCojWlHou4nooggl5iI2PJQ&s',
-    'daniilbk@yandex.by',
-    ['admin'],
-  ),
+  authenticatedUser: {
+    id: '234',
+    firstName: 'Тест',
+    lastName: 'Тестович',
+    patronymic: 'Тестов',
+    userName: '234234',
+    avatarUrl: 'some/test/image.png',
+    email: 'test@gmail.com',
+    roles: [Role.ROLE_CIT],
+  },
 };
 
 export const authenticatedUserSlice = createSlice({

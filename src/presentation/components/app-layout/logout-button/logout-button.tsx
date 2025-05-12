@@ -4,8 +4,8 @@ import { IconLogout } from '@tabler/icons-react';
 import { useAppDispatch } from '@application/store';
 import { clearAuthenticatedUser } from '@application/store/slices';
 import { useInjection } from 'inversify-react';
-import { LogoutUseCase } from '@/usecases/auth';
 import { IUINotificationService } from '@domain/adapters/services/ui-notification';
+import { IAuthService } from '@domain/adapters/services/auth-service';
 
 export interface LogoutButtonProps extends ButtonProps {
   title?: string;
@@ -17,12 +17,12 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({
   ...props
 }) => {
   const dispatch = useAppDispatch();
-  const logoutUseCase = useInjection(LogoutUseCase);
+  const authService = useInjection(IAuthService.$);
   const uiNotificationService = useInjection(IUINotificationService.$);
 
   const handleClick = async () => {
     try {
-      await logoutUseCase.execute();
+      authService.logout();
       dispatch(clearAuthenticatedUser(null));
     } catch (e) {
       uiNotificationService.showError(e);

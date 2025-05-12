@@ -1,6 +1,6 @@
 import { Sex } from '@domain/enums';
 
-export type ResidentId = number;
+export type ResidentId = string;
 
 export class ResidentEntity {
   constructor(

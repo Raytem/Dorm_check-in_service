@@ -19,7 +19,7 @@ export interface IRoomRepository {
 
   getAvailableRoomsToRelocateResident(
     roomName: string,
-    residentId: number,
+    residentId: ResidentId,
   ): Promise<RoomEntity[]>;
 
   evictResident(residentId: ResidentId): Promise<void>;

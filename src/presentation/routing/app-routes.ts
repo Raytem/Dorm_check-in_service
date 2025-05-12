@@ -1,6 +1,5 @@
 export enum AppRoutes {
   HOME = '/',
-  LOGIN = '/auth/login',
   ROOMS = '/rooms',
   ROOM = '/rooms/:roomId',
   CHECK_IN_CONFIRMATION = '/check-in-confirmation',
