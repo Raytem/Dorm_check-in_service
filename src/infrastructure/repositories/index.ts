@@ -1,3 +1,3 @@
 export * from './mock-room.repository.ts';
-export * from './local-storage-token.repository';
+export * from './cookie-token.repository.ts';
 export * from './mock-resident.repository';

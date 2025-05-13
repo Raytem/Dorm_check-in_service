@@ -11,7 +11,7 @@ export class DormitoryApiHttpService {
     private readonly config: ConfigService,
   ) {
     const instance = axios.create({
-      baseURL: this.config.getConfig().dormitoryApi.baseUrl,
+      baseURL: this.config.getConfig().backendApi.baseUrl,
     });
 
     this.instance = instance;

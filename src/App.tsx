@@ -1,7 +1,12 @@
 import React, { useEffect } from 'react';
 import { useInjection } from 'inversify-react';
 import { IAuthService } from '@domain/adapters/services/auth-service';
-import { Role } from '@domain/enums';
+import { useAppDispatch, useAppSelector } from '@application/store';
+import {
+  isUserAuthenticated,
+  setAuthenticatedUser,
+} from '@application/store/slices';
+import LoadingPage from '@pages/loading-page';
 
 export interface AppProps {
   children?: React.ReactNode;
@@ -9,24 +14,32 @@ export interface AppProps {
 
 function App({ children = <></> }: AppProps) {
   const authService = useInjection(IAuthService.$);
+  const dispatch = useAppDispatch();
+  const isAuthenticated = useAppSelector(isUserAuthenticated);
 
   useEffect(() => {
     (async () => {
-      const isAuthenticated = await authService.checkAuthorization([
-        Role.ROLE_CIT,
-        Role.ROLE_DEPUTY_DEAN,
-        Role.ROLE_HOSTEL,
-      ]);
-      // const isAuthenticated = true; // TODO: delete mock
+      const result = await authService.checkAuthorization();
 
-      if (!isAuthenticated) {
-        authService.redirectToLogin();
+      if (result.isAuthorized) {
+        try {
+          const user = await authService.getUserProfile();
+          dispatch(setAuthenticatedUser(user));
+        } catch {
+          authService.redirectToLogin();
+        }
         return;
+      }
+
+      if (result.statusCode === 403) {
+        authService.redirectToForbidden();
+      } else {
+        authService.redirectToLogin();
       }
     })();
   }, []);
 
-  return children;
+  return isAuthenticated ? children : <LoadingPage />;
 }
 
 export default App;

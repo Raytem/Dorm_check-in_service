@@ -24,7 +24,7 @@ import {
 // Repositories impl
 import {
   MockRoomRepository,
-  LocalStorageTokenRepository,
+  CookieTokenRepository,
   MockResidentRepository,
 } from '@infrastructure/repositories';
 // Usecases
@@ -43,14 +43,8 @@ import {
 // Core
 import { ILogger } from '@domain/logger/logger.interface.ts';
 import { LoggerImpl } from '@infrastructure/logger/logger.ts';
-// Storage
-import { useAppDispatch } from '@application/store';
 
 const diContainer = new Container();
-
-export const DI_TOKENS = {
-  APP_DISPATCH: Symbol('APP_DISPATCH'),
-};
 
 // Api Http Services
 diContainer.bind(AuthApiHttpService).toSelf();
@@ -68,7 +62,7 @@ diContainer.bind(IAuthService.$).to(AuthService);
 diContainer.bind(ConfigService).toSelf().inSingletonScope();
 diContainer.bind(LocalStorageService).toSelf();
 // Repositories
-diContainer.bind(ITokenRepository.$).to(LocalStorageTokenRepository);
+diContainer.bind(ITokenRepository.$).to(CookieTokenRepository);
 diContainer.bind(IRoomRepository.$).to(MockRoomRepository);
 diContainer.bind(IResidentRepository.$).to(MockResidentRepository);
 // UseCases
@@ -80,7 +74,5 @@ diContainer.bind(GetAvailableRoomsToRelocateResidentUseCase).toSelf();
 diContainer.bind(UpdateResidentInfoUseCase).toSelf();
 diContainer.bind(GetCandidatesForRoomUseCase).toSelf();
 diContainer.bind(AddResidentUseCase).toSelf();
-// Storage
-diContainer.bind(DI_TOKENS.APP_DISPATCH).toConstantValue(useAppDispatch());
 
 export { diContainer };

@@ -6,6 +6,6 @@ export class UserRoleMapper {
     if (!(role.name in Role)) {
       throw new Error(`Cannot map role with name '${role.name}' to domain`);
     }
-    return role.name as Role;
+    return Role[role.name as keyof typeof Role];
   }
 }

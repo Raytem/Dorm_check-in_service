@@ -1,52 +1,51 @@
 import { inject } from 'inversify';
 
-import { IAuthService } from '@domain/adapters/services/auth-service';
+import {
+  AuthorizationCheckResult,
+  IAuthService,
+} from '@domain/adapters/services/auth-service';
 
 import * as AuthApi from '@infrastructure/api/auth';
 import { AppException, ERROR_MESSAGES } from '@domain/adapters/exceptions';
 
 import { UserProfileMapper } from './mappers';
-import { HttpStatusCode, isAxiosError } from 'axios';
+import { isAxiosError } from 'axios';
 import { ConfigService } from '@infrastructure/services';
-import { ITokenRepository } from '@domain/repositories';
 import { Role } from '@domain/enums';
 import { AuthenticatedUserEntity } from '@domain/entities';
-import { useAppDispatch } from '@application/store';
-import { setAuthenticatedUser } from '@application/store/slices';
 
 export class AuthService implements IAuthService {
   constructor(
     @inject(ConfigService)
     private readonly config: ConfigService,
-    @inject(ITokenRepository.$)
-    private readonly tokenRepository: ITokenRepository,
     @inject(AuthApi.AuthApiHttpService)
     private readonly authApiHttpService: AuthApi.AuthApiHttpService,
   ) {}
 
-  async checkAuthorization(roles: Role[]): Promise<boolean> {
+  async checkAuthorization(): Promise<AuthorizationCheckResult> {
     try {
-      await this.authApiHttpService.instance.post('/users/hasAuthority', roles);
+      const res = await this.authApiHttpService.instance.post(
+        '/users/hasAuthority',
+        [Role.CIT, Role.DEPUTY_DEAN, Role.HOSTEL, Role.STUDENT], // TODO: удалить после тестов STUDENT
+      );
 
-      const user = await this.getUserProfile();
-      const dispatch = useAppDispatch();
-      dispatch(setAuthenticatedUser(user));
-
-      return true;
+      return {
+        isAuthorized: true,
+        statusCode: res.status,
+      };
     } catch (e) {
-      if (!isAxiosError(e)) return false;
-
-      if (e.response?.status === HttpStatusCode.Forbidden) {
-        this.redirectToForbidden();
-      }
-      throw e;
+      const statusCode = isAxiosError(e) ? (e.response?.status ?? 500) : 500;
+      return {
+        isAuthorized: false,
+        statusCode,
+      };
     }
   }
 
   async getUserProfile(): Promise<AuthenticatedUserEntity> {
     try {
       const response =
-        await this.authApiHttpService.instance.post<AuthApi.UserProfileResponse>(
+        await this.authApiHttpService.instance.get<AuthApi.UserProfileResponse>(
           '/users/me',
         );
 
@@ -64,11 +63,10 @@ export class AuthService implements IAuthService {
   }
 
   logout() {
-    this.tokenRepository.removeAccessToken();
     window.location.href = this.getSSOLogoutLink();
   }
 
-  private redirectToForbidden() {
+  redirectToForbidden() {
     window.location.href = this.config.getConfig().authServer.forbiddenUrl;
   }
 

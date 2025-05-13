@@ -12,7 +12,7 @@ const CheckInConfirmation = lazy(() => import('@pages/check-in-confirmation'));
 const PopulatedStatistics = lazy(() => import('@pages/populated-statistics'));
 
 export const AppRouter: React.FC = () => {
-  const routesElement = useRoutes([
+  return useRoutes([
     {
       path: '/',
       element: <AppLayout />,
@@ -25,10 +25,11 @@ export const AppRouter: React.FC = () => {
               element: (
                 <RouteGuard
                   allowedRoles={[
-                    Role.ROLE_HOSTEL,
-                    Role.ROLE_CIT,
-                    Role.ROLE_DEPUTY_DEAN,
-                  ]}
+                    Role.HOSTEL,
+                    Role.CIT,
+                    Role.DEPUTY_DEAN,
+                    Role.STUDENT,
+                  ]} // TODO: удалить STUDENT
                   children={<Rooms />}
                 />
               ),
@@ -38,10 +39,11 @@ export const AppRouter: React.FC = () => {
               element: (
                 <RouteGuard
                   allowedRoles={[
-                    Role.ROLE_HOSTEL,
-                    Role.ROLE_CIT,
-                    Role.ROLE_DEPUTY_DEAN,
-                  ]}
+                    Role.HOSTEL,
+                    Role.CIT,
+                    Role.DEPUTY_DEAN,
+                    Role.STUDENT,
+                  ]} // TODO: удалить STUDENT
                   children={<Room />}
                 />
               ),
@@ -53,10 +55,11 @@ export const AppRouter: React.FC = () => {
           element: (
             <RouteGuard
               allowedRoles={[
-                Role.ROLE_HOSTEL,
-                Role.ROLE_CIT,
-                Role.ROLE_DEPUTY_DEAN,
-              ]}
+                Role.HOSTEL,
+                Role.CIT,
+                Role.DEPUTY_DEAN,
+                Role.STUDENT,
+              ]} // TODO: удалить STUDENT
               children={<CheckInConfirmation />}
             />
           ),
@@ -66,10 +69,11 @@ export const AppRouter: React.FC = () => {
           element: (
             <RouteGuard
               allowedRoles={[
-                Role.ROLE_HOSTEL,
-                Role.ROLE_CIT,
-                Role.ROLE_DEPUTY_DEAN,
-              ]}
+                Role.HOSTEL,
+                Role.CIT,
+                Role.DEPUTY_DEAN,
+                Role.STUDENT,
+              ]} // TODO: удалить STUDENT
               children={<PopulatedStatistics />}
             />
           ),
@@ -81,6 +85,4 @@ export const AppRouter: React.FC = () => {
       element: <NotFoundPage />,
     },
   ]);
-
-  return routesElement;
 };

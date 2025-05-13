@@ -1,5 +1,6 @@
 export enum Role {
-  ROLE_CIT = 'ROLE_CIT',
-  ROLE_DEPUTY_DEAN = 'ROLE_TEST', // TODO: заменить на 'ROLE_DEPUTY_DEAN'
-  ROLE_HOSTEL = 'ROLE_HOSTEL',
+  CIT = 'ROLE_CIT',
+  DEPUTY_DEAN = 'ROLE_TEST', // TODO: заменить на 'DEPUTY_DEAN'
+  HOSTEL = 'ROLE_HOSTEL',
+  STUDENT = 'ROLE_STUDENT',
 }

@@ -13,7 +13,7 @@ export interface ProfileBlockProps {
 }
 
 const ProfileBlock: React.FC<ProfileBlockProps> = (props) => {
-  const displayName = `${TextUtil.capitalize(props.surname)} ${props.name.slice(1, 2).toUpperCase()}. ${props.patronymic.slice(1, 2).toUpperCase()}.`;
+  const displayName = `${TextUtil.capitalize(props.surname)} ${props.name.slice(0, 1).toUpperCase()}. ${props.patronymic.slice(0, 1).toUpperCase()}.`;
 
   const avatarSize: number = useMatches({
     base: 40,
