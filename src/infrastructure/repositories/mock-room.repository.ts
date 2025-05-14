@@ -19,13 +19,11 @@ import { ILogger } from '@domain/logger/logger.interface.ts';
 
 @injectable()
 export class MockRoomRepository implements IRoomRepository {
-  private logger: ILogger;
-
   constructor(
     @inject(ILogger.$)
-    private readonly baseLogger: ILogger,
+    private readonly logger: ILogger,
   ) {
-    this.logger = this.baseLogger.withContext(MockRoomRepository.name);
+    this.logger.setContext(MockRoomRepository.name);
   }
 
   async findAll(

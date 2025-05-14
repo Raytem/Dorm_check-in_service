@@ -34,7 +34,7 @@ export class LoggerImpl implements ILogger {
     ],
   };
 
-  constructor(private readonly context?: string) {}
+  constructor(private context?: string) {}
 
   debug(message: string, ...args: any[]) {
     this.log(LogLevel.DEBUG, message, ...args);
@@ -52,8 +52,8 @@ export class LoggerImpl implements ILogger {
     this.log(LogLevel.ERROR, message, ...args);
   }
 
-  withContext(context: string): ILogger {
-    return new LoggerImpl(context);
+  setContext(context: string): void {
+    this.context = context;
   }
 
   private log(level: LogLevel, message: string, ...args: any[]) {

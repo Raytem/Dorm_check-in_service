@@ -13,13 +13,11 @@ import { ILogger } from '@domain/logger/logger.interface.ts';
 
 @injectable()
 export class MockResidentRepository implements IResidentRepository {
-  private logger: ILogger;
-
   constructor(
     @inject(ILogger.$)
-    private readonly baseLogger: ILogger,
+    private readonly logger: ILogger,
   ) {
-    this.logger = this.baseLogger.withContext(MockResidentRepository.name);
+    this.logger.setContext(MockResidentRepository.name);
   }
 
   getCandidatesForRoom(

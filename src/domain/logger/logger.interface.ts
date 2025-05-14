@@ -9,7 +9,7 @@ export interface ILogger {
 
   error(message: string, ...args: any[]): void;
 
-  withContext(context: string): ILogger;
+  setContext(context: string): void;
 }
 
 export namespace ILogger {
