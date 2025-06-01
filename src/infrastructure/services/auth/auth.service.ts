@@ -71,12 +71,10 @@ export class AuthService implements IAuthService {
   }
 
   private getSSOLoginLink() {
-    const redirectUrl = this.config.getConfig().app.loginRedirectUrl;
-    return `${this.config.getConfig().authServer.loginUrl}?redirectUrl=${redirectUrl}`;
+    return `${this.config.getConfig().authServer.loginUrl}?redirectUrl=${window.location.href}`;
   }
 
   private getSSOLogoutLink() {
-    const redirectUrl = this.config.getConfig().app.logoutRedirectUrl;
-    return `${this.config.getConfig().authServer.logoutUrl}?redirectUrl=${redirectUrl}`;
+    return `${this.config.getConfig().authServer.logoutUrl}?redirectUrl=${window.location.href}`;
   }
 }

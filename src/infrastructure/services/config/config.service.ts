@@ -18,14 +18,6 @@ export class ConfigService {
       app: {
         title: this.getRequiredEnv('VITE_APP_TITLE'),
         baseUrl: appBaseUrl,
-        loginRedirectUrl: StringUtil.joinStr(
-          appBaseUrl,
-          this.getRequiredEnv('VITE_APP_LOGIN_REDIRECT_PATH'),
-        ),
-        logoutRedirectUrl: StringUtil.joinStr(
-          appBaseUrl,
-          this.getRequiredEnv('VITE_APP_LOGOUT_REDIRECT_PATH'),
-        ),
       },
       authServer: {
         baseUrl: authServerBaseUrl,

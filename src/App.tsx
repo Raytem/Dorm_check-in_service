@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useInjection } from 'inversify-react';
 import { IAuthService } from '@domain/adapters/services/auth-service';
 import { useAppDispatch, useAppSelector } from '@application/store';
@@ -7,12 +7,9 @@ import {
   setAuthenticatedUser,
 } from '@application/store/slices';
 import LoadingPage from '@pages/loading-page';
+import { AppRouter } from '@routing/app-router.tsx';
 
-export interface AppProps {
-  children?: React.ReactNode;
-}
-
-function App({ children = <></> }: AppProps) {
+function App() {
   const authService = useInjection(IAuthService.$);
   const dispatch = useAppDispatch();
   const isAuthenticated = useAppSelector(isUserAuthenticated);
@@ -39,7 +36,7 @@ function App({ children = <></> }: AppProps) {
     })();
   }, []);
 
-  return isAuthenticated ? children : <LoadingPage />;
+  return isAuthenticated ? <AppRouter /> : <LoadingPage />;
 }
 
 export default App;

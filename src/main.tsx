@@ -9,7 +9,6 @@ import { Provider as StoreProvider } from 'react-redux';
 import { QueryParamProvider } from 'use-query-params';
 import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';
 
-import { AppRouter } from '@routing/app-router.tsx';
 import LoadingPage from 'presentation/pages/loading-page';
 
 import { store } from '@application/store';
@@ -33,7 +32,6 @@ createRoot(document.getElementById('root')!).render(
               <QueryParamProvider adapter={ReactRouter6Adapter}>
                 <Suspense fallback={<LoadingPage />}>
                   <App />
-                  <AppRouter />
                 </Suspense>
               </QueryParamProvider>
             </BrowserRouter>

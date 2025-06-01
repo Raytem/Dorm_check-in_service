@@ -2,8 +2,6 @@ export interface Config {
   app: {
     title: string;
     baseUrl: string;
-    loginRedirectUrl: string;
-    logoutRedirectUrl: string;
   };
   authServer: {
     baseUrl: string;
