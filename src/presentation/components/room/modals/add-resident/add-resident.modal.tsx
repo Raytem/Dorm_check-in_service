@@ -5,7 +5,7 @@ import EmptyView from '@components/shared/empty-view';
 import { IconUsers } from '@tabler/icons-react';
 import AlignedPagination from '@components/shared/aligned-pagination';
 import ResidentsTable from '@components/room/modals/add-resident/residents-table';
-import { RoomId } from '@domain/entities';
+import { ResidentId, RoomId } from '@domain/entities';
 import ResidentFilters from '@components/room/modals/add-resident/resident-filters';
 import { useAddResidentModalActions } from '@components/room/modals/add-resident/use-add-resident-modal-actions.hook.ts';
 
@@ -15,7 +15,7 @@ export interface AddResidentModalProps {
   roomId: RoomId;
   roomName: string;
   isAddResidentLoading: boolean;
-  onAddResident: (residentId: number) => void;
+  onAddResident: (residentId: ResidentId) => void;
 }
 
 const AddResidentModal: React.FC<AddResidentModalProps> = (props) => {

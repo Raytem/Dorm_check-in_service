@@ -8,7 +8,7 @@ import {
   Modal,
   Stack,
 } from '@mantine/core';
-import { ResidentEntity, RoomEntity } from '@domain/entities';
+import { ResidentEntity, RoomEntity, RoomId } from '@domain/entities';
 import RoomCardList from '@components/room/modals/relocate-resident/room-card-list/room-card-list.tsx';
 import { useRelocateResidentModalActions } from './use-relocate-resident-modal-actions.hook';
 
@@ -17,7 +17,7 @@ export interface RelocateResidentModalProps {
   onClose: () => void;
   resident: ResidentEntity;
   roomFrom: RoomEntity;
-  onRelocate: (resident: ResidentEntity, newRoomId: number) => void;
+  onRelocate: (resident: ResidentEntity, newRoomId: RoomId) => void;
   isRelocateLoading?: boolean;
 }
 

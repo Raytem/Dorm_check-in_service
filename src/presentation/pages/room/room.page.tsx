@@ -15,7 +15,7 @@ const RoomPage: React.FC = () => {
 
   const {
     queries: { getRoom, relocateResident, addResident },
-    states: { selectedResident },
+    states: { selectedResident, addResidentBlockerReason },
     modals,
     functions,
     handlers: {
@@ -38,7 +38,11 @@ const RoomPage: React.FC = () => {
         <Stack gap={'xl'}>
           <RoomInfoSection room={getRoom.data} />
 
-          <ResidentsSectionHeader onAddResident={onAddResidentClick} />
+          <ResidentsSectionHeader
+            onAddResident={onAddResidentClick}
+            addResidentBlockerReason={addResidentBlockerReason}
+            isLoading={getRoom.isLoading}
+          />
 
           <ResidentCardList
             residents={getRoom.data.residents}

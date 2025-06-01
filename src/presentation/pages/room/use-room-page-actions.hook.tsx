@@ -24,6 +24,10 @@ export const useRoomPageActions = (roomId: RoomId | undefined) => {
   const [selectedResident, setSelectedResident] =
     useState<ResidentEntity | null>(null);
 
+  const [addResidentBlockerReason, setAddResidentBlockerReason] = useState<
+    string | null
+  >(null);
+
   const [
     isRelocateModalOpened,
     { open: openRelocateModal, close: closeRelocateModal },
@@ -45,7 +49,7 @@ export const useRoomPageActions = (roomId: RoomId | undefined) => {
   }, true);
 
   const { isLoading: isRelocateLoading, refetch: refetchRelocate } = useFetch(
-    async (params: { residentId: number; newRoomId: number }) => {
+    async (params: { residentId: ResidentId; newRoomId: RoomId }) => {
       await relocateResidentUseCase.execute(
         params.residentId,
         params.newRoomId,
@@ -63,6 +67,15 @@ export const useRoomPageActions = (roomId: RoomId | undefined) => {
     (async () => refetchRoom())();
   }, []);
 
+  useEffect(() => {
+    if (room !== null && room.availablePlacesCount <= 0) {
+      setAddResidentBlockerReason('В комнате не осталось свободных мест');
+      return;
+    }
+
+    setAddResidentBlockerReason(null);
+  }, [room?.availablePlacesCount, room?.residents]);
+
   // functions
 
   const saveResidentNotes = async (resident: ResidentEntity, notes: string) => {
@@ -73,7 +86,7 @@ export const useRoomPageActions = (roomId: RoomId | undefined) => {
 
   const relocateResident = async (
     resident: ResidentEntity,
-    newRoomId: number,
+    newRoomId: RoomId,
   ) => {
     try {
       await refetchRelocate({
@@ -92,7 +105,7 @@ export const useRoomPageActions = (roomId: RoomId | undefined) => {
     await refetchRoom({ showLoadingState: false });
   };
 
-  const addResident = async (residentId: number) => {
+  const addResident = async (residentId: ResidentId) => {
     if (room === null) return;
 
     try {
@@ -233,6 +246,7 @@ export const useRoomPageActions = (roomId: RoomId | undefined) => {
       },
     },
     states: {
+      addResidentBlockerReason,
       selectedResident,
     },
     modals: {
