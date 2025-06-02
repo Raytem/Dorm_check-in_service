@@ -11,7 +11,6 @@ export const useBodyOverflow = () => {
   }, []);
 
   useEffect(() => {
-    // Очистка при размонтировании — восстанавливает стандартное значение
     return () => {
       document.body.style.overflow = '';
     };

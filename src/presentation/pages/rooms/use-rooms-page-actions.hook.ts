@@ -3,7 +3,7 @@ import { GetRoomsUseCase } from '@usecases/rooms';
 import { useFetch, useQueryPagination, useQuerySort } from '@hooks/shared';
 import { useQueryRoomFilters } from '@hooks/rooms';
 import { RoomSortParams, SortDirection } from '@domain/enums';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 export const useRoomsPageActions = () => {
   const ROOMS_PER_PAGE = 20;
@@ -38,6 +38,8 @@ export const useRoomsPageActions = () => {
 
   const sortDeps = [sort.sortBy, sort.sortDir];
 
+  const isFirstRender = useRef(true);
+
   useEffect(() => {
     window.scrollTo({ top: 0 });
   }, []);
@@ -47,6 +49,10 @@ export const useRoomsPageActions = () => {
   }, [...filtersDeps, ...sortDeps, page, limit]);
 
   useEffect(() => {
+    if (isFirstRender) {
+      isFirstRender.current = false;
+      return;
+    }
     setPage(1);
   }, [...filtersDeps, ...sortDeps]);
 

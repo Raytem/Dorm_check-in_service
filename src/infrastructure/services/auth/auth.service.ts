@@ -58,23 +58,27 @@ export class AuthService implements IAuthService {
     }
   }
 
-  redirectToLogin() {
-    window.location.href = this.getSSOLoginLink();
+  redirectToLogin(): void {
+    window.location.replace(this.getSSOLoginLink());
   }
 
-  logout() {
-    window.location.href = this.getSSOLogoutLink();
+  logout(): void {
+    window.location.replace(this.getSSOLogoutLink());
   }
 
-  redirectToForbidden() {
+  redirectToForbidden(): void {
     window.location.href = this.config.getConfig().authServer.forbiddenUrl;
   }
 
-  private getSSOLoginLink() {
-    return `${this.config.getConfig().authServer.loginUrl}?redirectUrl=${window.location.href}`;
+  private getSSOLoginLink(): string {
+    return `${this.config.getConfig().authServer.loginUrl}?redirectUrl=${this.doubleEncodeURI(window.location.href)}`;
   }
 
-  private getSSOLogoutLink() {
-    return `${this.config.getConfig().authServer.logoutUrl}?redirectUrl=${window.location.href}`;
+  private getSSOLogoutLink(): string {
+    return `${this.config.getConfig().authServer.logoutUrl}?redirectUrl=${this.doubleEncodeURI(window.location.href)}`;
+  }
+
+  private doubleEncodeURI(url: string): string {
+    return encodeURIComponent(encodeURIComponent(url));
   }
 }

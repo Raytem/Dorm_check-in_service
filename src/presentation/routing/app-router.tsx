@@ -14,7 +14,7 @@ const PopulatedStatistics = lazy(() => import('@pages/populated-statistics'));
 export const AppRouter: React.FC = () => {
   return useRoutes([
     {
-      path: '/',
+      path: AppRoutes.HOME,
       element: <AppLayout />,
       children: [
         {
