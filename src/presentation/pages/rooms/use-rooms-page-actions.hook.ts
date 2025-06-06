@@ -49,7 +49,7 @@ export const useRoomsPageActions = () => {
   }, [...filtersDeps, ...sortDeps, page, limit]);
 
   useEffect(() => {
-    if (isFirstRender) {
+    if (isFirstRender.current) {
       isFirstRender.current = false;
       return;
     }

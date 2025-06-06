@@ -67,11 +67,11 @@ export class AuthService implements IAuthService {
   }
 
   redirectToForbidden(): void {
-    window.location.href = this.config.getConfig().authServer.forbiddenUrl;
+    window.location.replace(this.config.getConfig().authServer.forbiddenUrl);
   }
 
   private getSSOLoginLink(): string {
-    return `${this.config.getConfig().authServer.loginUrl}?redirectUrl=${this.doubleEncodeURI(window.location.href)}`;
+    return `${this.config.getConfig().authServer.loginUrl}?redirectUrl=${encodeURIComponent(window.location.href)}`;
   }
 
   private getSSOLogoutLink(): string {

@@ -2,6 +2,7 @@ import PageLayout from 'presentation/layouts/page';
 import React from 'react';
 import RoomPageSkeleton from '@components/room/skeletons/room-page';
 import DataStatusContainer from '@components/shared/data-status-container';
+import { AppRoutes } from '@routing/app-routes.ts';
 
 export interface RoomPageLayoutProps {
   dormitoryNumber?: number;
@@ -20,7 +21,10 @@ const RoomPageLayout: React.FC<RoomPageLayoutProps> = ({
 }) => {
   return (
     <PageLayout
-      backButton={{ title: 'К списку комнат' }}
+      backButton={{
+        title: 'К списку комнат',
+        to: AppRoutes.getPath(AppRoutes.ROOMS),
+      }}
       title={`Общежитие ${dormitoryNumber ?? '_'}, комната ${roomName ?? '_'}`}
       isTitleLoading={isLoading}
     >

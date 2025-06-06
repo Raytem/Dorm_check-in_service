@@ -22,7 +22,7 @@ const EmptyView: React.FC<EmptyViewProps> = ({
         </Stack>
       )}
 
-      <Stack align={'center'} gap={'0'}>
+      <Stack align={'center'} gap={'0'} style={{ textAlign: 'center' }}>
         <Title order={4}>{title}</Title>
         {description && (
           <Text c={'dimmed'} size={'sm'}>

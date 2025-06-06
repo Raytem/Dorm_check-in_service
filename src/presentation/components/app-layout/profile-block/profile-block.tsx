@@ -36,7 +36,7 @@ const ProfileBlock: React.FC<ProfileBlockProps> = (props) => {
         variant={'filled'}
       />
       <Stack gap={0}>
-        <Text fw={'bold'} lineClamp={1}>
+        <Text fw={'bold'} lineClamp={1} truncate={true}>
           {displayName}
         </Text>
         <Text visibleFrom={'sm'} size={'xs'} lineClamp={1}>
